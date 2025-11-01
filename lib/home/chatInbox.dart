@@ -41,15 +41,15 @@ class _ChatinboxState extends ConsumerState<Chatinbox> {
                     height: 44.h,
                     width: 44.w,
                     decoration: BoxDecoration(
-                        color: Color.fromARGB(39, 255, 255, 255),
+                        color: Color(0xFF1B1B1B),
                         borderRadius: BorderRadius.circular(500.r)),
-                    child: Center(
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        color: Color.fromARGB(255, 248, 248, 248),
-                        size: 15.w,
-                      ),
-                    ),
+                    // child: Center(
+                    //   child: Icon(
+                    //     Icons.arrow_back_ios,
+                    //     color: Color.fromARGB(255, 248, 248, 248),
+                    //     size: 15.w,
+                    //   ),
+                    // ),
                   ),
                 ),
                 Spacer(),

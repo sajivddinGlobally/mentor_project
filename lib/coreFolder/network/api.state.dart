@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:educationapp/coreFolder/Model/getProfileUserModel.dart';
 import 'package:educationapp/coreFolder/Model/login.body.model.dart';
+import 'package:educationapp/coreFolder/Model/login.rsponse.model.dart';
 import 'package:educationapp/coreFolder/Model/skillModel.dart';
 import 'package:educationapp/coreFolder/Model/trendingSkillExpertResModel.dart';
 import 'package:educationapp/coreFolder/Model/userProfileResModel.dart';
@@ -25,11 +26,11 @@ part 'api.state.g.dart';
 abstract class APIStateNetwork {
   factory APIStateNetwork(Dio dio, {String baseUrl}) = _APIStateNetwork;
 
-  // @POST('/login')
-  // Future<HttpResponse<dynamic>> login(@Body() LoginBodyModel body);
+  @POST('/login')
+  Future<LoginResponseModel> login(@Body() LoginBodyModel body);
 
-  @POST("/login")
-  Future<HttpResponse<dynamic>> login(@Body() Map<String, dynamic> body);
+  // @POST("/login")
+  // Future<HttpResponse<dynamic>> login(@Body() Map<String, dynamic> body);
 
   @POST('/mentor/buy-coins')
   Future<HttpResponse<dynamic>> buyCoin(@Body() Map<String, dynamic> body);

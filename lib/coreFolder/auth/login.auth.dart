@@ -45,113 +45,108 @@ import 'package:path/path.dart' as path;
 //   return token ?? "unknown_device";
 // }
 
-Future<String> fcmGetToken() async {
-  // ✅ Now request notification permissions
-  NotificationSettings settings =
-      await FirebaseMessaging.instance.requestPermission(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
+// Future<String> fcmGetToken() async {
+//   // ✅ Now request notification permissions
+//   NotificationSettings settings =
+//       await FirebaseMessaging.instance.requestPermission(
+//     alert: true,
+//     badge: true,
+//     sound: true,
+//   );
 
-  if (settings.authorizationStatus != AuthorizationStatus.authorized) {
-    print('User declined permission');
-    return "no_permission";
-  }
+//   if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+//     print('User declined permission');
+//     return "no_permission";
+//   }
 
-  String? Fcmtoken = await FirebaseMessaging.instance.getToken();
-  print('FCM Token: $Fcmtoken');
-  return Fcmtoken ?? "unknown_device";
-}
+//   String? Fcmtoken = await FirebaseMessaging.instance.getToken();
+//   print('FCM Token: $Fcmtoken');
+//   return Fcmtoken ?? "unknown_device";
+// }
 
 class Auth {
-  static Future<void> login(
-    String email,
-    String password,
-    BuildContext context,
-  ) async {
-    try {
-      final deviceToken = await fcmGetToken();
-
-      final dio = await createDio();
-      final service = APIStateNetwork(dio);
-
-      // final response = await service.login(
-      //   LoginBodyModel(
-      //     email: email,
-      //     password: password,
-      //     deviceToken: deviceToken,
-
-      //   ),
-      // );
-
-      // ✅ Send as JSON body, not multipart
-      final body = {
-        "email": email,
-        "password": password,
-        "device_token": deviceToken,
-      };
-      final response = await service.login(body);
-
-      if (response.response.statusCode == 200) {
-        final data = response.response.data;
-        final loginData = LoginResponseModel.fromJson(data);
-        final box = await Hive.openBox('userdata');
-        await box.clear(); // Optional: Clear previous session
-        await box.put('token', loginData.data!.token);
-        await box.put('full_name', loginData.data!.fullName);
-        await box.put('userType', loginData.data!.userType);
-        await box.put("email", loginData.data!.email);
-        await box.put("userid", loginData.data!.userid);
-        var userType = box.get("userType");
-        log("userID ${box.get("userid")}");
-        log("userType : - $userType");
-        Fluttertoast.showToast(
-          msg: data['message'] ?? 'Login successful',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 12.0,
-        );
-        developer.log('Login successful: $data');
-      }
-    } on DioException catch (e) {
-      String errorMessage = e.response?.data['message'] ?? 'Login failed';
-      // if (e.response?.statusCode == 403) {
-      //   errorMessage =
-      //       'Your profile is under review. Please wait for approval.';
-      //   Fluttertoast.showToast(
-      //     msg: errorMessage,
-      //     toastLength: Toast.LENGTH_LONG,
-      //     gravity: ToastGravity.TOP,
-      //     backgroundColor: Colors.orange,
-      //     textColor: Colors.white,
-      //     fontSize: 12.0,
-      //   );
-      // } else {
-      //   Fluttertoast.showToast(
-      //     msg: errorMessage,
-      //     toastLength: Toast.LENGTH_SHORT,
-      //     gravity: ToastGravity.TOP,
-      //     backgroundColor: Colors.red,
-      //     textColor: Colors.white,
-      //     fontSize: 12.0,
-      //   );
-      // }
-      // throw Exception('Failed to login: ${e.message}');
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: 'An unexpected error occurred: $e',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 12.0,
-      );
-      throw Exception('Failed to login: $e');
-    }
-  }
+  // static Future<void> login(
+  //   String email,
+  //   String password,
+  //   BuildContext context,
+  // ) async {
+  //   try {
+  //     final deviceToken = await fcmGetToken();
+  //     final dio = await createDio();
+  //     final service = APIStateNetwork(dio);
+  //     // final response = await service.login(
+  //     //   LoginBodyModel(
+  //     //     email: email,
+  //     //     password: password,
+  //     //     deviceToken: deviceToken,
+  //     //   ),
+  //     // );
+  //     // ✅ Send as JSON body, not multipart
+  //     final body = {
+  //       "email": email,
+  //       "password": password,
+  //       "device_token": deviceToken,
+  //     };
+  //     final response = await service.login(body);
+  //     if (response.response.statusCode == 200) {
+  //       final data = response.response.data;
+  //       final loginData = LoginResponseModel.fromJson(data);
+  //       final box = await Hive.openBox('userdata');
+  //       await box.clear(); // Optional: Clear previous session
+  //       await box.put('token', loginData.data!.token);
+  //       await box.put('full_name', loginData.data!.fullName);
+  //       await box.put('userType', loginData.data!.userType);
+  //       await box.put("email", loginData.data!.email);
+  //       await box.put("userid", loginData.data!.userid);
+  //       var userType = box.get("userType");
+  //       log("userID ${box.get("userid")}");
+  //       log("userType : - $userType");
+  //       Fluttertoast.showToast(
+  //         msg: data['message'] ?? 'Login successful',
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.TOP,
+  //         backgroundColor: Colors.green,
+  //         textColor: Colors.white,
+  //         fontSize: 12.0,
+  //       );
+  //       developer.log('Login successful: $data');
+  //     }
+  //   } on DioException catch (e) {
+  //     String errorMessage = e.response?.data['message'] ?? 'Login failed';
+  //     // if (e.response?.statusCode == 403) {
+  //     //   errorMessage =
+  //     //       'Your profile is under review. Please wait for approval.';
+  //     //   Fluttertoast.showToast(
+  //     //     msg: errorMessage,
+  //     //     toastLength: Toast.LENGTH_LONG,
+  //     //     gravity: ToastGravity.TOP,
+  //     //     backgroundColor: Colors.orange,
+  //     //     textColor: Colors.white,
+  //     //     fontSize: 12.0,
+  //     //   );
+  //     // } else {
+  //     //   Fluttertoast.showToast(
+  //     //     msg: errorMessage,
+  //     //     toastLength: Toast.LENGTH_SHORT,
+  //     //     gravity: ToastGravity.TOP,
+  //     //     backgroundColor: Colors.red,
+  //     //     textColor: Colors.white,
+  //     //     fontSize: 12.0,
+  //     //   );
+  //     // }
+  //     // throw Exception('Failed to login: ${e.message}');
+  //   } catch (e) {
+  //     Fluttertoast.showToast(
+  //       msg: 'An unexpected error occurred: $e',
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.TOP,
+  //       backgroundColor: Colors.red,
+  //       textColor: Colors.white,
+  //       fontSize: 12.0,
+  //     );
+  //     throw Exception('Failed to login: $e');
+  //   }
+  // }
 
   static Future<void> register(
     String email,

@@ -202,46 +202,74 @@ Dio createDio() {
         );
 
         if (statusCode == 401) {
-          final box = Hive.box("userdata");
-          await box.delete("token");
-          await box.flush();
-          Fluttertoast.showToast(
-            msg: "Session expired, please login again",
-            backgroundColor: Colors.orange,
-          );
-          // navigatorKey.currentState?.pushAndRemoveUntil(
-          //   CupertinoPageRoute(
-          //     builder: (context) => LoginPage(),
-          //   ),
-          //   (route) => false,
+          // final box = Hive.box("userdata");
+          // await box.delete("token");
+          // await box.flush();
+          // Fluttertoast.showToast(
+          //   msg: "Session expired, please login again",
+          //   backgroundColor: Colors.orange,
           // );
-          /// ✅ Always ensure navigation runs on main isolate event loop
-          Future.microtask(() {
-            final navState = navigatorKey.currentState;
-            if (navState != null) {
-              log("✅ Navigator found, redirecting to login");
-              navState.pushAndRemoveUntil(
-                CupertinoPageRoute(builder: (_) => const LoginPage()),
-                (route) => false,
-              );
-            } else {
-              log("❌ Navigator was null, retrying navigation...");
+          // Future.microtask(() {
+          //   final navState = navigatorKey.currentState;
+          //   if (navState != null) {
+          //     log("✅ Navigator found, redirecting to login");
+          //     navState.pushAndRemoveUntil(
+          //       CupertinoPageRoute(builder: (_) => const LoginPage()),
+          //       (route) => false,
+          //     );
+          //   } else {
+          //     log("❌ Navigator was null, retrying navigation...");
+          //     /// retry after short delay
+          //     Future.delayed(const Duration(seconds: 1), () {
+          //       final retryNav = navigatorKey.currentState;
+          //       if (retryNav != null) {
+          //         retryNav.pushAndRemoveUntil(
+          //           CupertinoPageRoute(builder: (_) => const LoginPage()),
+          //           (route) => false,
+          //         );
+          //         log("✅ Navigation successful on retry");
+          //       } else {
+          //         log("❌ Navigator still null after retry");
+          //       }
+          //     });
+          //   }
+          // });
 
-              /// retry after short delay
-              Future.delayed(const Duration(seconds: 1), () {
-                final retryNav = navigatorKey.currentState;
-                if (retryNav != null) {
-                  retryNav.pushAndRemoveUntil(
-                    CupertinoPageRoute(builder: (_) => const LoginPage()),
-                    (route) => false,
-                  );
-                  log("✅ Navigation successful on retry");
-                } else {
-                  log("❌ Navigator still null after retry");
-                }
-              });
-            }
-          });
+          final path = e.requestOptions.path;
+          // ✅ Skip handling for login API (only handle post-login token expiry)
+          if (!path.contains('/login')) {
+            final box = Hive.box("userdata");
+            await box.delete("token");
+            await box.flush();
+            Fluttertoast.showToast(
+              msg: "Session expired, please login again",
+              backgroundColor: Colors.orange,
+            );
+
+            Future.microtask(() {
+              final navState = navigatorKey.currentState;
+              if (navState != null) {
+                navState.pushAndRemoveUntil(
+                  CupertinoPageRoute(builder: (_) => const LoginPage()),
+                  (route) => false,
+                );
+              } else {
+                log("❌ Navigator was null, retrying navigation...");
+                Future.delayed(const Duration(seconds: 1), () {
+                  final retryNav = navigatorKey.currentState;
+                  if (retryNav != null) {
+                    retryNav.pushAndRemoveUntil(
+                      CupertinoPageRoute(builder: (_) => const LoginPage()),
+                      (route) => false,
+                    );
+                    log("✅ Navigation successful on retry");
+                  } else {
+                    log("❌ Navigator still null after retry");
+                  }
+                });
+              }
+            });
+          }
         }
 
         handler.next(e);

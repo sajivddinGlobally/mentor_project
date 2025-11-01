@@ -1,11 +1,19 @@
 import 'dart:developer';
+import 'package:dio/dio.dart';
+import 'package:educationapp/coreFolder/Model/login.body.model.dart';
+import 'package:educationapp/coreFolder/Model/login.rsponse.model.dart';
+import 'package:educationapp/coreFolder/network/api.state.dart';
+import 'package:educationapp/coreFolder/utils/preety.dio.dart';
 import 'package:educationapp/home/home.page.dart';
 import 'package:educationapp/splash/getstart.page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import '../complete/complete.page.dart';
 import '../coreFolder/auth/login.auth.dart';
 import '../register/register.page.dart';
@@ -118,33 +126,78 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
     super.dispose();
   }
 
+  Future<String> fcmGetToken() async {
+    // ✅ Now request notification permissions
+    NotificationSettings settings =
+        await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+      print('User declined permission');
+      return "no_permission";
+    }
+
+    String? Fcmtoken = await FirebaseMessaging.instance.getToken();
+    print('FCM Token: $Fcmtoken');
+    return Fcmtoken ?? "unknown_device";
+  }
+
   Future<void> _handleLogin() async {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() {
-        isLoading = true; // Show loader
+        isLoading = true;
       });
+
+      final deviceToken = await fcmGetToken();
+
       try {
-        await Auth.login(
-          emailController.text.trim(),
-          passwordController.text.trim(),
-          context,
+        final body = LoginBodyModel(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+          deviceToken: deviceToken,
         );
-        if (mounted) {
+
+        final service = APIStateNetwork(createDio());
+        final response = await service.login(body);
+
+        if (response.data != null) {
+          final box = await Hive.openBox('userdata');
+          await box.clear();
+          await box.put('token', response.data!.token);
+          await box.put('full_name', response.data!.fullName);
+          await box.put('userType', response.data!.userType);
+          await box.put('email', response.data!.email);
+          await box.put('userid', response.data!.userid);
+
+          Fluttertoast.showToast(msg: response.message!);
           Navigator.pushAndRemoveUntil(
             context,
-            CupertinoPageRoute(builder: (context) => HomePage(0)),
+            CupertinoPageRoute(builder: (_) => HomePage(0)),
             (route) => false,
           );
+        } else {
+          // ✅ Clean failure handling for invalid credentials
+          Fluttertoast.showToast(
+            msg: response.message ?? "Invalid credentials",
+            backgroundColor: Colors.purple,
+          );
         }
-      } catch (e) {
-        // Error is already handled in AuthService.login (shows toast)
-        log('Login error: $e');
+      } on DioException catch (e) {
+        final error = e.response!.data['error'];
+        Fluttertoast.showToast(
+          msg: error,
+          backgroundColor: Colors.red,
+        );
+      } catch (e, st) {
+        log("Login exception: $e\n$st");
+        Fluttertoast.showToast(msg: "Unexpected error");
       } finally {
-        if (mounted) {
-          setState(() {
-            isLoading = false; // Hide loader
-          });
-        }
+        setState(() {
+          isLoading = false;
+        });
       }
     }
   }

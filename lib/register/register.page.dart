@@ -265,7 +265,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                         setState(() {
                           buttonLoader = false;
                         });
-                        Fluttertoast.showToast(msg: e.toString());
+                        // Fluttertoast.showToast(msg: e.toString());
                         log("Register Error $e");
                       } finally {
                         setState(() => buttonLoader = false);
