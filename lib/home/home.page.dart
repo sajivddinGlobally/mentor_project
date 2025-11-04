@@ -116,6 +116,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget drawerWidget(Box box) {
     final userType = box.get('userType');
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Container(
@@ -175,7 +176,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             borderRadius: BorderRadius.circular(500.r),
                           ),
                           child: Image.network(
-                            box.get("pic").toString(),
+                            box.get("profile").toString(),
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return ClipOval(
@@ -420,6 +421,8 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
   @override
   Widget build(BuildContext context) {
     var box = Hive.box('userdata');
+    final profileImage = box.get('profile');
+
     final getHomeStudentData = ref.watch(getHomeStudentDataProvider);
     final getHomeMentorData = ref.watch(getHomeMentorDataProvider);
     final userType = box.get('userType');
@@ -514,7 +517,7 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                       borderRadius: BorderRadius.circular(500.r),
                     ),
                     child: Image.network(
-                      box.get("pic").toString(),
+                      profileImage['profile_picture'].toString(),
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return ClipOval(

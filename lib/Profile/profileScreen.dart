@@ -67,7 +67,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     // final profileAsync = ref.watch(profileProvider(parsedUserId));
 
     final userProfileProvider = ref.watch(userProfileController);
-
     return Scaffold(
       body: userProfileProvider.when(
         data: (userProfile) => SingleChildScrollView(

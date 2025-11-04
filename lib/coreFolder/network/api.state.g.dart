@@ -342,7 +342,7 @@ class _APIStateNetwork implements APIStateNetwork {
     if (profilePicture != null) {
       _data.files.add(
         MapEntry(
-          'profile_picture',
+          'profile_pic',
           MultipartFile.fromFileSync(
             profilePicture.path,
             filename: profilePicture.path.split(Platform.pathSeparator).last,
@@ -619,6 +619,36 @@ class _APIStateNetwork implements APIStateNetwork {
     late TrendingExpertResModel _value;
     try {
       _value = TrendingExpertResModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<PasswordChangeResModel> passwordChange(
+    PasswordChangeBodyModel body,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _options = _setStreamType<PasswordChangeResModel>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/change-password',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late PasswordChangeResModel _value;
+    try {
+      _value = PasswordChangeResModel.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

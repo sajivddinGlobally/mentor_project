@@ -245,7 +245,7 @@ class FromDataMode {
   String? dob;
   String? userType;
   String? serviceType;
-  String? profileImage;
+  String? profilePicture;
   String? idCardImage;
 
   FromDataMode({
@@ -257,7 +257,7 @@ class FromDataMode {
     this.phoneNumber,
     this.userType,
     this.serviceType,
-    this.profileImage,
+    this.profilePicture,
     this.idCardImage,
   });
 
@@ -282,7 +282,7 @@ class FromDataMode {
       dob: dob ?? this.dob,
       userType: userType ?? this.userType,
       serviceType: serviceType ?? this.serviceType,
-      profileImage: profilePicture ?? this.profileImage,
+      profilePicture: profilePicture ?? this.profilePicture,
       idCardImage: idCardImage ?? this.idCardImage,
     );
   }
@@ -322,8 +322,8 @@ class FormDataNotifier extends StateNotifier<FromDataMode> {
       File? profileImageFile;
       File? idCardFile;
 
-      if (state.profileImage != null && state.profileImage!.isNotEmpty) {
-        profileImageFile = File(state.profileImage!);
+      if (state.profilePicture != null && state.profilePicture!.isNotEmpty) {
+        profileImageFile = File(state.profilePicture!);
       }
       if (state.idCardImage != null && state.idCardImage!.isNotEmpty) {
         idCardFile = File(state.idCardImage!);
@@ -343,17 +343,9 @@ class FormDataNotifier extends StateNotifier<FromDataMode> {
       );
 
       log("✅ Registered successfully: $response");
-
-      log("➡️ Sending Registration Data:");
-      log("Full Name: ${state.fullName}");
-      log("Email: ${state.email}");
-      log("Phone: ${state.phoneNumber}");
-      log("Password: ${state.password}");
-      log("Confirm Pass: ${state.confirmPass}");
-      log("Profile Pic: ${state.profileImage}");
-      log("ID Card Pic: ${state.idCardImage}");
-    } catch (e) {
+    } catch (e, st) {
       log("❌ Registration failed: $e");
+      log(st.toString());
       rethrow;
     }
   }

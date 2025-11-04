@@ -5,6 +5,8 @@ import 'package:educationapp/coreFolder/Model/getProfileUserModel.dart';
 import 'package:educationapp/coreFolder/Model/login.body.model.dart';
 import 'package:educationapp/coreFolder/Model/login.rsponse.model.dart';
 import 'package:educationapp/coreFolder/Model/newRegisterResModel.dart';
+import 'package:educationapp/coreFolder/Model/passwordChangeBodyModel.dart';
+import 'package:educationapp/coreFolder/Model/passwordChangeResModel.dart';
 import 'package:educationapp/coreFolder/Model/skillModel.dart';
 import 'package:educationapp/coreFolder/Model/trendingSkillExpertResModel.dart';
 import 'package:educationapp/coreFolder/Model/userProfileResModel.dart';
@@ -124,4 +126,8 @@ abstract class APIStateNetwork {
 
   @GET("/skills/experts/{id}")
   Future<TrendingExpertResModel> exprtTrendingSkill(@Path("id") String id);
+
+  @POST("/change-password")
+  Future<PasswordChangeResModel> passwordChange(
+      @Body() PasswordChangeBodyModel body);
 }

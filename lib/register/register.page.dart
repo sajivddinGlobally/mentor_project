@@ -319,7 +319,8 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               controller: dateController,
               readOnly: true,
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.only(left: 10.w),
+                contentPadding:
+                    EdgeInsets.only(left: 10.w, top: 20.h, bottom: 20.h),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.grey),
                   borderRadius: BorderRadius.circular(40.r),
@@ -465,12 +466,15 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                         Notifier.setUserType(
                             formData.userType ?? "Professional");
 
-                        Notifier.setProfilePicture(_image!.path);
+                        // Notifier.setProfilePicture(_image!.path);
+                        ref
+                            .read(myFormDataProvider.notifier)
+                            .setProfilePicture(_image!.path);
 
                         await ref.read(myFormDataProvider.notifier).register();
 
                         Fluttertoast.showToast(msg: "Register Successfull");
-                        
+
                         Navigator.pushAndRemoveUntil(
                           context,
                           CupertinoPageRoute(
@@ -478,12 +482,13 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                           ),
                           (route) => false,
                         );
-                      } catch (e) {
+                      } catch (e, st) {
                         setState(() {
                           buttonLoader = false;
                         });
                         // Fluttertoast.showToast(msg: e.toString());
                         log("Register Error $e");
+                        log(st.toString());
                       } finally {
                         setState(() => buttonLoader = false);
                       }

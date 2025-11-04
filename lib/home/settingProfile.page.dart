@@ -1,7 +1,12 @@
+import 'package:educationapp/coreFolder/Model/passwordChangeBodyModel.dart';
+import 'package:educationapp/coreFolder/network/api.state.dart';
+import 'package:educationapp/coreFolder/utils/preety.dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:developer';
 
 class SettingProfilePage extends StatefulWidget {
   const SettingProfilePage({super.key});
@@ -15,7 +20,7 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
     final oldPasswordController = TextEditingController();
     final newPasswordController = TextEditingController();
     final repeatPasswordController = TextEditingController();
-
+    bool isChange = false;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -167,49 +172,81 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff008080),
                   ),
-                  onPressed: () {
-                    final oldPass = oldPasswordController.text.trim();
-                    final newPass = newPasswordController.text.trim();
-                    final repeatPass = repeatPasswordController.text.trim();
+                  onPressed: isChange
+                      ? null
+                      : () async {
+                          final oldPass = oldPasswordController.text.trim();
+                          final newPass = newPasswordController.text.trim();
+                          final repeatPass =
+                              repeatPasswordController.text.trim();
 
-                    if (oldPass.isEmpty ||
-                        newPass.isEmpty ||
-                        repeatPass.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Please fill all fields"),
-                          backgroundColor: Colors.red,
+                          if (oldPass.isEmpty ||
+                              newPass.isEmpty ||
+                              repeatPass.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Please fill all fields"),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+
+                          if (newPass != repeatPass) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Passwords do not match"),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+                          try {
+                            setState(() {
+                              isChange = true;
+                            });
+                            final body = PasswordChangeBodyModel(
+                                oldPassword: oldPass,
+                                newPassword: newPass,
+                                newPasswordConfirmation: repeatPass);
+                            final service = APIStateNetwork(createDio());
+                            final response = await service.passwordChange(body);
+                            if (response != null) {
+                              Fluttertoast.showToast(msg: response.message);
+                              Navigator.pop(context);
+                            } else {
+                              Fluttertoast.showToast(msg: response.message);
+                            }
+                          } catch (e, st) {
+                            setState(() {
+                              isChange = false;
+                            });
+                            log(e.toString());
+                          } finally {
+                            setState(() {
+                              isChange = false;
+                            });
+                          }
+                        },
+                  child: isChange
+                      ? Center(
+                          child: SizedBox(
+                            width: 20.w,
+                            height: 20.h,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2.w,
+                            ),
+                          ),
+                        )
+                      : Text(
+                          "Save Password",
+                          style: GoogleFonts.roboto(
+                            color: Colors.white,
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      );
-                      return;
-                    }
-
-                    if (newPass != repeatPass) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Passwords do not match"),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                      return;
-                    }
-
-                    Navigator.pop(context); // Close BottomSheet
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Password updated successfully"),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                  },
-                  child: Text(
-                    "Save Password",
-                    style: GoogleFonts.roboto(
-                      color: Colors.white,
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
                 ),
               ),
               SizedBox(height: 15.h),
