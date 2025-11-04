@@ -148,106 +148,106 @@ class Auth {
   //   }
   // }
 
-  static Future<void> register(
-    String email,
-    String password,
-    String fullName,
-    String phoneNumber,
-    String serviceType,
-    String userType,
-    BuildContext context,
-  ) async {
-    final dio = await createDio();
-    final service = APIStateNetwork(dio);
-    final response = await service.register(
-      RegisterBodyModel(
-          email: email,
-          password: password,
-          fullName: fullName,
-          phoneNumber: phoneNumber,
-          serviceType: serviceType,
-          userType: userType),
-    );
+  // static Future<void> register(
+  //   String email,
+  //   String password,
+  //   String fullName,
+  //   String phoneNumber,
+  //   String serviceType,
+  //   String userType,
+  //   BuildContext context,
+  // ) async {
+  //   final dio = await createDio();
+  //   final service = APIStateNetwork(dio);
+  //   final response = await service.register(
+  //     RegisterBodyModel(
+  //         email: email,
+  //         password: password,
+  //         fullName: fullName,
+  //         phoneNumber: phoneNumber,
+  //         serviceType: serviceType,
+  //         userType: userType),
+  //   );
 
-    if (response.data != null) {
-      Fluttertoast.showToast(msg: response.data['message']);
-      Navigator.pushAndRemoveUntil(
-        context,
-        CupertinoPageRoute(
-          builder: (context) => LoginPage(),
-        ),
-        (route) => false,
-      );
-    } else {
-      Fluttertoast.showToast(msg: "Something went wrong");
-    }
+  //   if (response.data != null) {
+  //     Fluttertoast.showToast(msg: response.data['message']);
+  //     Navigator.pushAndRemoveUntil(
+  //       context,
+  //       CupertinoPageRoute(
+  //         builder: (context) => LoginPage(),
+  //       ),
+  //       (route) => false,
+  //     );
+  //   } else {
+  //     Fluttertoast.showToast(msg: "Something went wrong");
+  //   }
 
-    // if (response.response.data['message'] == "Registration successful") {
-    //   Fluttertoast.showToast(
-    //     msg: response.response.data['message'],
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.TOP,
-    //     backgroundColor: Colors.green,
-    //     textColor: Colors.white,
-    //     fontSize: 12.0,
-    //   );
-    //   log('Register successful: ${response.response.data}');
-    //   // Navigator.pop(context);
-    //   Navigator.pushAndRemoveUntil(
-    //     context,
-    //     CupertinoPageRoute(
-    //       builder: (context) => LoginPage(),
-    //     ),
-    //     (route) => false,
-    //   );
-    // } else {
-    //   Fluttertoast.showToast(
-    //     msg: response.response.data['message'],
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.TOP,
-    //     backgroundColor: Colors.red,
-    //     textColor: Colors.white,
-    //     fontSize: 12.0,
-    //   );
-    //   throw Exception('Failed to login');
-    // }
+  //   // if (response.response.data['message'] == "Registration successful") {
+  //   //   Fluttertoast.showToast(
+  //   //     msg: response.response.data['message'],
+  //   //     toastLength: Toast.LENGTH_SHORT,
+  //   //     gravity: ToastGravity.TOP,
+  //   //     backgroundColor: Colors.green,
+  //   //     textColor: Colors.white,
+  //   //     fontSize: 12.0,
+  //   //   );
+  //   //   log('Register successful: ${response.response.data}');
+  //   //   // Navigator.pop(context);
+  //   //   Navigator.pushAndRemoveUntil(
+  //   //     context,
+  //   //     CupertinoPageRoute(
+  //   //       builder: (context) => LoginPage(),
+  //   //     ),
+  //   //     (route) => false,
+  //   //   );
+  //   // } else {
+  //   //   Fluttertoast.showToast(
+  //   //     msg: response.response.data['message'],
+  //   //     toastLength: Toast.LENGTH_SHORT,
+  //   //     gravity: ToastGravity.TOP,
+  //   //     backgroundColor: Colors.red,
+  //   //     textColor: Colors.white,
+  //   //     fontSize: 12.0,
+  //   //   );
+  //   //   throw Exception('Failed to login');
+  //   // }
 
-    // final message = (response.response.data['message'] ?? '').toString().trim();
+  //   // final message = (response.response.data['message'] ?? '').toString().trim();
 
-    // // ✅ check for any success message
-    // final isSuccess = message.toLowerCase().contains('success');
+  //   // // ✅ check for any success message
+  //   // final isSuccess = message.toLowerCase().contains('success');
 
-    // if (isSuccess) {
-    //   Fluttertoast.showToast(
-    //     msg: message,
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.TOP,
-    //     backgroundColor: Colors.green, // green for success
-    //     textColor: Colors.white,
-    //     fontSize: 12.0,
-    //   );
+  //   // if (isSuccess) {
+  //   //   Fluttertoast.showToast(
+  //   //     msg: message,
+  //   //     toastLength: Toast.LENGTH_SHORT,
+  //   //     gravity: ToastGravity.TOP,
+  //   //     backgroundColor: Colors.green, // green for success
+  //   //     textColor: Colors.white,
+  //   //     fontSize: 12.0,
+  //   //   );
 
-    //   log('✅ Register successful: ${response.response.data}');
+  //   //   log('✅ Register successful: ${response.response.data}');
 
-    //   Navigator.pushAndRemoveUntil(
-    //     context,
-    //     CupertinoPageRoute(builder: (context) => const LoginPage()),
-    //     (route) => false,
-    //   );
+  //   //   Navigator.pushAndRemoveUntil(
+  //   //     context,
+  //   //     CupertinoPageRoute(builder: (context) => const LoginPage()),
+  //   //     (route) => false,
+  //   //   );
 
-    //   return;
-    // }
-    // Fluttertoast.showToast(
-    //   msg: message.isNotEmpty ? message : 'Something went wrong',
-    //   toastLength: Toast.LENGTH_SHORT,
-    //   gravity: ToastGravity.TOP,
-    //   backgroundColor: Colors.red, // red for failure
-    //   textColor: Colors.white,
-    //   fontSize: 12.0,
-    // );
+  //   //   return;
+  //   // }
+  //   // Fluttertoast.showToast(
+  //   //   msg: message.isNotEmpty ? message : 'Something went wrong',
+  //   //   toastLength: Toast.LENGTH_SHORT,
+  //   //   gravity: ToastGravity.TOP,
+  //   //   backgroundColor: Colors.red, // red for failure
+  //   //   textColor: Colors.white,
+  //   //   fontSize: 12.0,
+  //   // );
 
-    // throw Exception('Registration failed: $message');
-  }
+  //   // throw Exception('Registration failed: $message');
+  // }
 
   static Future<void> updateUserProfile({
     required String userType,

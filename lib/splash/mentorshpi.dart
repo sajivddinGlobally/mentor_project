@@ -258,6 +258,7 @@ class _MentorshipBodyState extends ConsumerState<MentorshipBody> {
 */
 
 import 'dart:developer';
+import 'package:educationapp/home/id.page.dart';
 import 'package:educationapp/main.dart';
 import 'package:educationapp/coreFolder/Model/service.model.dart';
 import 'package:educationapp/splash/getstart.page.dart';
@@ -321,8 +322,13 @@ class _MentorshipBodyState extends ConsumerState<MentorshipBody> {
   ];
 
   void sendToNextPage() {
+    // Navigator.push(
+    //     context, CupertinoPageRoute(builder: (context) => RegisterPage()));
     Navigator.push(
-        context, CupertinoPageRoute(builder: (context) => RegisterPage()));
+        context,
+        CupertinoPageRoute(
+          builder: (context) => IdPage(),
+        ));
   }
 
   @override

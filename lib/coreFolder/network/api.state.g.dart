@@ -314,14 +314,60 @@ class _APIStateNetwork implements APIStateNetwork {
   }
 
   @override
-  Future<HttpResponse<dynamic>> register(RegisterBodyModel body) async {
+  Future<NewRegisterResModel> registerUser(
+    String fullName,
+    String email,
+    String phoneNumber,
+    String password,
+    String confirmPass,
+    String dob,
+    String userType,
+    String serviceType,
+    File? profilePicture,
+    File? idCards,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(body.toJson());
-    final _options = _setStreamType<HttpResponse<dynamic>>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
+    final _data = FormData();
+    _data.fields.add(MapEntry('full_name', fullName));
+    _data.fields.add(MapEntry('email', email));
+    _data.fields.add(MapEntry('phone_number', phoneNumber));
+    _data.fields.add(MapEntry('password', password));
+    _data.fields.add(MapEntry('confirm_password', confirmPass));
+    _data.fields.add(MapEntry('dob', dob));
+    _data.fields.add(MapEntry('user_type', userType));
+    _data.fields.add(MapEntry('service_type', serviceType));
+    if (profilePicture != null) {
+      _data.files.add(
+        MapEntry(
+          'profile_picture',
+          MultipartFile.fromFileSync(
+            profilePicture.path,
+            filename: profilePicture.path.split(Platform.pathSeparator).last,
+          ),
+        ),
+      );
+    }
+    if (idCards != null) {
+      _data.files.add(
+        MapEntry(
+          'student_id',
+          MultipartFile.fromFileSync(
+            idCards.path,
+            filename: idCards.path.split(Platform.pathSeparator).last,
+          ),
+        ),
+      );
+    }
+    final _options = _setStreamType<NewRegisterResModel>(
+      Options(
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'multipart/form-data',
+      )
           .compose(
             _dio.options,
             '/register',
@@ -330,10 +376,15 @@ class _APIStateNetwork implements APIStateNetwork {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
-    final httpResponse = HttpResponse(_value, _result);
-    return httpResponse;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late NewRegisterResModel _value;
+    try {
+      _value = NewRegisterResModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
   }
 
   @override

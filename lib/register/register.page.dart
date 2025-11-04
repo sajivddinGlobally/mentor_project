@@ -1,4 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:dotted_border/dotted_border.dart';
+import 'package:educationapp/home/id.page.dart';
 import 'package:educationapp/login/login.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +9,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../coreFolder/auth/login.auth.dart';
 import '../main.dart';
 
@@ -106,9 +112,86 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
     super.dispose();
   }
 
+  DateTime? selectedDate;
+  final dateController = TextEditingController();
+
+  Future<void> pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2000),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (picked != null) {
+      final formatted = DateFormat('yyyy-MM-dd').format(picked);
+      dateController.text = formatted;
+      ref.read(myFormDataProvider.notifier).setDOB(formatted);
+    }
+  }
+
+  File? _image;
+  final picker = ImagePicker();
+
+  Future pickImageFromGallery() async {
+    var status = await Permission.camera.request();
+    if (status.isGranted) {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } else {
+      Fluttertoast.showToast(msg: "Gallery permission denied");
+    }
+  }
+
+  Future pickImageFromCamera() async {
+    var status = await Permission.camera.request();
+    if (status.isGranted) {
+      final pickedFile = await picker.pickImage(source: ImageSource.camera);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } else {
+      Fluttertoast.showToast(msg: "Camera permission denied");
+    }
+  }
+
+  Future showImage() async {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) {
+        return CupertinoActionSheet(
+          actions: [
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+                pickImageFromGallery();
+              },
+              child: const Text("Gallery"),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+                pickImageFromCamera();
+              },
+              child: const Text("Camera"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final formData = ref.watch(formDataProvider);
+
+    final registerProviderData = ref.read(myFormDataProvider.notifier);
     return Form(
       key: _formKey,
       child: Column(
@@ -162,12 +245,18 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
           ),
           SizedBox(height: 10.h),
           RegisterField(
+            onChange: (value) {
+              registerProviderData.setName(value);
+            },
             controller: fullNameController,
             label: 'Full Name',
             validator: (value) =>
                 value!.isEmpty ? "Full Name is required" : null,
           ),
           RegisterField(
+            onChange: (value) {
+              registerProviderData.setEmail(value);
+            },
             controller: emailController,
             label: 'Email Address',
             validator: (value) {
@@ -217,10 +306,55 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               invalidNumberMessage: "Invalid phone number",
               onChanged: (phone) {
                 log("Phone Number: ${phone.completeNumber}");
+                registerProviderData.setPhone(phone.toString());
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 28.w, right: 28.w, top: 10.h),
+            child: TextFormField(
+              onTap: () {
+                pickDate();
+              },
+              controller: dateController,
+              readOnly: true,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(left: 10.w),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(40.r),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(40.r),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(40.r),
+                ),
+                prefixIcon: Icon(
+                  Icons.date_range_outlined,
+                  color: Color(0xFFC8C8C8),
+                ),
+                hintText: "Date of Birth",
+                hintStyle: GoogleFonts.inter(
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFFC8C8C8),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please select your date of birth';
+                }
+                return null;
               },
             ),
           ),
           RegisterField(
+            onChange: (value) {
+              registerProviderData.setPassword(value);
+            },
             controller: passwordController,
             label: 'Password',
             obscureText: true,
@@ -232,6 +366,9 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
             },
           ),
           RegisterField(
+            onChange: (value) {
+              registerProviderData.setConfriPassword(value);
+            },
             controller: confirmPasswordController,
             label: 'Confirm Password',
             obscureText: true,
@@ -243,6 +380,60 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               return null;
             },
           ),
+          SizedBox(
+            height: 20.h,
+          ),
+          InkWell(
+            onTap: () {
+              showImage();
+            },
+            child: Center(
+              child: DottedBorder(
+                  dashPattern: [8, 8],
+                  radius: Radius.circular(20.r),
+                  borderType: BorderType.RRect,
+                  color: Color(0xFF008080),
+                  strokeWidth: 2.w,
+                  child: Container(
+                    width: 400.w,
+                    height: 220.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
+                    child: _image == null
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.upload_sharp,
+                                color: Color(0xFF008080),
+                                size: 30.sp,
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              Text(
+                                "Upload picture",
+                                style: GoogleFonts.inter(
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xFF4D4D4D)),
+                              )
+                            ],
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(20.r),
+                            child: Image.file(
+                              _image!,
+                              fit: BoxFit.cover,
+                              width: 400.w,
+                              height: 220.h,
+                            ),
+                          ),
+                  )),
+            ),
+          ),
           SizedBox(height: 20.h),
           GestureDetector(
             onTap: buttonLoader
@@ -253,14 +444,40 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                         buttonLoader = true; // show loader
                       });
                       try {
-                        await Auth.register(
-                            emailController.text,
-                            passwordController.text,
-                            fullNameController.text,
-                            phoneController.text,
-                            formData.serviceType ?? "Opportunities",
-                            formData.userType ?? "Professional",
-                            context);
+                        // await Auth.register(
+                        //     emailController.text,
+                        //     passwordController.text,
+                        //     fullNameController.text,
+                        //     phoneController.text,
+                        //     formData.serviceType ?? "Opportunities",
+                        //     formData.userType ?? "Professional",
+                        //     context);
+
+                        final Notifier = ref.read(myFormDataProvider.notifier);
+                        Notifier.setName(fullNameController.text);
+                        Notifier.setEmail(emailController.text);
+                        Notifier.setPhone(phoneController.text);
+                        Notifier.setPassword(passwordController.text);
+                        Notifier.setConfriPassword(
+                            confirmPasswordController.text);
+                        Notifier.setSerType(
+                            formData.serviceType ?? "Opportunities");
+                        Notifier.setUserType(
+                            formData.userType ?? "Professional");
+
+                        Notifier.setProfilePicture(_image!.path);
+
+                        await ref.read(myFormDataProvider.notifier).register();
+
+                        Fluttertoast.showToast(msg: "Register Successfull");
+                        
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => LoginPage(),
+                          ),
+                          (route) => false,
+                        );
                       } catch (e) {
                         setState(() {
                           buttonLoader = false;
@@ -296,7 +513,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               ),
             ),
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 20.h),
         ],
       ),
     );
@@ -308,12 +525,14 @@ class RegisterField extends StatelessWidget {
   final TextEditingController controller;
   final bool obscureText;
   final String? Function(String?)? validator;
+  final Function(String)? onChange;
   const RegisterField({
     super.key,
     required this.label,
     required this.controller,
     this.obscureText = false,
     this.validator,
+    this.onChange,
   });
 
   @override
@@ -338,6 +557,7 @@ class RegisterField extends StatelessWidget {
           ),
           SizedBox(height: 10.h),
           TextFormField(
+            onChanged: onChange,
             controller: controller,
             obscureText: obscureText,
             decoration: InputDecoration(

@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:educationapp/coreFolder/Model/getProfileUserModel.dart';
 import 'package:educationapp/coreFolder/Model/login.body.model.dart';
 import 'package:educationapp/coreFolder/Model/login.rsponse.model.dart';
+import 'package:educationapp/coreFolder/Model/newRegisterResModel.dart';
 import 'package:educationapp/coreFolder/Model/skillModel.dart';
 import 'package:educationapp/coreFolder/Model/trendingSkillExpertResModel.dart';
 import 'package:educationapp/coreFolder/Model/userProfileResModel.dart';
@@ -74,8 +77,24 @@ abstract class APIStateNetwork {
     @Query("industry") String industry,
   );
 
+  // @POST('/register')
+  // Future<HttpResponse<dynamic>> register(@Body() RegisterBodyModel body);
+
+  // @MultiPart()
+  @MultiPart()
   @POST('/register')
-  Future<HttpResponse<dynamic>> register(@Body() RegisterBodyModel body);
+  Future<NewRegisterResModel> registerUser(
+    @Part(name: "full_name") String fullName,
+    @Part(name: "email") String email,
+    @Part(name: "phone_number") String phoneNumber,
+    @Part(name: "password") String password,
+    @Part(name: "confirm_password") String confirmPass,
+    @Part(name: "dob") String dob,
+    @Part(name: "user_type") String userType,
+    @Part(name: "service_type") String serviceType,
+    @Part(name: "profile_pic") File? profilePicture,
+    @Part(name: "student_id") File? idCards,
+  );
 
   @GET('/dropdowns')
   Future<GetDropDownModel> getDropDownApi();
