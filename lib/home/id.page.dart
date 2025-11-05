@@ -208,8 +208,23 @@ class _IdBodyState extends ConsumerState<IdBody> {
         Center(
           child: ElevatedButton(
             onPressed: () {
+              // ✅ Step 1: Determine which message to show based on userType
+              final data = formData.userType == "Student"
+                  ? "Please select Student ID Card"
+                  : "Please select Professional ID Card";
+
+              // ✅ Step 2: Validate if image is picked
+              if (_image == null || _image!.path.isEmpty) {
+                Fluttertoast.showToast(msg: data);
+                return;
+              }
+
+              // ✅ Step 3: Save image path in Riverpod provider
               ref.read(myFormDataProvider.notifier).setIdCarPic(_image!.path);
-              Fluttertoast.showToast(msg: "upload id Card sucess");
+
+              // ✅ Step 4: Show success message
+              Fluttertoast.showToast(msg: "ID Card uploaded successfully");
+
               Navigator.push(context,
                   CupertinoPageRoute(builder: (context) => RegisterPage()));
             },
@@ -299,8 +314,8 @@ class FormDataNotifier extends StateNotifier<FromDataMode> {
   void setPassword(String password) =>
       state = state.copyWith(passwprd: password);
 
-  void setConfriPassword(String password) =>
-      state = state.copyWith(passwprd: password);
+  void setConfriPassword(String confirmpassword) =>
+      state = state.copyWith(confirmPass: confirmpassword);
 
   void setPhone(String phone) {
     state = state.copyWith(phoneNumber: phone);

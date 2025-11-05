@@ -453,6 +453,10 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                         //     formData.serviceType ?? "Opportunities",
                         //     formData.userType ?? "Professional",
                         //     context);
+                        if (_image == null || _image!.path.isEmpty) {
+                          Fluttertoast.showToast(msg: "Please Select Picture");
+                          return;
+                        }
 
                         final Notifier = ref.read(myFormDataProvider.notifier);
                         Notifier.setName(fullNameController.text);
