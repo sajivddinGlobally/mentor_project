@@ -422,6 +422,46 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                   ),
                                 ]),
                           ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Divider(),
+                          // Educations section
+                          Container(
+                            margin: EdgeInsets.only(left: 20.w, top: 15.h),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Language",
+                                        style: GoogleFonts.roboto(
+                                          fontSize: 20.sp,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10.h),
+                                      if (userProfile.data!.languageKnown !=
+                                              null &&
+                                          userProfile
+                                              .data!.languageKnown!.isNotEmpty)
+                                        Text(
+                                            userProfile.data!.languageKnown ??
+                                                "No Language select",
+                                            style: GoogleFonts.roboto(
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.black,
+                                            )),
+                                    ],
+                                  ),
+                                ]),
+                          ),
+
                           SizedBox(height: 20.h),
                         ]),
                       ),

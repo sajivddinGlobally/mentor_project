@@ -380,6 +380,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
 class RegisterField extends StatelessWidget {
   final String label;
   final TextEditingController controller;
+  final TextInputType? type;
   final bool obscureText;
   final int? maxLine;
   final String? Function(String?)? validator;
@@ -391,6 +392,7 @@ class RegisterField extends StatelessWidget {
     this.obscureText = false,
     this.validator,
     this.maxLine,
+    this.type,
   });
 
   @override
@@ -418,6 +420,7 @@ class RegisterField extends StatelessWidget {
             controller: controller,
             obscureText: obscureText,
             maxLines: maxLine,
+            keyboardType: type,
             decoration: InputDecoration(
               focusedBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.black),

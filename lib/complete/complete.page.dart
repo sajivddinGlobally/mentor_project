@@ -819,6 +819,7 @@ class _ProfileCompletionWidgetState
                           children: [
                             SizedBox(height: 20.h),
                             RegisterField(
+                              type: TextInputType.name,
                               controller: fullNameController,
                               label: 'Full Name',
                               validator: (value) => value!.isEmpty
@@ -943,6 +944,7 @@ class _ProfileCompletionWidgetState
                               ),
                             ),
                             RegisterField(
+                              type: TextInputType.number,
                               controller: totalExperienceController,
                               label: 'Total Experience',
                               validator: (value) => value!.isEmpty
