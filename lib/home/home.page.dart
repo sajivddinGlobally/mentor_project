@@ -116,7 +116,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget drawerWidget(Box box) {
     final userType = box.get('userType');
-    final profileImage = box.get('profile');
+    final profileImage = box.get('profile') ?? {};
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Container(
@@ -177,7 +177,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ),
                           child: ClipOval(
                             child: Image.network(
-                              profileImage['profile_picture'].toString(),
+                              profileImage['profile_picture']?.toString() ??
+                                  "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
                                 return ClipOval(
@@ -423,7 +424,7 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
   @override
   Widget build(BuildContext context) {
     var box = Hive.box('userdata');
-    final profileImage = box.get('profile');
+    final profileImage = box.get('profile') ?? {};
 
     final getHomeStudentData = ref.watch(getHomeStudentDataProvider);
     final getHomeMentorData = ref.watch(getHomeMentorDataProvider);
@@ -520,7 +521,8 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                     ),
                     child: ClipOval(
                       child: Image.network(
-                        profileImage['profile_picture'].toString(),
+                        profileImage['profile_picture']?.toString() ??
+                            "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return ClipOval(

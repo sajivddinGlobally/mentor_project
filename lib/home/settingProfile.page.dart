@@ -8,6 +8,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:developer';
 
+import 'package:hive/hive.dart';
+
 class SettingProfilePage extends StatefulWidget {
   const SettingProfilePage({super.key});
 
@@ -16,6 +18,27 @@ class SettingProfilePage extends StatefulWidget {
 }
 
 class _SettingProfilePageState extends State<SettingProfilePage> {
+  late TextEditingController fullNameController;
+  late TextEditingController dobController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    var box = Hive.box('userdata');
+    final profileData = box.get('profile');
+    final fullName = profileData['full_name'].toString();
+    final dob = profileData['dob']?.toString() ?? "No Date of Birth";
+    fullNameController = TextEditingController(text: fullName);
+    dobController = TextEditingController(text: dob);
+  }
+
+  @override
+  void dispose() {
+    fullNameController.dispose();
+    dobController.dispose();
+    super.dispose();
+  }
+
   void showChangePasswordBottomSheet(BuildContext context) {
     final oldPasswordController = TextEditingController();
     final newPasswordController = TextEditingController();
@@ -259,6 +282,8 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    var box = Hive.box('userdata');
+    final profileImage = box.get('profile');
     return Scaffold(
       backgroundColor: Color(0xFFF9F9F9),
       body: Padding(
@@ -321,6 +346,7 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                           )
                         ]),
                     child: TextField(
+                      controller: fullNameController,
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
@@ -334,6 +360,10 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xFF9B9B9B)),
                           )),
+                      onChanged: (value) {
+                        var box = Hive.box('userdata');
+                        box.put('fullName', value);
+                      },
                     ),
                   ),
                   SizedBox(
@@ -352,6 +382,7 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                           )
                         ]),
                     child: TextField(
+                      controller: dobController,
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
@@ -365,6 +396,10 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xFF9B9B9B)),
                           )),
+                      onChanged: (value) {
+                        var box = Hive.box('userdata');
+                        box.put('dob', value);
+                      },
                     ),
                   ),
                   SizedBox(
@@ -417,7 +452,7 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                             borderSide: BorderSide.none,
                           ),
                           label: Text(
-                            "Password",
+                            "*************",
                             style: GoogleFonts.inter(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
