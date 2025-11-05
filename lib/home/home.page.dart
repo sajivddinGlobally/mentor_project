@@ -431,6 +431,7 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
     final userType = box.get('userType');
 
     final profileCompletion = box.get('profileCompletion')?.toDouble() ?? 0.45;
+
     final isLoading =
         getHomeMentorData.isLoading || getHomeStudentData.isLoading;
 
@@ -805,122 +806,161 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                         children: [
                           SizedBox(height: 20.h),
                           Container(
-                            width: 400.w.clamp(0, 400.w),
-                            padding: EdgeInsets.symmetric(vertical: 20.h),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.r),
-                              color: Color(0x26008080),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.all(10.sp),
-                                  height: 5.h,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    borderRadius: BorderRadius.circular(10.r),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.r),
-                                    child: LinearProgressIndicator(
-                                      value: profileCompletion.clamp(0.0, 1.0),
-                                      backgroundColor: Colors.transparent,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.blue[600] ?? Colors.blue),
-                                      minHeight: 20.h,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 8.h),
-                                Container(
-                                  margin: EdgeInsets.only(right: 10.w),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                              width: 400.w.clamp(0, 400.w),
+                              padding: EdgeInsets.symmetric(vertical: 20.h),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.r),
+                                color: Color(0x26008080),
+                              ),
+                              child: getHomeMentorData.when(
+                                data: (mentorData) {
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20.w),
+                                      Container(
+                                        margin: EdgeInsets.all(10.sp),
+                                        height: 5.h,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[400],
+                                          borderRadius:
+                                              BorderRadius.circular(10.r),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10.r),
+                                          child: LinearProgressIndicator(
+                                            // value: profileCompletion.clamp(
+                                            //     0.0, 1.0),
+                                            value: (((mentorData.data!
+                                                                .profileCompletion ??
+                                                            0.0) /
+                                                        100)
+                                                    .clamp(0.0, 1.0))
+                                                .toDouble(),
+                                            backgroundColor: Colors.transparent,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    Colors.blue[600] ??
+                                                        Colors.blue),
+                                            minHeight: 20.h,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      Container(
+                                        margin: EdgeInsets.only(right: 10.w),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 20.w),
+                                              child: Text(
+                                                "Profile Completed",
+                                                style: GoogleFonts.roboto(
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(
+                                              //  "${(profileCompletion * 100).toInt()}%",
+                                              "${(mentorData.data!.profileCompletion ?? 0.0).toStringAsFixed(0)}%",
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.all(10.sp),
+                                        child: Row(
+                                          children: [
+                                            ClipOval(
+                                              child: Image.network(
+                                                // profileImage['profile_picture']
+                                                //         ?.toString() ??
+                                                //     "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                                mentorData.data!.profilePic ??
+                                                    "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                                fit: BoxFit.cover,
+                                                height: 50.h,
+                                                width: 50.w,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return ClipOval(
+                                                    child: Image.network(
+                                                      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                                      fit: BoxFit.cover,
+                                                      height: 50.h,
+                                                      width: 50.w,
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            SizedBox(width: 10.w),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  // "Mike Pena",
+                                                  "${mentorData.data!.fullName ?? "Mentor"}!",
+                                                  style: GoogleFonts.roboto(
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "Placement | Interview",
+                                                  style: GoogleFonts.roboto(
+                                                    fontSize: 14.sp,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.all(10.sp),
                                         child: Text(
-                                          "Profile Completed",
+                                          "With over 5 years of experience, "
+                                          "I've guided 300+ students to land jobs "
+                                          "in top companies like Google, TCS, and Deloitte. "
+                                          "My sessions focus on mock interviews, resume building, "
+                                          "and effective communication",
                                           style: GoogleFonts.roboto(
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12.sp,
+                                            fontWeight: FontWeight.w400,
                                             color: Colors.black,
                                           ),
                                         ),
                                       ),
-                                      Text(
-                                        "${(profileCompletion * 100).toInt()}%",
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.black,
-                                        ),
-                                      ),
                                     ],
-                                  ),
+                                  );
+                                },
+                                error: (error, stackTrace) {
+                                  log(stackTrace.toString());
+                                  return Center(
+                                    child: Text(error.toString()),
+                                  );
+                                },
+                                loading: () => Center(
+                                  child: CircularProgressIndicator(),
                                 ),
-                                Container(
-                                  margin: EdgeInsets.all(10.sp),
-                                  child: Row(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(30.0),
-                                        child: Image.asset(
-                                          "assets/pic.png",
-                                          height: 50.h,
-                                          width: 50.w,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      SizedBox(width: 10.w),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Mike Pena",
-                                            style: GoogleFonts.roboto(
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          Text(
-                                            "Placement | Interview",
-                                            style: GoogleFonts.roboto(
-                                              fontSize: 14.sp,
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.all(10.sp),
-                                  child: Text(
-                                    "With over 5 years of experience, "
-                                    "I've guided 300+ students to land jobs "
-                                    "in top companies like Google, TCS, and Deloitte. "
-                                    "My sessions focus on mock interviews, resume building, "
-                                    "and effective communication",
-                                    style: GoogleFonts.roboto(
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                              )),
                           Container(
                             margin: EdgeInsets.only(left: 20.w, top: 10.h),
                             child: Row(
