@@ -646,11 +646,12 @@ class _ProfileCompletionWidgetState
           textColor: Colors.white,
           fontSize: 12.0,
         );
-        Navigator.pushAndRemoveUntil(
-          context,
-          CupertinoPageRoute(builder: (context) => HomePage(0)),
-          (route) => false,
-        );
+        // Navigator.pushAndRemoveUntil(
+        //   context,
+        //   CupertinoPageRoute(builder: (context) => HomePage(0)),
+        //   (route) => false,
+        // );
+        Navigator.pop(context);
       }
     } catch (e, st) {
       log('Registration error: $e');

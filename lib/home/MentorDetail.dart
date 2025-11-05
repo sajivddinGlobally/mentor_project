@@ -1,4 +1,9 @@
+import 'dart:developer';
+
 import 'package:educationapp/coreFolder/Controller/reviewController.dart';
+import 'package:educationapp/coreFolder/Model/sendRequestBodyModel.dart';
+import 'package:educationapp/coreFolder/network/api.state.dart';
+import 'package:educationapp/coreFolder/utils/preety.dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,6 +22,40 @@ class MentorDetailPage extends ConsumerStatefulWidget {
 }
 
 class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
+  bool isConnected = false;
+
+  Future<void> sendConnectRequest() async {
+    try {
+      final body = SendRequestBodyModel(mentorId: widget.id);
+      final service = APIStateNetwork(createDio());
+      final response = await service.studentSendRequest(body);
+
+      if (response.status == true) {
+        Fluttertoast.showToast(msg: response.message);
+        setState(() {
+          isConnected = true;
+        });
+      } else {
+        Fluttertoast.showToast(msg: response.message);
+      }
+    } catch (e, st) {
+      log("${e.toString()} \n $st");
+      Fluttertoast.showToast(msg: "No Request sent");
+    }
+  }
+
+  Future<void> sendDisconnectRequest() async {
+    try {
+      // if you have a disconnect API, call it here
+      Fluttertoast.showToast(msg: "Disconnected successfully");
+      setState(() {
+        isConnected = false;
+      });
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Failed to disconnect");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var box = Hive.box('userdata');
@@ -202,61 +241,74 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                                 color: const Color(0xff666666),
                               ),
                             ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: 10.w, top: 10.h, right: 10.w),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding:
-                                      EdgeInsets.only(left: 10.w, right: 10.w),
-                                  height: 50.h,
-                                  width: 140.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: const Color(0xffA8E6CF),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "Placement Expert",
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 20.w),
-                                GestureDetector(
-                                  onTap: () {
-                                    // Handle message action
-                                  },
-                                  child: Container(
+                          InkWell(
+                            onTap: () async {
+                              if (isConnected) {
+                                await sendDisconnectRequest();
+                              } else {
+                                await sendConnectRequest();
+                              }
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                  left: 10.w, top: 10.h, right: 10.w),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
                                     padding: EdgeInsets.only(
                                         left: 10.w, right: 10.w),
                                     height: 50.h,
                                     width: 140.w,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white,
-                                      border: Border.all(
-                                          color: const Color(0xff008080)),
+                                      //color: const Color(0xffA8E6CF),
+                                      color: isConnected
+                                          ? const Color(
+                                              0xffFF8A80) // red for disconnect
+                                          : const Color(0xffA8E6CF),
                                     ),
                                     child: Center(
                                       child: Text(
-                                        "Message",
+                                        isConnected ? "Disconnect" : "Connect",
                                         style: GoogleFonts.roboto(
                                           fontSize: 12.sp,
                                           fontWeight: FontWeight.w600,
-                                          color: const Color(0xff008080),
+                                          color: Colors.black,
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(width: 20.w),
+                                  GestureDetector(
+                                    onTap: () {
+                                      // Handle message action
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.only(
+                                          left: 10.w, right: 10.w),
+                                      height: 50.h,
+                                      width: 140.w,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colors.white,
+                                        border: Border.all(
+                                            color: const Color(0xff008080)),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "Message",
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 12.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: const Color(0xff008080),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           SizedBox(

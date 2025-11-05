@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:educationapp/MyListing/MyListingPage.dart';
 import 'package:educationapp/Profile/profileScreen.dart';
 import 'package:educationapp/complete/complete.page.dart';
+import 'package:educationapp/coreFolder/Controller/getRequestStudentController.dart';
 import 'package:educationapp/home/CollegeDetail.dart';
 import 'package:educationapp/home/CompanyDetail.dart';
 import 'package:educationapp/home/MentorDetail.dart';
@@ -428,6 +429,7 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
 
     final getHomeStudentData = ref.watch(getHomeStudentDataProvider);
     final getHomeMentorData = ref.watch(getHomeMentorDataProvider);
+    final getRequestHomeData = ref.watch(getRequestStudentController);
     final userType = box.get('userType');
 
     final profileCompletion = box.get('profileCompletion')?.toDouble() ?? 0.45;
@@ -807,181 +809,185 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                           SizedBox(height: 20.h),
                           getHomeMentorData.when(
                             data: (mentorData) {
-                              // if (mentorData.data!.acceptedStudents!.isEmpty) {
-                              //   return Center(
-                              //     child: Text(
-                              //       "No Accepted Student",
-                              //       style: GoogleFonts.roboto(
-                              //         fontSize: 14.sp,
-                              //         fontWeight: FontWeight.w600,
-                              //         color: Color.fromARGB(204, 0, 0, 0),
-                              //       ),
-                              //     ),
-                              //   );
-                              // }
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: 20.w, right: 20.w),
-                                    // width: 400.w.clamp(0, 400.w),
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 20.h),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30.r),
-                                      //color: Color(0x26008080),
-                                      color: Color.fromARGB(38, 0, 128, 128),
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              left: 20.w,
-                                              right: 20.w,
-                                              top: 10.h),
-                                          height: 5.h,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(10.r),
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10.r),
-                                            child: LinearProgressIndicator(
-                                              // value: profileCompletion.clamp(
-                                              //     0.0, 1.0),
-                                              value: (((mentorData.data!
-                                                                  .profileCompletion ??
-                                                              0.0) /
-                                                          100)
-                                                      .clamp(0.0, 1.0))
-                                                  .toDouble(),
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              valueColor:
-                                                  AlwaysStoppedAnimation<Color>(
-                                                      Color(0xFF008080)),
-                                              minHeight: 20.h,
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                            builder: (context) =>
+                                                ProfileCompletionWidget(true),
+                                          ));
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                          left: 20.w, right: 20.w),
+                                      // width: 400.w.clamp(0, 400.w),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20.h),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(30.r),
+                                        //color: Color(0x26008080),
+                                        color: Color.fromARGB(38, 0, 128, 128),
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                                left: 20.w,
+                                                right: 20.w,
+                                                top: 10.h),
+                                            height: 5.h,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10.r),
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.r),
+                                              child: LinearProgressIndicator(
+                                                // value: profileCompletion.clamp(
+                                                //     0.0, 1.0),
+                                                value: (((mentorData.data!
+                                                                    .profileCompletion ??
+                                                                0.0) /
+                                                            100)
+                                                        .clamp(0.0, 1.0))
+                                                    .toDouble(),
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                            Color>(
+                                                        Color(0xFF008080)),
+                                                minHeight: 20.h,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(height: 12.h),
-                                        Container(
-                                          margin: EdgeInsets.only(right: 16.w),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 20.w),
-                                                child: Text(
-                                                  "Profile Completed",
-                                                  style: GoogleFonts.roboto(
-                                                    fontSize: 14.sp,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Color.fromARGB(
-                                                        204, 0, 0, 0),
-                                                  ),
-                                                ),
-                                              ),
-                                              Text(
-                                                //  "${(profileCompletion * 100).toInt()}%",
-                                                "${(mentorData.data!.profileCompletion ?? 0.0).toStringAsFixed(0)}%",
-                                                style: GoogleFonts.roboto(
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              left: 15.w,
-                                              right: 20.w,
-                                              top: 16.h),
-                                          child: Row(
-                                            children: [
-                                              ClipOval(
-                                                child: Image.network(
-                                                  // profileImage['profile_picture']
-                                                  //         ?.toString() ??
-                                                  //     "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                                  mentorData.data!.profilePic ??
-                                                      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                                  fit: BoxFit.cover,
-                                                  height: 50.h,
-                                                  width: 50.w,
-                                                  errorBuilder: (context, error,
-                                                      stackTrace) {
-                                                    return ClipOval(
-                                                      child: Image.network(
-                                                        "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                                        fit: BoxFit.cover,
-                                                        height: 50.h,
-                                                        width: 50.w,
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                              SizedBox(width: 10.w),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    // "Mike Pena",
-                                                    "${mentorData.data!.fullName ?? "Mentor"}!",
-                                                    style: GoogleFonts.roboto(
-                                                      fontSize: 16.sp,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    "Placement | Interview",
+                                          SizedBox(height: 12.h),
+                                          Container(
+                                            margin:
+                                                EdgeInsets.only(right: 16.w),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 20.w),
+                                                  child: Text(
+                                                    "Profile Completed",
                                                     style: GoogleFonts.roboto(
                                                       fontSize: 14.sp,
                                                       fontWeight:
-                                                          FontWeight.w400,
-                                                      color: Colors.black,
+                                                          FontWeight.w600,
+                                                      color: Color.fromARGB(
+                                                          204, 0, 0, 0),
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              left: 20.w,
-                                              right: 15.w,
-                                              top: 16.h),
-                                          child: Text(
-                                            // "With over 5 years of experience, "
-                                            // "I've guided 300+ students to land jobs "
-                                            // "in top companies like Google, TCS, and Deloitte. "
-                                            // "My sessions focus on mock interviews, resume building, "
-                                            // "and effective communication",
-                                            mentorData.data!.description ??
-                                                "No descripion",
-                                            style: GoogleFonts.roboto(
-                                              fontSize: 15.sp,
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.black,
+                                                ),
+                                                Text(
+                                                  //  "${(profileCompletion * 100).toInt()}%",
+                                                  "${(mentorData.data!.profileCompletion ?? 0.0).toStringAsFixed(0)}%",
+                                                  style: GoogleFonts.roboto(
+                                                    fontSize: 14.sp,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                                left: 15.w,
+                                                right: 20.w,
+                                                top: 16.h),
+                                            child: Row(
+                                              children: [
+                                                ClipOval(
+                                                  child: Image.network(
+                                                    // profileImage['profile_picture']
+                                                    //         ?.toString() ??
+                                                    //     "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                                    mentorData
+                                                            .data!.profilePic ??
+                                                        "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                                    fit: BoxFit.cover,
+                                                    height: 50.h,
+                                                    width: 50.w,
+                                                    errorBuilder: (context,
+                                                        error, stackTrace) {
+                                                      return ClipOval(
+                                                        child: Image.network(
+                                                          "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                                          fit: BoxFit.cover,
+                                                          height: 50.h,
+                                                          width: 50.w,
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10.w),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      // "Mike Pena",
+                                                      "${mentorData.data!.fullName ?? "Mentor"}!",
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      "Placement | Interview",
+                                                      style: GoogleFonts.roboto(
+                                                        fontSize: 14.sp,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                                left: 20.w,
+                                                right: 15.w,
+                                                top: 16.h),
+                                            child: Text(
+                                              // "With over 5 years of experience, "
+                                              // "I've guided 300+ students to land jobs "
+                                              // "in top companies like Google, TCS, and Deloitte. "
+                                              // "My sessions focus on mock interviews, resume building, "
+                                              // "and effective communication",
+                                              mentorData.data!.description ??
+                                                  "No descripion",
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 15.sp,
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   Padding(
@@ -1048,69 +1054,69 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                           },
                                         ),
                                   SizedBox(height: 10.h),
-                                  Container(
-                                    margin:
-                                        EdgeInsets.only(left: 20.w, top: 10.h),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "New Messages",
-                                          style: GoogleFonts.roboto(
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  mentorData.data!.messages!.isEmpty
-                                      ? Center(
-                                          child: Text(
-                                            "No Data Available",
-                                            style: GoogleFonts.inter(
-                                                fontSize: 20.sp,
-                                                fontWeight: FontWeight.w300,
-                                                color: Colors.black),
-                                          ),
-                                        )
-                                      : ListView.builder(
-                                          padding: EdgeInsets.zero,
-                                          shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          itemCount:
-                                              mentorData.data!.messages!.length,
-                                          itemBuilder: (context, index) {
-                                            return GestureDetector(
-                                              onTap: () {},
-                                              child: NewContainer(
-                                                image: mentorData
-                                                        .data!
-                                                        .messages![index]
-                                                        .profilePic ??
-                                                    "https://flutter.github.io/assets-for-api-docs/assets/widgets/puffin.jpg",
-                                                title: mentorData
-                                                        .data!
-                                                        .messages![index]
-                                                        .senderName ??
-                                                    "No title",
-                                                subtitle: mentorData
-                                                        .data!
-                                                        .messages![index]
-                                                        .message ??
-                                                    "Helping students land their dream jobs with 5+ years of placement coaching experience",
-                                                unread: mentorData
-                                                    .data!
-                                                    .messages![index]
-                                                    .unreadCount
-                                                    .toString(),
-                                              ),
-                                            );
-                                          },
-                                        )
+                                  // Container(
+                                  //   margin:
+                                  //       EdgeInsets.only(left: 20.w, top: 10.h),
+                                  //   child: Row(
+                                  //     children: [
+                                  //       Text(
+                                  //         "New Messages",
+                                  //         style: GoogleFonts.roboto(
+                                  //             fontSize: 18.sp,
+                                  //             fontWeight: FontWeight.w600,
+                                  //             color: Colors.black),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 10.h,
+                                  // ),
+                                  // mentorData.data!.messages!.isEmpty
+                                  //     ? Center(
+                                  //         child: Text(
+                                  //           "No Data Available",
+                                  //           style: GoogleFonts.inter(
+                                  //               fontSize: 20.sp,
+                                  //               fontWeight: FontWeight.w300,
+                                  //               color: Colors.black),
+                                  //         ),
+                                  //       )
+                                  //     : ListView.builder(
+                                  //         padding: EdgeInsets.zero,
+                                  //         shrinkWrap: true,
+                                  //         physics:
+                                  //             NeverScrollableScrollPhysics(),
+                                  //         itemCount:
+                                  //             mentorData.data!.messages!.length,
+                                  //         itemBuilder: (context, index) {
+                                  //           return GestureDetector(
+                                  //             onTap: () {},
+                                  //             child: NewContainer(
+                                  //               image: mentorData
+                                  //                       .data!
+                                  //                       .messages![index]
+                                  //                       .profilePic ??
+                                  //                   "https://flutter.github.io/assets-for-api-docs/assets/widgets/puffin.jpg",
+                                  //               title: mentorData
+                                  //                       .data!
+                                  //                       .messages![index]
+                                  //                       .senderName ??
+                                  //                   "No title",
+                                  //               subtitle: mentorData
+                                  //                       .data!
+                                  //                       .messages![index]
+                                  //                       .message ??
+                                  //                   "Helping students land their dream jobs with 5+ years of placement coaching experience",
+                                  //               unread: mentorData
+                                  //                   .data!
+                                  //                   .messages![index]
+                                  //                   .unreadCount
+                                  //                   .toString(),
+                                  //             ),
+                                  //           );
+                                  //         },
+                                  //       )
                                 ],
                               );
                             },
@@ -1124,6 +1130,50 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                               child: CircularProgressIndicator(),
                             ),
                           ),
+                          Container(
+                            margin: EdgeInsets.only(left: 20.w, top: 10.h),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "New Request",
+                                  style: GoogleFonts.roboto(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10.h),
+                          getRequestHomeData.when(
+                            data: (requestData) {
+                              return ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: requestData.data.length,
+                                itemBuilder: (context, index) {
+                                  return GetRequestStudentBody(
+                                      image: requestData
+                                              .data[index].studentProfile ??
+                                          "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                      title:
+                                          requestData.data[index].studentName,
+                                      subtitle:
+                                          requestData.data[index].studentType);
+                                },
+                              );
+                            },
+                            error: (error, stackTrace) {
+                              return Center(
+                                child: Text(error.toString()),
+                              );
+                            },
+                            loading: () => Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                          SizedBox(height: 20.h),
                         ],
                       ),
                     ),
@@ -2280,41 +2330,6 @@ class _MyContainerState extends State<MyContainer> {
                     color: Colors.grey.shade400,
                   ),
                   SizedBox(height: 10.h),
-                  // Row(
-                  //   children: [
-                  //     Container(
-                  //       padding: EdgeInsets.only(
-                  //           left: 10.w, right: 10.w, top: 8.h, bottom: 8.h),
-                  //       decoration: BoxDecoration(
-                  //           borderRadius: BorderRadius.circular(10),
-                  //           color: Color(0xffDEDDEC)),
-                  //       child: Text(
-                  //         "Mock Interviews",
-                  //         style: GoogleFonts.roboto(
-                  //           fontSize: 12,
-                  //           fontWeight: FontWeight.w400,
-                  //           color: Color.fromARGB(255, 102, 102, 102),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     SizedBox(width: 20.w),
-                  //     Container(
-                  //       padding: EdgeInsets.all(5.sp),
-                  //       decoration: BoxDecoration(
-                  //           borderRadius: BorderRadius.circular(10),
-                  //           color: Color(0xffDEDDEC)),
-                  //       child: Text(
-                  //         "Aptitude Training",
-                  //         style: GoogleFonts.roboto(
-                  //           fontSize: 12,
-                  //           fontWeight: FontWeight.w400,
-                  //           color: Color.fromARGB(255, 102, 102, 102),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-
                   // Wrap(
                   //                                 spacing: 8.w,
                   //                                 runSpacing: 8.h,
@@ -2407,8 +2422,8 @@ class _NewContainerState extends State<NewContainer> {
               borderRadius: BorderRadius.circular(12.r),
               child: Image.network(
                 widget.image,
-                height: 60.h,
-                width: 60.w,
+                height: 70.h,
+                width: 70.w,
                 fit: BoxFit.cover,
               ),
             ),
@@ -2462,6 +2477,114 @@ class _NewContainerState extends State<NewContainer> {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class GetRequestStudentBody extends StatefulWidget {
+  final String image;
+  final String title;
+  final String subtitle;
+  const GetRequestStudentBody(
+      {super.key,
+      required this.image,
+      required this.title,
+      required this.subtitle});
+
+  @override
+  State<GetRequestStudentBody> createState() => _GetRequestStudentBodyState();
+}
+
+class _GetRequestStudentBodyState extends State<GetRequestStudentBody> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding:
+          EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w, bottom: 10.h),
+      child: Container(
+        padding:
+            EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w, bottom: 10.h),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+            color: const Color.fromARGB(25, 0, 0, 0),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              blurRadius: 4,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+        child: Row(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          // mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12.r),
+              child: Image.network(
+                widget.image,
+                height: 70.h,
+                width: 70.w,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(width: 8.w),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    widget.title,
+                    style: GoogleFonts.roboto(
+                      color: Colors.black,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    widget.subtitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.roboto(
+                      color: Colors.black,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10.h),
+              ],
+            ),
+            // Spacer(),
+            // Container(
+            //   margin: EdgeInsets.only(left: 10.w, right: 10.w),
+            //   decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(10),
+            //       color: Color(0xff008080)),
+            //   height: 30.h,
+            //   width: 30.w,
+            //   child: Center(
+            //     child: Text(
+            //       widget.unread,
+            //       style: GoogleFonts.roboto(
+            //           fontSize: 12,
+            //           fontWeight: FontWeight.w600,
+            //           color: Colors.white),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

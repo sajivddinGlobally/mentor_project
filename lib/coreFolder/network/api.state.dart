@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:educationapp/coreFolder/Model/getProfileUserModel.dart';
+import 'package:educationapp/coreFolder/Model/getStudentRequestResModel.dart';
 import 'package:educationapp/coreFolder/Model/login.body.model.dart';
 import 'package:educationapp/coreFolder/Model/login.rsponse.model.dart';
 import 'package:educationapp/coreFolder/Model/newRegisterResModel.dart';
 import 'package:educationapp/coreFolder/Model/passwordChangeBodyModel.dart';
 import 'package:educationapp/coreFolder/Model/passwordChangeResModel.dart';
+import 'package:educationapp/coreFolder/Model/sendRequestBodyModel.dart';
+import 'package:educationapp/coreFolder/Model/sendRequestResModel.dart';
 import 'package:educationapp/coreFolder/Model/skillModel.dart';
 import 'package:educationapp/coreFolder/Model/trendingSkillExpertResModel.dart';
 import 'package:educationapp/coreFolder/Model/userProfileResModel.dart';
@@ -130,4 +133,11 @@ abstract class APIStateNetwork {
   @POST("/change-password")
   Future<PasswordChangeResModel> passwordChange(
       @Body() PasswordChangeBodyModel body);
+
+  @POST("/request/send")
+  Future<SendRequestResModel> studentSendRequest(
+      @Body() SendRequestBodyModel body);
+
+  @GET("/request/GetStudent")
+  Future<GetStudentRequestResModel> getRequestStudent();
 }
