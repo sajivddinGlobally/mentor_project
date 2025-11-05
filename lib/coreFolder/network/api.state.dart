@@ -5,6 +5,7 @@ import 'package:educationapp/coreFolder/Model/getProfileUserModel.dart';
 import 'package:educationapp/coreFolder/Model/getStudentRequestResModel.dart';
 import 'package:educationapp/coreFolder/Model/login.body.model.dart';
 import 'package:educationapp/coreFolder/Model/login.rsponse.model.dart';
+import 'package:educationapp/coreFolder/Model/myListingResModel.dart';
 import 'package:educationapp/coreFolder/Model/newRegisterResModel.dart';
 import 'package:educationapp/coreFolder/Model/passwordChangeBodyModel.dart';
 import 'package:educationapp/coreFolder/Model/passwordChangeResModel.dart';
@@ -140,4 +141,11 @@ abstract class APIStateNetwork {
 
   @GET("/request/GetStudent")
   Future<GetStudentRequestResModel> getRequestStudent();
+
+  @POST("/request/accept")
+  Future<AcceptRequestResModel> acceptRequest(
+      @Body() AcceptRequestBodyModel body);
+
+  @GET("/mylist")
+  Future<MyListingResModel> myListing();
 }

@@ -1,7 +1,11 @@
+import 'package:educationapp/coreFolder/Controller/myListingController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:developer';
+
+import 'package:hive/hive.dart';
 
 class MyListing extends ConsumerStatefulWidget {
   const MyListing({super.key});
@@ -15,7 +19,9 @@ class _MyListingState extends ConsumerState<MyListing> {
   int currentBalance = 0;
   @override
   Widget build(BuildContext context) {
-
+    var box = Hive.box("userdata");
+    var userType = box.get("userType");
+    final myListingProvider = ref.watch(myListingController);
     return Scaffold(
       backgroundColor: Color(0xFF1B1B1B),
       body: SingleChildScrollView(
@@ -41,12 +47,12 @@ class _MyListingState extends ConsumerState<MyListing> {
                     height: 44.h,
                     width: 44.w,
                     decoration: BoxDecoration(
-                        color: Color.fromARGB(39, 255, 255, 255),
+                        color: Color(0xFF1B1B1B),
                         borderRadius: BorderRadius.circular(500.r)),
                     child: Center(
                       child: Icon(
                         Icons.arrow_back_ios,
-                        color: Color.fromARGB(255, 248, 248, 248),
+                        color: Color(0xFF1B1B1B),
                         size: 15.w,
                       ),
                     ),
@@ -83,7 +89,6 @@ class _MyListingState extends ConsumerState<MyListing> {
             SizedBox(
               height: 25.h,
             ),
-
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
@@ -92,73 +97,217 @@ class _MyListingState extends ConsumerState<MyListing> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40.r),
                       topRight: Radius.circular(40.r))),
-              child: Padding(
-                padding: EdgeInsets.all(19.0.w),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-
-                    Container(
-                      padding: EdgeInsets.all(5.0.sp),
-                      margin: EdgeInsets.all(5.0.sp),
-                      decoration: BoxDecoration(
-
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(10)
+              child: myListingProvider.when(
+                data: (myListingData) {
+                  if (myListingData.data.isEmpty) {
+                    return Center(
+                      child: Text(
+                        "No List Available",
+                        style: GoogleFonts.inter(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black),
                       ),
-                      child:
-                      Row(children: [
-
-                        SizedBox(width: 10.w,),
-                        Container(
-                          height: 60.h,
-                          width: 60.w,
-                          decoration: BoxDecoration(
-
-                              borderRadius: BorderRadius.circular(10)
-
-                          ),
-                          child: Image.asset("assets/girlpic.png"),
+                    );
+                  }
+                  return ListView.builder(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 16.w),
+                    itemCount: myListingData.data.length,
+                    itemBuilder: (context, index) {
+                      final item = myListingData.data[index];
+                      return Container(
+                        margin: EdgeInsets.only(bottom: 16.h),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.08),
+                              blurRadius: 8,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
                         ),
-
-                        SizedBox(width: 10.w,),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Mike Pena",
-                                style: GoogleFonts.roboto(
-                                    fontSize: 18.w,
+                        padding: EdgeInsets.all(16.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // 🟩 STATUS TAG
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 4.h, horizontal: 10.w),
+                                decoration: BoxDecoration(
+                                  color: item.status == "accepted"
+                                      ? Colors.green.withOpacity(0.15)
+                                      : Colors.orange.withOpacity(0.15),
+                                  borderRadius: BorderRadius.circular(20.r),
+                                ),
+                                child: Text(
+                                  item.status.toUpperCase(),
+                                  style: GoogleFonts.roboto(
+                                    color: item.status == "accepted"
+                                        ? Colors.green[800]
+                                        : Colors.orange[800],
                                     fontWeight: FontWeight.w600,
-                                    color: Color(0xff1B1B1B)),
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
                               ),
-                              Text(
-                                "You need to go to Tempa University",
-                                style: GoogleFonts.roboto(
-                                    fontSize: 18.w,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff1B1B1B)),
-                              ),
+                            ),
+                            SizedBox(height: 10.h),
 
-                            ],),
+                            // 👩‍🎓 STUDENT SECTION
+                            if (userType == "Mentor") ...[
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(40.r),
+                                    child: Image.network(
+                                      item.studentProfile,
+                                      height: 60.h,
+                                      width: 60.w,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Label
+                                        // Container(
+                                        //   padding: EdgeInsets.symmetric(
+                                        //       vertical: 3.h, horizontal: 8.w),
+                                        //   decoration: BoxDecoration(
+                                        //     color: Colors.blue.withOpacity(0.1),
+                                        //     borderRadius:
+                                        //         BorderRadius.circular(6.r),
+                                        //   ),
+                                        //   child: Text(
+                                        //     "Student",
+                                        //     style: GoogleFonts.roboto(
+                                        //       color: Colors.blue[700],
+                                        //       fontSize: 12.sp,
+                                        //       fontWeight: FontWeight.w600,
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                        SizedBox(height: 5.h),
+                                        Text(
+                                          item.studentName,
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        Text(
+                                          item.studentEmail,
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.grey[700],
+                                          ),
+                                        ),
+                                        Text(
+                                          item.studentPhone,
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 13.sp,
+                                            color: Colors.grey[600],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ] else ...[
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(40.r),
+                                    child: Image.network(
+                                      item.mentorProfile,
+                                      height: 60.h,
+                                      width: 60.w,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Label
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 3.h, horizontal: 8.w),
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Colors.purple.withOpacity(0.1),
+                                            borderRadius:
+                                                BorderRadius.circular(6.r),
+                                          ),
+                                          child: Text(
+                                            "Mentor",
+                                            style: GoogleFonts.roboto(
+                                              color: Colors.purple[700],
+                                              fontSize: 12.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 5.h),
+                                        Text(
+                                          item.mentorName,
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        Text(
+                                          item.mentorEmail,
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.grey[700],
+                                          ),
+                                        ),
+                                        Text(
+                                          item.mentorPhone,
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 13.sp,
+                                            color: Colors.grey[600],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ]
+                          ],
                         ),
-
-
-                        Container(
-                          height: 25.h,
-                          width: 25.w,
-                          decoration: BoxDecoration(
-                              color: Color(0xff008080),
-                              borderRadius: BorderRadius.circular(30)),
-                          child: Icon(Icons.arrow_forward_ios,size: 10.sp,),
-                        )
-
-
-                      ],),
-                    )
-                  ],
+                      );
+                    },
+                  );
+                },
+                error: (error, stackTrace) {
+                  log(stackTrace.toString());
+                  return Center(
+                    child: Text(error.toString()),
+                  );
+                },
+                loading: () => Center(
+                  child: CircularProgressIndicator(),
                 ),
               ),
             )
@@ -176,9 +325,9 @@ class DraggableBottomSheetContent extends ConsumerStatefulWidget {
 
   DraggableBottomSheetContent(
       {super.key,
-        required this.callback,
-        required this.voletid,
-        required this.currentBalance});
+      required this.callback,
+      required this.voletid,
+      required this.currentBalance});
 
   @override
   ConsumerState<DraggableBottomSheetContent> createState() =>
@@ -230,7 +379,7 @@ class _DraggableBottomSheetContentState
             TextFormField(
               controller: coinsController,
               keyboardType:
-              TextInputType.numberWithOptions(signed: true, decimal: true),
+                  TextInputType.numberWithOptions(signed: true, decimal: true),
               decoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.grey),
@@ -334,9 +483,7 @@ class _DraggableBottomSheetContentState
               height: 40.h,
             ),
             GestureDetector(
-              onTap: () {
-
-              },
+              onTap: () {},
               child: Container(
                 height: 52.h,
                 width: 400.w,

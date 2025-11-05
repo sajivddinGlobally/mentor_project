@@ -3,6 +3,9 @@ import 'package:educationapp/MyListing/MyListingPage.dart';
 import 'package:educationapp/Profile/profileScreen.dart';
 import 'package:educationapp/complete/complete.page.dart';
 import 'package:educationapp/coreFolder/Controller/getRequestStudentController.dart';
+import 'package:educationapp/coreFolder/Model/sendRequestBodyModel.dart';
+import 'package:educationapp/coreFolder/network/api.state.dart';
+import 'package:educationapp/coreFolder/utils/preety.dio.dart';
 import 'package:educationapp/home/CollegeDetail.dart';
 import 'package:educationapp/home/CompanyDetail.dart';
 import 'package:educationapp/home/MentorDetail.dart';
@@ -421,6 +424,8 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
     if (text.length <= limit) return text;
     return '${text.substring(0, limit)}..';
   }
+
+  bool isAccept = false;
 
   @override
   Widget build(BuildContext context) {
@@ -1147,6 +1152,17 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                           SizedBox(height: 10.h),
                           getRequestHomeData.when(
                             data: (requestData) {
+                              if (requestData.data.isEmpty) {
+                                return Center(
+                                  child: Text(
+                                    "No Request Available",
+                                    style: GoogleFonts.inter(
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w300,
+                                        color: Colors.black),
+                                  ),
+                                );
+                              }
                               return ListView.builder(
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
@@ -1154,13 +1170,44 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                 itemCount: requestData.data.length,
                                 itemBuilder: (context, index) {
                                   return GetRequestStudentBody(
-                                      image: requestData
-                                              .data[index].studentProfile ??
-                                          "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                      title:
-                                          requestData.data[index].studentName,
-                                      subtitle:
-                                          requestData.data[index].studentType);
+                                    image: requestData
+                                            .data[index].studentProfile ??
+                                        "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                    title: requestData.data[index].studentName,
+                                    subtitle:
+                                        requestData.data[index].studentType,
+                                    callBack: () async {
+                                      final body = AcceptRequestBodyModel(
+                                          requestId:
+                                              requestData.data[index].id);
+                                      try {
+                                        final service =
+                                            APIStateNetwork(createDio());
+                                        final response =
+                                            await service.acceptRequest(body);
+                                        if (response.status == true) {
+                                          Fluttertoast.showToast(
+                                              msg: response.message);
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              msg: response.message);
+                                          ref.invalidate(
+                                              getHomeMentorDataProvider);
+
+                                          ref.refresh(
+                                              getHomeMentorDataProvider);
+                                        }
+                                      } catch (e, st) {
+                                        log("${e.toString()} /n ${st.toString()}");
+                                        Fluttertoast.showToast(
+                                            msg: "Not Accept");
+                                      } finally {
+                                        setState(() {
+                                          isAccept = false;
+                                        });
+                                      }
+                                    },
+                                  );
                                 },
                               );
                             },
@@ -2276,14 +2323,15 @@ class _MyContainerState extends State<MyContainer> {
           ],
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12.r),
               child: Image.network(
                 widget.image,
-                height: 100.h,
-                width: 100.w,
+                height: 80.h,
+                width: 85.w,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Image.network(
@@ -2296,74 +2344,73 @@ class _MyContainerState extends State<MyContainer> {
               ),
             ),
             SizedBox(width: 8.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Text(
-                      widget.title,
-                      style: GoogleFonts.roboto(
-                        color: Colors.black,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    widget.title,
+                    style: GoogleFonts.roboto(
+                      color: Colors.black,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 10, top: 5.h),
-                    child: Text(
-                      widget.subtitle,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.roboto(
-                        color: Colors.black,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    widget.subtitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.roboto(
+                      color: Colors.black,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
-                  SizedBox(height: 10.h),
-                  Container(
-                    height: 0.5.h,
-                    color: Colors.grey.shade400,
-                  ),
-                  SizedBox(height: 10.h),
-                  // Wrap(
-                  //                                 spacing: 8.w,
-                  //                                 runSpacing: 8.h,
-                  //                                 children: List.generate(
-                  //                                     tags.length, (tagIndex) {
-                  //                                   return Container(
-                  //                                     padding:
-                  //                                         EdgeInsets.symmetric(
-                  //                                             horizontal: 10.w,
-                  //                                             vertical: 5.h),
-                  //                                     decoration: BoxDecoration(
-                  //                                       color: const Color
-                  //                                           .fromARGB(
-                  //                                           225, 222, 221, 236),
-                  //                                       borderRadius:
-                  //                                           BorderRadius
-                  //                                               .circular(50.r),
-                  //                                     ),
-                  //                                     child: Text(
-                  //                                       tags[tagIndex],
-                  //                                       style:
-                  //                                           GoogleFonts.roboto(
-                  //                                         fontSize: 12.sp,
-                  //                                         fontWeight:
-                  //                                             FontWeight.w400,
-                  //                                         color: Colors.black,
-                  //                                       ),
-                  //                                     ),
-                  //                                   );
-                  //                                 }),
-                  //                               ),
-                  SizedBox(height: 10.h),
-                ],
-              ),
+                ),
+                // SizedBox(height: 10.h),
+                // Container(
+                //   height: 0.5.h,
+                //   color: Colors.grey.shade400,
+                // ),
+                SizedBox(height: 10.h),
+                // Wrap(
+                //                                 spacing: 8.w,
+                //                                 runSpacing: 8.h,
+                //                                 children: List.generate(
+                //                                     tags.length, (tagIndex) {
+                //                                   return Container(
+                //                                     padding:
+                //                                         EdgeInsets.symmetric(
+                //                                             horizontal: 10.w,
+                //                                             vertical: 5.h),
+                //                                     decoration: BoxDecoration(
+                //                                       color: const Color
+                //                                           .fromARGB(
+                //                                           225, 222, 221, 236),
+                //                                       borderRadius:
+                //                                           BorderRadius
+                //                                               .circular(50.r),
+                //                                     ),
+                //                                     child: Text(
+                //                                       tags[tagIndex],
+                //                                       style:
+                //                                           GoogleFonts.roboto(
+                //                                         fontSize: 12.sp,
+                //                                         fontWeight:
+                //                                             FontWeight.w400,
+                //                                         color: Colors.black,
+                //                                       ),
+                //                                     ),
+                //                                   );
+                //                                 }),
+                //                               ),
+                //SizedBox(height: 10.h),
+              ],
             ),
           ],
         ),
@@ -2488,11 +2535,14 @@ class GetRequestStudentBody extends StatefulWidget {
   final String image;
   final String title;
   final String subtitle;
-  const GetRequestStudentBody(
-      {super.key,
-      required this.image,
-      required this.title,
-      required this.subtitle});
+  final Function callBack;
+  const GetRequestStudentBody({
+    super.key,
+    required this.image,
+    required this.title,
+    required this.subtitle,
+    required this.callBack,
+  });
 
   @override
   State<GetRequestStudentBody> createState() => _GetRequestStudentBodyState();
@@ -2522,69 +2572,75 @@ class _GetRequestStudentBodyState extends State<GetRequestStudentBody> {
             ),
           ],
         ),
-        child: Row(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12.r),
-              child: Image.network(
-                widget.image,
-                height: 70.h,
-                width: 70.w,
-                fit: BoxFit.cover,
-              ),
-            ),
-            SizedBox(width: 8.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+            Row(
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    widget.title,
-                    style: GoogleFonts.roboto(
-                      color: Colors.black,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12.r),
+                  child: Image.network(
+                    widget.image,
+                    height: 70.h,
+                    width: 70.w,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Text(
-                    widget.subtitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.roboto(
-                      color: Colors.black,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
+                SizedBox(width: 8.w),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        widget.title,
+                        style: GoogleFonts.roboto(
+                          color: Colors.black,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        widget.subtitle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.roboto(
+                          color: Colors.black,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                  ],
                 ),
-                SizedBox(height: 10.h),
               ],
             ),
-            // Spacer(),
-            // Container(
-            //   margin: EdgeInsets.only(left: 10.w, right: 10.w),
-            //   decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(10),
-            //       color: Color(0xff008080)),
-            //   height: 30.h,
-            //   width: 30.w,
-            //   child: Center(
-            //     child: Text(
-            //       widget.unread,
-            //       style: GoogleFonts.roboto(
-            //           fontSize: 12,
-            //           fontWeight: FontWeight.w600,
-            //           color: Colors.white),
-            //     ),
-            //   ),
+            // SizedBox(
+            //   height: 15.h,
             // ),
+            Align(
+              alignment: AlignmentGeometry.centerRight,
+              child: ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(minimumSize: Size(100.w, 45.h)),
+                  onPressed: () {
+                    widget.callBack();
+                  },
+                  child: Text(
+                    "Accept",
+                    style: GoogleFonts.inter(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black),
+                  )),
+            )
           ],
         ),
       ),
