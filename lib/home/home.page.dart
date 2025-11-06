@@ -11,6 +11,7 @@ import 'package:educationapp/home/CollegeDetail.dart';
 import 'package:educationapp/home/CompanyDetail.dart';
 import 'package:educationapp/home/MentorDetail.dart';
 import 'package:educationapp/home/chatInbox.dart';
+import 'package:educationapp/home/chating.page.dart';
 import 'package:educationapp/home/expertTrendingDetails.page.dart';
 import 'package:educationapp/home/findmentor.page.dart';
 import 'package:educationapp/home/settingProfile.page.dart';
@@ -1031,14 +1032,28 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                           itemBuilder: (context, index) {
                                             final student = mentorData
                                                 .data!.acceptedStudents![index];
-                                            return MyContainer(
-                                              image: student.profilePic ??
-                                                  "https://flutter.github.io/assets-for-api-docs/assets/widgets/puffin.jpg",
-                                              title: student.fullName ?? "N/A",
-                                              email:
-                                                  student.email ?? "No Email",
-                                              description:
-                                                  student.description ?? "",
+                                            return InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    CupertinoPageRoute(
+                                                      builder: (context) =>
+                                                          ChatingPage(
+                                                              name: student
+                                                                      .fullName ??
+                                                                  "No Name"),
+                                                    ));
+                                              },
+                                              child: MyContainer(
+                                                image: student.profilePic ??
+                                                    "https://flutter.github.io/assets-for-api-docs/assets/widgets/puffin.jpg",
+                                                title:
+                                                    student.fullName ?? "N/A",
+                                                email:
+                                                    student.email ?? "No Email",
+                                                description:
+                                                    student.description ?? "",
+                                              ),
                                             );
                                           },
                                         ),

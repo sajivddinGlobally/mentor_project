@@ -5,7 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ChatingPage extends StatefulWidget {
-  const ChatingPage({super.key});
+  final String? name;
+  const ChatingPage({
+    super.key,
+    this.name,
+  });
 
   @override
   State<ChatingPage> createState() => _ChatingPageState();
@@ -34,18 +38,18 @@ class _ChatingPageState extends State<ChatingPage> {
     super.initState();
 
     // ✅ Optional: preload some messages
-    _messages.addAll([
-      {'text': "Hey there! 👋", 'isSender': false},
-      {'text': "Sunday at 10 AM does this work for you", 'isSender': false},
-      {'text': "Hi!", 'isSender': true},
-      {'text': "Awesome, thanks for letting me know!", 'isSender': true},
-      {
-        'text': "No problem at all! I'll be there in about 15 minutes.",
-        'isSender': false,
-      },
-      {'text': "I'll text you when I arrive.", 'isSender': false},
-      {'text': "Great! 😊", 'isSender': true},
-    ]);
+    // _messages.addAll([
+    //   {'text': "Hey there! 👋", 'isSender': false},
+    //   {'text': "Sunday at 10 AM does this work for you", 'isSender': false},
+    //   {'text': "Hi!", 'isSender': true},
+    //   {'text': "Awesome, thanks for letting me know!", 'isSender': true},
+    //   {
+    //     'text': "No problem at all! I'll be there in about 15 minutes.",
+    //     'isSender': false,
+    //   },
+    //   {'text': "I'll text you when I arrive.", 'isSender': false},
+    //   {'text': "Great! 😊", 'isSender': true},
+    // ]);
   }
 
   @override
@@ -86,7 +90,8 @@ class _ChatingPageState extends State<ChatingPage> {
                 Column(
                   children: [
                     Text(
-                      "Sajiv",
+                      // "Sajiv",
+                      widget.name ?? "No Name",
                       style: GoogleFonts.roboto(
                           fontSize: 20.sp,
                           fontWeight: FontWeight.w600,
