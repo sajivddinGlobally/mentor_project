@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:educationapp/coreFolder/Controller/getRequestStudentController.dart';
 import 'package:educationapp/coreFolder/Controller/reviewController.dart';
 import 'package:educationapp/coreFolder/Model/sendRequestBodyModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
@@ -56,7 +57,7 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
 
       if (response.status == true) {
         Fluttertoast.showToast(msg: response.message);
-
+        ref.invalidate(getRequestStudentController);
         // ✅ Save connected mentor ID in Hive
         var box = Hive.box('userdata');
         List connectedMentors = box.get('connectedMentors', defaultValue: []);

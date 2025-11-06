@@ -63,7 +63,7 @@ class Datum {
         studentName: json["student_name"],
         studentEmail: json["student_email"],
         studentPhone: json["student_phone"],
-        studentProfile: json["student_profile"],
+        studentProfile: json["student_profile"].toString(),
         studentType: json["student_type"],
       );
 

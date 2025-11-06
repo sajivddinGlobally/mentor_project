@@ -725,7 +725,7 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                   ),
                                   Text(
                                     // "20",
-                                    requestLenght ?? 0.toString(),
+                                    requestLenght ?? "0",
                                     style: GoogleFonts.roboto(
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.w600,
@@ -1166,8 +1166,13 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                           SizedBox(height: 10.h),
                           getRequestHomeData.when(
                             data: (requestData) {
-                              requestLenght =
-                                  requestData.data.length.toString();
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                setState(() {
+                                  requestLenght =
+                                      requestData.data.length.toString();
+                                });
+                              });
+
                               if (requestData.data.isEmpty) {
                                 return Center(
                                   child: Text(
@@ -1230,6 +1235,7 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                               );
                             },
                             error: (error, stackTrace) {
+                              log(stackTrace.toString());
                               return Center(
                                 child: Text(error.toString()),
                               );
