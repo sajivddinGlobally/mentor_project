@@ -3,6 +3,7 @@ import 'package:educationapp/MyListing/MyListingPage.dart';
 import 'package:educationapp/Profile/profileScreen.dart';
 import 'package:educationapp/complete/complete.page.dart';
 import 'package:educationapp/coreFolder/Controller/getRequestStudentController.dart';
+import 'package:educationapp/coreFolder/Controller/myListingController.dart';
 import 'package:educationapp/coreFolder/Model/sendRequestBodyModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
 import 'package:educationapp/coreFolder/utils/preety.dio.dart';
@@ -1014,9 +1015,10 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                           child: Text(
                                             "No Accepted Student",
                                             style: GoogleFonts.inter(
-                                                fontSize: 20.sp,
-                                                fontWeight: FontWeight.w300,
-                                                color: Colors.black),
+                                              fontSize: 20.sp,
+                                              fontWeight: FontWeight.w300,
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         )
                                       : ListView.builder(
@@ -1027,37 +1029,20 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                           itemCount: mentorData
                                               .data!.acceptedStudents!.length,
                                           itemBuilder: (context, index) {
-                                            return Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () {},
-                                                  child: MyContainer(
-                                                    image: mentorData
-                                                            .data!
-                                                            .acceptedStudents![
-                                                                index]
-                                                            .profilePic ??
-                                                        "https://flutter.github.io/assets-for-api-docs/assets/widgets/puffin.jpg",
-                                                    title: mentorData
-                                                            .data!
-                                                            .acceptedStudents![
-                                                                index]
-                                                            .fullName ??
-                                                        "N/A",
-                                                    subtitle: mentorData
-                                                            .data!
-                                                            .acceptedStudents![
-                                                                index]
-                                                            .description ??
-                                                        "No Message",
-                                                  ),
-                                                ),
-                                              ],
+                                            final student = mentorData
+                                                .data!.acceptedStudents![index];
+                                            return MyContainer(
+                                              image: student.profilePic ??
+                                                  "https://flutter.github.io/assets-for-api-docs/assets/widgets/puffin.jpg",
+                                              title: student.fullName ?? "N/A",
+                                              email:
+                                                  student.email ?? "No Email",
+                                              description:
+                                                  student.description ?? "",
                                             );
                                           },
                                         ),
+
                                   SizedBox(height: 10.h),
                                   // Container(
                                   //   margin:
@@ -1163,23 +1148,24 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                   ),
                                 );
                               }
+
                               return ListView.builder(
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemCount: requestData.data.length,
                                 itemBuilder: (context, index) {
+                                  final student = requestData.data[index];
                                   return GetRequestStudentBody(
-                                    image: requestData
-                                            .data[index].studentProfile ??
+                                    image: student.studentProfile ??
                                         "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                    title: requestData.data[index].studentName,
-                                    subtitle:
-                                        requestData.data[index].studentType,
+                                    title: student.studentName,
+                                    subtitle: student.studentType,
+                                    email: student.studentEmail,
+                                    phone: student.studentPhone,
                                     callBack: () async {
                                       final body = AcceptRequestBodyModel(
-                                          requestId:
-                                              requestData.data[index].id);
+                                          requestId: student.id);
                                       try {
                                         final service =
                                             APIStateNetwork(createDio());
@@ -1193,9 +1179,9 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                               msg: response.message);
                                           ref.invalidate(
                                               getHomeMentorDataProvider);
-
                                           ref.refresh(
                                               getHomeMentorDataProvider);
+                                          ref.invalidate(myListingController);
                                         }
                                       } catch (e, st) {
                                         log("${e.toString()} /n ${st.toString()}");
@@ -2282,135 +2268,102 @@ class Upertabs extends StatelessWidget {
   }
 }
 
-class MyContainer extends StatefulWidget {
+class MyContainer extends StatelessWidget {
   final String image;
   final String title;
-  final String subtitle;
+  final String email;
+  final String description;
   const MyContainer({
     super.key,
     required this.image,
     required this.title,
-    required this.subtitle,
+    required this.email,
+    required this.description,
   });
 
   @override
-  State<MyContainer> createState() => _MyContainerState();
-}
-
-class _MyContainerState extends State<MyContainer> {
-  @override
   Widget build(BuildContext context) {
-    log(widget.image.replaceAll('/public/', ''));
     return Padding(
       padding:
           EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w, bottom: 10.h),
       child: Container(
-        padding:
-            EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w, bottom: 10.h),
+        padding: EdgeInsets.all(14.w),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(
-            color: const Color.fromARGB(25, 0, 0, 0),
-            width: 1,
-          ),
+          borderRadius: BorderRadius.circular(18.r),
+          border: Border.all(color: Colors.grey.withOpacity(0.2)),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              blurRadius: 4,
-              spreadRadius: 1,
-            ),
+              color: Colors.black12,
+              blurRadius: 6,
+              offset: Offset(0, 3),
+            )
           ],
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12.r),
               child: Image.network(
-                widget.image,
+                image,
                 height: 80.h,
-                width: 85.w,
+                width: 80.w,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Image.network(
-                    "https://t4.ftcdn.net/jpg/05/07/58/41/360_F_507584110_KNIfe7d3hUAEpraq10J7MCPmtny8EH7A.jpg",
-                    height: 100.h,
-                    width: 100.w,
-                    fit: BoxFit.contain,
-                  );
-                },
+                errorBuilder: (context, error, stackTrace) => Image.network(
+                  "https://t4.ftcdn.net/jpg/05/07/58/41/360_F_507584110_KNIfe7d3hUAEpraq10J7MCPmtny8EH7A.jpg",
+                  height: 80.h,
+                  width: 80.w,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-            SizedBox(width: 8.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    widget.title,
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
                     style: GoogleFonts.roboto(
                       color: Colors.black,
-                      fontSize: 18.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Text(
-                    widget.subtitle,
+                  SizedBox(height: 4.h),
+                  Row(
+                    children: [
+                      Icon(Icons.email_outlined,
+                          size: 14.sp, color: Colors.grey),
+                      SizedBox(width: 5.w),
+                      Expanded(
+                        child: Text(
+                          email,
+                          style: GoogleFonts.roboto(
+                            fontSize: 13.sp,
+                            color: Colors.grey[700],
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 6.h),
+                  Text(
+                    description.isNotEmpty
+                        ? description
+                        : "No Description Available",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.roboto(
-                      color: Colors.black,
-                      fontSize: 14.sp,
+                      fontSize: 12.sp,
+                      color: Colors.black87,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                ),
-                // SizedBox(height: 10.h),
-                // Container(
-                //   height: 0.5.h,
-                //   color: Colors.grey.shade400,
-                // ),
-                SizedBox(height: 10.h),
-                // Wrap(
-                //                                 spacing: 8.w,
-                //                                 runSpacing: 8.h,
-                //                                 children: List.generate(
-                //                                     tags.length, (tagIndex) {
-                //                                   return Container(
-                //                                     padding:
-                //                                         EdgeInsets.symmetric(
-                //                                             horizontal: 10.w,
-                //                                             vertical: 5.h),
-                //                                     decoration: BoxDecoration(
-                //                                       color: const Color
-                //                                           .fromARGB(
-                //                                           225, 222, 221, 236),
-                //                                       borderRadius:
-                //                                           BorderRadius
-                //                                               .circular(50.r),
-                //                                     ),
-                //                                     child: Text(
-                //                                       tags[tagIndex],
-                //                                       style:
-                //                                           GoogleFonts.roboto(
-                //                                         fontSize: 12.sp,
-                //                                         fontWeight:
-                //                                             FontWeight.w400,
-                //                                         color: Colors.black,
-                //                                       ),
-                //                                     ),
-                //                                   );
-                //                                 }),
-                //                               ),
-                //SizedBox(height: 10.h),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -2535,12 +2488,17 @@ class GetRequestStudentBody extends StatefulWidget {
   final String image;
   final String title;
   final String subtitle;
+  final String email;
+  final String phone;
   final Function callBack;
+
   const GetRequestStudentBody({
     super.key,
     required this.image,
     required this.title,
     required this.subtitle,
+    required this.email,
+    required this.phone,
     required this.callBack,
   });
 
@@ -2553,94 +2511,113 @@ class _GetRequestStudentBodyState extends State<GetRequestStudentBody> {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w, bottom: 10.h),
+          EdgeInsets.only(top: 10.h, left: 16.w, right: 16.w, bottom: 10.h),
       child: Container(
-        padding:
-            EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w, bottom: 10.h),
+        padding: EdgeInsets.all(14.w),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(
-            color: const Color.fromARGB(25, 0, 0, 0),
-            width: 1,
-          ),
+          borderRadius: BorderRadius.circular(16.r),
+          border: Border.all(color: Colors.grey.withOpacity(0.2)),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              blurRadius: 4,
-              spreadRadius: 1,
-            ),
+              color: Colors.black12,
+              blurRadius: 6,
+              offset: Offset(0, 3),
+            )
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              // mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12.r),
-                  child: Image.network(
-                    widget.image,
-                    height: 70.h,
-                    width: 70.w,
-                    fit: BoxFit.cover,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12.r),
+              child: Image.network(
+                widget.image,
+                height: 80.h,
+                width: 80.w,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Icon(
+                  Icons.person,
+                  size: 70,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.title,
+                    style: GoogleFonts.roboto(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    widget.subtitle,
+                    style: GoogleFonts.roboto(
+                      fontSize: 13.sp,
+                      color: Colors.blueGrey,
+                    ),
+                  ),
+                  SizedBox(height: 6.h),
+                  Row(
+                    children: [
+                      Icon(Icons.email_outlined,
+                          size: 14.sp, color: Colors.grey),
+                      SizedBox(width: 4.w),
+                      Expanded(
+                        child: Text(
+                          widget.email,
+                          style: GoogleFonts.roboto(
+                            fontSize: 12.sp,
+                            color: Colors.grey[700],
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 4.h),
+                  Row(
+                    children: [
+                      Icon(Icons.phone, size: 14.sp, color: Colors.grey),
+                      SizedBox(width: 4.w),
+                      Text(
+                        widget.phone,
+                        style: GoogleFonts.roboto(
+                          fontSize: 12.sp,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.greenAccent.shade100,
+                  foregroundColor: Colors.black,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                ),
+                onPressed: () => widget.callBack(),
+                child: Text(
+                  "Accept",
+                  style: GoogleFonts.inter(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(width: 8.w),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Text(
-                        widget.title,
-                        style: GoogleFonts.roboto(
-                          color: Colors.black,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        widget.subtitle,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.roboto(
-                          color: Colors.black,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10.h),
-                  ],
-                ),
-              ],
+              ),
             ),
-            // SizedBox(
-            //   height: 15.h,
-            // ),
-            Align(
-              alignment: AlignmentGeometry.centerRight,
-              child: ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(minimumSize: Size(100.w, 45.h)),
-                  onPressed: () {
-                    widget.callBack();
-                  },
-                  child: Text(
-                    "Accept",
-                    style: GoogleFonts.inter(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black),
-                  )),
-            )
           ],
         ),
       ),
