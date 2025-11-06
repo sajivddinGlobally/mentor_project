@@ -1,7 +1,6 @@
 import 'dart:core';
 import 'dart:developer';
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
 import 'package:educationapp/coreFolder/utils/preety.dio.dart';

@@ -277,24 +277,25 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
               ),
-            ListTile(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FindSkillPage(),
-                    ));
-              },
-              leading: Image.asset("assets/drawer2.png"),
-              title: Text(
-                "Trending Skills",
-                style: GoogleFonts.roboto(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  color: const Color.fromARGB(255, 27, 27, 27),
+            if (userType != "Mentor")
+              ListTile(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FindSkillPage(),
+                      ));
+                },
+                leading: Image.asset("assets/drawer2.png"),
+                title: Text(
+                  "Trending Skills",
+                  style: GoogleFonts.roboto(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: const Color.fromARGB(255, 27, 27, 27),
+                  ),
                 ),
               ),
-            ),
             if (userType != "Mentor")
               ListTile(
                 onTap: () {
@@ -428,6 +429,8 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
   }
 
   bool isAccept = false;
+
+  String? requestLenght;
 
   @override
   void didChangeDependencies() {
@@ -603,14 +606,89 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Row(
                 children: [
-                  Expanded(
-                    child: Container(
-                      height: 130.h,
-                      decoration: BoxDecoration(
-                        color: const Color(0xff008080),
-                        borderRadius: BorderRadius.circular(20.r),
+                  if (userType != "Mentor")
+                    Expanded(
+                      child: Container(
+                        height: 130.h,
+                        decoration: BoxDecoration(
+                          color: const Color(0xff008080),
+                          borderRadius: BorderRadius.circular(20.r),
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 15.h),
+                              Padding(
+                                padding: EdgeInsets.only(left: 15.w),
+                                child: Container(
+                                  width: 50.w,
+                                  height: 50.h,
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromARGB(255, 0, 0, 0)
+                                        .withOpacity(0.1),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Image.asset(
+                                    "assets/mask1.png",
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.h),
+                              Padding(
+                                padding: EdgeInsets.only(left: 15.w),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Mentors Available",
+                                      style: GoogleFonts.roboto(
+                                          fontSize: 11.sp,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white),
+                                    ),
+                                    getHomeStudentData.when(
+                                      data: (data) => Text(
+                                        "${data.mentors?.values.fold(0, (sum, list) => sum + list.length) ?? 0}",
+                                        style: GoogleFonts.roboto(
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white),
+                                      ),
+                                      loading: () => SizedBox(
+                                        width: 20.w,
+                                        height: 20.h,
+                                        child: const CircularProgressIndicator(
+                                            color: Colors.white,
+                                            strokeWidth: 2),
+                                      ),
+                                      error: (error, stack) => Text(
+                                        "N/A",
+                                        style: GoogleFonts.roboto(
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      child: SingleChildScrollView(
+                    ),
+                  SizedBox(width: 15.w),
+                  if (userType == "Mentor")
+                    Expanded(
+                      child: Container(
+                        height: 130.h,
+                        decoration: BoxDecoration(
+                          color: const Color(0xffA8E6CF),
+                          borderRadius: BorderRadius.circular(20.r),
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -639,33 +717,19 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Mentors Available",
+                                    "New Requests",
                                     style: GoogleFonts.roboto(
                                         fontSize: 11.sp,
                                         fontWeight: FontWeight.w400,
-                                        color: Colors.white),
+                                        color: Colors.black),
                                   ),
-                                  getHomeStudentData.when(
-                                    data: (data) => Text(
-                                      "${data.mentors?.values.fold(0, (sum, list) => sum + list.length) ?? 0}",
-                                      style: GoogleFonts.roboto(
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white),
-                                    ),
-                                    loading: () => SizedBox(
-                                      width: 20.w,
-                                      height: 20.h,
-                                      child: const CircularProgressIndicator(
-                                          color: Colors.white, strokeWidth: 2),
-                                    ),
-                                    error: (error, stack) => Text(
-                                      "N/A",
-                                      style: GoogleFonts.roboto(
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white),
-                                    ),
+                                  Text(
+                                    // "20",
+                                    requestLenght ?? 0.toString(),
+                                    style: GoogleFonts.roboto(
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black),
                                   ),
                                 ],
                               ),
@@ -674,67 +738,11 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                         ),
                       ),
                     ),
-                  ),
                   SizedBox(width: 15.w),
-                  Expanded(
-                    child: Container(
+                  if (userType != "Mentor")
+                    Container(
                       height: 130.h,
-                      decoration: BoxDecoration(
-                        color: const Color(0xffA8E6CF),
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 15.h),
-                          Padding(
-                            padding: EdgeInsets.only(left: 15.w),
-                            child: Container(
-                              width: 50.w,
-                              height: 50.h,
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 0, 0, 0)
-                                    .withOpacity(0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Image.asset(
-                                "assets/mask1.png",
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Padding(
-                            padding: EdgeInsets.only(left: 15.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "New Requests",
-                                  style: GoogleFonts.roboto(
-                                      fontSize: 11.sp,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black),
-                                ),
-                                Text(
-                                  "20",
-                                  style: GoogleFonts.roboto(
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 15.w),
-                  Expanded(
-                    child: Container(
-                      height: 130.h,
+                      width: 200.w,
                       decoration: BoxDecoration(
                         color: const Color.fromARGB(255, 38, 38, 38),
                         borderRadius: BorderRadius.circular(20.r),
@@ -801,7 +809,6 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                         ],
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -1159,6 +1166,8 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                           SizedBox(height: 10.h),
                           getRequestHomeData.when(
                             data: (requestData) {
+                              requestLenght =
+                                  requestData.data.length.toString();
                               if (requestData.data.isEmpty) {
                                 return Center(
                                   child: Text(
