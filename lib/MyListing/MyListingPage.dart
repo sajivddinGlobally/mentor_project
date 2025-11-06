@@ -213,8 +213,6 @@ class _MyListingState extends ConsumerState<MyListing> {
                               ),
                             ),
                             SizedBox(height: 10.h),
-
-                            // 👩‍🎓 Student / Mentor section
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -227,6 +225,14 @@ class _MyListingState extends ConsumerState<MyListing> {
                                     height: 60.h,
                                     width: 60.w,
                                     fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Image.network(
+                                        "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                        height: 60.h,
+                                        width: 60.w,
+                                        fit: BoxFit.cover,
+                                      );
+                                    },
                                   ),
                                 ),
                                 SizedBox(width: 12.w),

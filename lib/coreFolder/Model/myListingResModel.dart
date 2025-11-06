@@ -78,7 +78,7 @@ class Datum {
         mentorName: json["mentor_name"],
         mentorEmail: json["mentor_email"],
         mentorPhone: json["mentor_phone"],
-        mentorProfile: json["mentor_profile"],
+        mentorProfile: json["mentor_profile"].toString(),
         mentorType: json["mentor_type"],
     );
 

@@ -430,6 +430,13 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
   bool isAccept = false;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Automatically refresh on page re-enter
+    Future.microtask(() => ref.invalidate(getRequestStudentController));
+  }
+
+  @override
   Widget build(BuildContext context) {
     var box = Hive.box('userdata');
     final profileImage = box.get('profile') ?? {};
@@ -1180,7 +1187,8 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                     phone: student.studentPhone,
                                     callBack: () async {
                                       final body = AcceptRequestBodyModel(
-                                          requestId: student.id);
+                                          requestId:
+                                              requestData.data[index].id);
                                       try {
                                         final service =
                                             APIStateNetwork(createDio());
@@ -1189,14 +1197,14 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                         if (response.status == true) {
                                           Fluttertoast.showToast(
                                               msg: response.message);
+                                          ref.invalidate(
+                                              getHomeMentorDataProvider);
+                                          ref.invalidate(
+                                              getRequestStudentController);
+                                          ref.invalidate(myListingController);
                                         } else {
                                           Fluttertoast.showToast(
                                               msg: response.message);
-                                          ref.invalidate(
-                                              getHomeMentorDataProvider);
-                                          ref.refresh(
-                                              getHomeMentorDataProvider);
-                                          ref.invalidate(myListingController);
                                         }
                                       } catch (e, st) {
                                         log("${e.toString()} /n ${st.toString()}");
@@ -2623,7 +2631,9 @@ class _GetRequestStudentBodyState extends State<GetRequestStudentBody> {
                   padding:
                       EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                 ),
-                onPressed: () => widget.callBack(),
+                onPressed: () {
+                  widget.callBack();
+                },
                 child: Text(
                   "Accept",
                   style: GoogleFonts.inter(
