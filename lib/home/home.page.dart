@@ -355,7 +355,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ListTile(
               onTap: () {
-                Fluttertoast.showToast(msg: "Dark Mode toggle not implemented");
+                // Fluttertoast.showToast(msg: "Dark Mode toggle not implemented");
               },
               leading: Image.asset("assets/drawer6.png"),
               title: Text(
@@ -1350,6 +1350,7 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                               mentor.serviceType ?? "N/A"
                                             ],
                                             image: mentor.profilePic ?? "",
+                                           // otherUserId: mentor.skillsId.toString(),
                                           );
                                         },
                                       ),
@@ -2156,6 +2157,7 @@ class UserTabs extends StatefulWidget {
   final List<String> servicetype;
   final String image;
   final Function callBack;
+  //final String otherUserId;
 
   const UserTabs({
     super.key,
@@ -2165,6 +2167,7 @@ class UserTabs extends StatefulWidget {
     required this.servicetype,
     required this.image,
     required this.callBack,
+    //required this.otherUserId,
   });
 
   @override
@@ -2247,6 +2250,7 @@ class _UserTabsState extends State<UserTabs> {
                           CupertinoPageRoute(
                             builder: (context) => ChatingPage(
                               name: widget.fullname,
+                              //otherUesrid: widget.otherUserId,
                             ),
                           ));
                     },

@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:educationapp/home/webView.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,15 +70,49 @@ class _CompanyDetailPageState extends ConsumerState<CompanyDetailPage> {
                               color: const Color(0xff666666),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 15.w, right: 15.w),
-                            child: Text(
-                              textAlign: TextAlign.center,
-                              snap.collage!.website.toString(),
-                              style: GoogleFonts.roboto(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xff666666),
+                          InkWell(
+                            onTap: () {
+                              String url =
+                                  snap.collage!.website.toString().trim();
+
+                              if (url.isEmpty) return;
+
+                              url = url.replaceAll(" ", "");
+
+                              if (url.startsWith("http://")) {
+                                url = url.replaceFirst("http://", "https://");
+                              }
+
+                              if (!url.startsWith("https://")) {
+                                url = "https://$url";
+                              }
+
+                              final uri = Uri.tryParse(url);
+
+                              if (uri == null || uri.host.isEmpty) {
+                                log("Invalid URL: $url");
+                                return;
+                              }
+
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => WebViewPage(url: url),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 15.w, right: 15.w),
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                snap.collage!.website.toString(),
+                                style: GoogleFonts.roboto(
+                                  fontSize: 17.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.blue, // clickable color
+                                  decoration: TextDecoration
+                                      .underline, // highlight clickable effect
+                                ),
                               ),
                             ),
                           ),
@@ -302,8 +339,11 @@ class _CompanyDetailPageState extends ConsumerState<CompanyDetailPage> {
                             color: Colors.white,
                           ),
                           child: Padding(
-                            padding: EdgeInsets.only(left: 6.w),
-                            child: Icon(Icons.arrow_back_ios),
+                            padding: EdgeInsets.only(left: 8.w),
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.black,
+                            ),
                           )),
                     ),
                     Text(

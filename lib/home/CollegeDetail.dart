@@ -79,13 +79,17 @@ class _CollegeDetailPageState extends ConsumerState<CollegeDetailPage> {
 
                                 if (url.isEmpty) return;
 
-                                if (!url.startsWith("http://") &&
-                                    !url.startsWith("https://")) {
+                                url = url.replaceAll(" ", "");
+
+                                if (url.startsWith("http://")) {
+                                  url = url.replaceFirst("http://", "https://");
+                                }
+
+                                if (!url.startsWith("https://")) {
                                   url = "https://$url";
                                 }
 
                                 final uri = Uri.tryParse(url);
-
                                 if (uri == null) {
                                   log("Invalid URL: $url");
                                   return;
@@ -335,8 +339,11 @@ class _CollegeDetailPageState extends ConsumerState<CollegeDetailPage> {
                             color: Colors.white,
                           ),
                           child: Padding(
-                            padding: EdgeInsets.only(left: 6.w),
-                            child: Icon(Icons.arrow_back_ios),
+                            padding: EdgeInsets.only(left: 8.w),
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.black,
+                            ),
                           )),
                     ),
                     Text(

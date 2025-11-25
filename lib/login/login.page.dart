@@ -25,6 +25,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final screenHeight = MediaQuery.of(context).size.height;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    Color bg = isDark ? Color(0xFF1B1B1B) : Colors.white;
+
     return Scaffold(
       //  resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xff008080),
@@ -200,6 +204,8 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
+    var box = Hive.box('userdata');
+
     return Form(
       key: _formKey,
       child: Column(

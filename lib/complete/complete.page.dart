@@ -537,9 +537,11 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:educationapp/coreFolder/Controller/getProfileUserProvider.dart';
 import 'package:educationapp/coreFolder/Controller/getSkillProvider.dart';
+import 'package:educationapp/coreFolder/Controller/userProfileController.dart';
 import 'package:educationapp/coreFolder/Model/getProfileUserModel.dart';
 import 'package:educationapp/coreFolder/auth/login.auth.dart';
 import 'package:educationapp/home/home.page.dart';
+import 'package:educationapp/main.dart';
 import 'package:educationapp/splash/getstart.page.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -668,6 +670,7 @@ class _ProfileCompletionWidgetState
   }
 
   Future<void> updateProfile() async {
+    final formData = ref.watch(formDataProvider);
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -686,8 +689,10 @@ class _ProfileCompletionWidgetState
       buttonLoder = true;
     });
     try {
+      var box = Hive.box('userdata');
+      String userType = box.get('userType', defaultValue: 'Student');
       await Auth.updateUserProfile(
-        userType: UserRegisterDataHold.usertype ?? "Student",
+        userType: userType,
         resumeFile: resumeFile,
         totalExperience: totalExperienceController.text,
         usersField: optionsController.text,
@@ -696,6 +701,7 @@ class _ProfileCompletionWidgetState
         linkedinUser: linkedinController.text,
         description: aboutController.text,
         fullName: fullNameController.text,
+        profilePic: _image!.path,
       );
       if (mounted) {
         Fluttertoast.showToast(
@@ -711,6 +717,7 @@ class _ProfileCompletionWidgetState
         //   CupertinoPageRoute(builder: (context) => HomePage(0)),
         //   (route) => false,
         // );
+        ref.invalidate(userProfileController);
         Navigator.pop(context);
       }
     } catch (e, st) {
@@ -1089,36 +1096,62 @@ class _ProfileCompletionWidgetState
                               validator: (value) =>
                                   value!.isEmpty ? 'About is required' : null,
                             ),
+                            // InkWell(
+                            //   onTap: () {
+                            //     showImage();
+                            //   },
+                            //   child: Center(
+                            //     child: Container(
+                            //       margin: EdgeInsets.only(top: 20.h),
+                            //       width: 380.w,
+                            //       height: 220.h,
+                            //       decoration: BoxDecoration(
+                            //           borderRadius: BorderRadius.circular(20.r),
+                            //           border: Border.all(color: Colors.grey)),
+                            //       child: _image == null
+                            //           ? Column(
+                            //               crossAxisAlignment:
+                            //                   CrossAxisAlignment.center,
+                            //               mainAxisAlignment:
+                            //                   MainAxisAlignment.center,
+                            //               children: [
+                            //                 Icon(
+                            //                   Icons.upload_sharp,
+                            //                   color: Color(0xFF008080),
+                            //                   size: 30.sp,
+                            //                 ),
+                            //                 SizedBox(
+                            //                   height: 10.h,
+                            //                 ),
+                            //               ],
+                            //             )
+                            //           : ClipRRect(
+                            //               borderRadius:
+                            //                   BorderRadius.circular(20.r),
+                            //               child: Image.file(
+                            //                 _image!,
+                            //                 fit: BoxFit.cover,
+                            //                 width: 400.w,
+                            //                 height: 220.h,
+                            //               ),
+                            //             ),
+                            //     ),
+                            //   ),
+                            // ),
                             InkWell(
                               onTap: () {
                                 showImage();
                               },
                               child: Center(
                                 child: Container(
-                                  width: 400.w,
+                                  margin: EdgeInsets.only(top: 20.h),
+                                  width: 380.w,
                                   height: 220.h,
                                   decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.circular(20.r),
-                                  ),
-                                  child: _image == null
-                                      ? Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.upload_sharp,
-                                              color: Color(0xFF008080),
-                                              size: 30.sp,
-                                            ),
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
-                                          ],
-                                        )
-                                      : ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.r),
+                                      border: Border.all(color: Colors.grey)),
+                                  child: _image != null
+                                      ? ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(20.r),
                                           child: Image.file(
@@ -1127,7 +1160,52 @@ class _ProfileCompletionWidgetState
                                             width: 400.w,
                                             height: 220.h,
                                           ),
-                                        ),
+                                        )
+                                      : (_profileData?.profilePic != null
+                                          ? ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.r),
+                                              child: Image.network(
+                                                _profileData!.profilePic!,
+                                                fit: BoxFit.cover,
+                                                width: 400.w,
+                                                height: 220.h,
+                                                errorBuilder: (context, error,
+                                                        stackTrace) =>
+                                                    Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.upload_sharp,
+                                                      color: Color(0xFF008080),
+                                                      size: 30.sp,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10.h,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          : Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.upload_sharp,
+                                                  color: Color(0xFF008080),
+                                                  size: 30.sp,
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                              ],
+                                            )),
                                 ),
                               ),
                             ),

@@ -1,9 +1,13 @@
+import 'dart:developer';
+
+import 'package:educationapp/coreFolder/Controller/chatController.dart';
 import 'package:educationapp/home/chating.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class Chatinbox extends ConsumerStatefulWidget {
   const Chatinbox({super.key});
@@ -12,19 +16,28 @@ class Chatinbox extends ConsumerStatefulWidget {
 }
 
 class _ChatinboxState extends ConsumerState<Chatinbox> {
+  final searchController = TextEditingController();
+  String searchQuery = "";
+  bool isShow = false;
   int voletId = 0;
   int currentBalance = 0;
   @override
   Widget build(BuildContext context) {
+    var box = Hive.box("userdata");
+    var id = box.get("userid");
+    final inboxData = ref.watch(inboxProvider(id.toString()));
     return Scaffold(
       backgroundColor: Color(0xFF1B1B1B),
-      body: SingleChildScrollView(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await ref.refresh(inboxProvider(id.toString()));
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: 70.h,
+              height: 55.h,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -61,17 +74,24 @@ class _ChatinboxState extends ConsumerState<Chatinbox> {
                       color: Color(0xff008080)),
                 ),
                 Spacer(),
-                Container(
-                  height: 44.h,
-                  width: 44.w,
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(39, 255, 255, 255),
-                    borderRadius: BorderRadius.circular(500.r),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.search,
-                      color: const Color.fromARGB(255, 255, 255, 255),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      isShow = !isShow;
+                    });
+                  },
+                  child: Container(
+                    height: 44.h,
+                    width: 44.w,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(39, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(500.r),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.search,
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                      ),
                     ),
                   ),
                 ),
@@ -80,17 +100,61 @@ class _ChatinboxState extends ConsumerState<Chatinbox> {
                 ),
               ],
             ),
+            if (isShow)
+              Padding(
+                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
+                child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value;
+                    });
+                  },
+                  controller: searchController,
+                  cursorColor: Colors.white,
+                  style: GoogleFonts.roboto(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white),
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(
+                          left: 15.w, right: 15.w, top: 10.h, bottom: 10.h),
+                      hint: Text(
+                        "Search",
+                        style: GoogleFonts.inter(
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white),
+                      ),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          setState(() {
+                            isShow = false;
+                          });
+                        },
+                        child: Icon(
+                          isShow ? Icons.close : Icons.search,
+                          color: Colors.white,
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFF262626),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30.r),
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.r),
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                          ))),
+                ),
+              ),
             SizedBox(
               height: 25.h,
             ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => ChatingPage(),
-                    ));
-              },
+            Expanded(
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
@@ -99,70 +163,161 @@ class _ChatinboxState extends ConsumerState<Chatinbox> {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40.r),
                         topRight: Radius.circular(40.r))),
-                child: Padding(
-                  padding: EdgeInsets.all(19.0.w),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(5.0.sp),
-                        margin: EdgeInsets.all(5.0.sp),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 10.w,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    inboxData.when(
+                      data: (data) {
+                        final filterData = data.inbox!.where(
+                          (chat) {
+                            final name = chat.otherUser!.name.toString();
+                            return name.contains(searchQuery);
+                          },
+                        ).toList();
+
+                        if (filterData.isEmpty) {
+                          return Center(
+                            child: Text(
+                              searchQuery.isEmpty
+                                  ? "No recent messages"
+                                  : "No chats found for '$searchQuery'",
+                              style: GoogleFonts.inter(
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.black),
                             ),
-                            Container(
-                              height: 60.h,
-                              width: 60.w,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Image.asset("assets/girlpic.png"),
-                            ),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Mike Pena",
-                                    style: GoogleFonts.roboto(
-                                        fontSize: 18.w,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xff1B1B1B)),
+                          );
+                        }
+                        return Expanded(
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemCount: filterData.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                        builder: (context) => ChatingPage(
+                                          otherUesrid: data
+                                              .inbox![index].otherUser!.id
+                                              .toString(),
+                                          id: data.egedUser?.id.toString(),
+                                          name: data.inbox![index].otherUser!
+                                                  .name ??
+                                              "N/A",
+                                        ),
+                                      ));
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.only(
+                                      left: 6.w,
+                                      top: 10.h,
+                                      right: 10.w,
+                                      bottom: 10.h),
+                                  margin: EdgeInsets.only(
+                                      left: 20.w,
+                                      right: 20.w,
+                                      bottom: 15.h,
+                                      top: 10.h),
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFFFFFFFF),
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius:
+                                          BorderRadius.circular(20.r)),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 10.w,
+                                      ),
+                                      Container(
+                                        height: 60.h,
+                                        width: 60.w,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(12.r)),
+                                        child: Image.asset(
+                                          //"assets/girlpic.png"
+                                          filterData[index]
+                                              .otherUser!
+                                              .profilePick
+                                              .toString(),
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Icon(
+                                              Icons.image_not_supported_sharp,
+                                              size: 40.sp,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10.w,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              filterData[index]
+                                                      .otherUser!
+                                                      .name ??
+                                                  "no name",
+                                              //  "Mike Pena",
+                                              style: GoogleFonts.roboto(
+                                                  fontSize: 17.w,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Color(0xff1B1B1B)),
+                                            ),
+                                            Text(
+                                              //"You need to go to Tempa University",
+                                              filterData[index].lastMessage ??
+                                                  "",
+                                              style: GoogleFonts.roboto(
+                                                  fontSize: 15.w,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Color(0xff666666)),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(right: 13.w),
+                                        height: 30.h,
+                                        width: 30.w,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xff008080)
+                                                .withOpacity(0.2),
+                                            shape: BoxShape.circle),
+                                        child: Icon(
+                                          Icons.arrow_forward_ios,
+                                          size: 10.sp,
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  Text(
-                                    "You need to go to Tempa University",
-                                    style: GoogleFonts.roboto(
-                                        fontSize: 18.w,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xff1B1B1B)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: 25.h,
-                              width: 25.w,
-                              decoration: BoxDecoration(
-                                  color: Color(0xff008080),
-                                  borderRadius: BorderRadius.circular(30)),
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                size: 10.sp,
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      error: (error, stackTrace) {
+                        log(stackTrace.toString());
+                        return Center(
+                          child: Text(error.toString()),
+                        );
+                      },
+                      loading: () => Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  ],
                 ),
               ),
             )

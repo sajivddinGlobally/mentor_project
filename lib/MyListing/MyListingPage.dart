@@ -22,8 +22,9 @@ class _MyListingState extends ConsumerState<MyListing> {
 
   @override
   Widget build(BuildContext context) {
-    var box = Hive.box("userdata");
-    var userType = box.get("userType");
+    final box = Hive.box("userdata");
+    final type = box.get("userType");
+    log("userType listing page : $type");
     final myListingProvider = ref.watch(myListingController);
     return Scaffold(
       backgroundColor: Color(0xFF1B1B1B),
@@ -147,7 +148,7 @@ class _MyListingState extends ConsumerState<MyListing> {
                 data: (myListingData) {
                   final query = searchController.text.toLowerCase();
                   final filteredList = myListingData.data.where((item) {
-                    final name = userType == "Mentor"
+                    final name = type == "Mentor"
                         ? item.studentName.toLowerCase()
                         : item.mentorName.toLowerCase();
                     return name.contains(query);
@@ -218,7 +219,7 @@ class _MyListingState extends ConsumerState<MyListing> {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(40.r),
                                   child: Image.network(
-                                    userType == "Mentor"
+                                    type == "Mentor"
                                         ? item.studentProfile
                                         : item.mentorProfile,
                                     height: 60.h,
@@ -241,7 +242,7 @@ class _MyListingState extends ConsumerState<MyListing> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        userType == "Mentor"
+                                        type == "Mentor"
                                             ? item.studentName
                                             : item.mentorName,
                                         style: GoogleFonts.roboto(
@@ -251,7 +252,7 @@ class _MyListingState extends ConsumerState<MyListing> {
                                         ),
                                       ),
                                       Text(
-                                        userType == "Mentor"
+                                        type == "Mentor"
                                             ? item.studentEmail
                                             : item.mentorEmail,
                                         style: GoogleFonts.roboto(
@@ -260,7 +261,7 @@ class _MyListingState extends ConsumerState<MyListing> {
                                         ),
                                       ),
                                       Text(
-                                        userType == "Mentor"
+                                        type == "Mentor"
                                             ? item.studentPhone
                                             : item.mentorPhone,
                                         style: GoogleFonts.roboto(
