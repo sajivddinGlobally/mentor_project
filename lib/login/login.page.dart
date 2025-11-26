@@ -126,23 +126,55 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
     super.dispose();
   }
 
+  // Future<String> fcmGetToken() async {
+  //   // ✅ Now request notification permissions
+  //   NotificationSettings settings =
+  //       await FirebaseMessaging.instance.requestPermission(
+  //     alert: true,
+  //     badge: true,
+  //     sound: true,
+  //   );
+
+  //   if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+  //     print('User declined permission');
+  //     return "no_permission";
+  //   }
+
+  //   String? Fcmtoken = await FirebaseMessaging.instance.getToken();
+  //   print('FCM Token: $Fcmtoken');
+  //   return Fcmtoken ?? "unknown_device";
+  // }
+
   Future<String> fcmGetToken() async {
-    // ✅ Now request notification permissions
-    NotificationSettings settings =
-        await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+    // 💡 500ms Delay यहाँ भी रखें
+    await Future.delayed(const Duration(milliseconds: 500));
 
-    if (settings.authorizationStatus != AuthorizationStatus.authorized) {
-      print('User declined permission');
-      return "no_permission";
+    try {
+      // ✅ Now request notification permissions
+      NotificationSettings settings =
+          await FirebaseMessaging.instance.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+      if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+        print('User declined permission');
+        return "no_permission";
+      }
+
+      String? Fcmtoken = await FirebaseMessaging.instance.getToken();
+      print('FCM Token: $Fcmtoken');
+      return Fcmtoken ?? "unknown_device";
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Notification Service Error. Try restarting the app.",
+        backgroundColor: Colors.orange,
+      );
+      log('FCM Token Error: $e');
+
+      return "error_fetching_token";
     }
-
-    String? Fcmtoken = await FirebaseMessaging.instance.getToken();
-    print('FCM Token: $Fcmtoken');
-    return Fcmtoken ?? "unknown_device";
   }
 
   Future<void> _handleLogin() async {
@@ -152,6 +184,15 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
       });
 
       final deviceToken = await fcmGetToken();
+
+      // 🛑 FIX 1: यदि टोकन प्राप्त करने में त्रुटि हुई है, तो यहाँ रुकें
+      if (deviceToken == "error_fetching_token") {
+        // fcmGetToken पहले ही टोस्ट दिखा चुका है, इसलिए हम बस लोडिंग बंद करेंगे।
+        setState(() {
+          isLoading = false;
+        });
+        return; // Login process यहीं रोक दिया जाएगा
+      }
 
       try {
         final body = LoginBodyModel(
