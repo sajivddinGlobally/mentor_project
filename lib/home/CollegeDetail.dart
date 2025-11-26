@@ -103,15 +103,22 @@ class _CollegeDetailPageState extends ConsumerState<CollegeDetailPage> {
                                   ),
                                 );
                               },
-                              child: Text(
-                                textAlign: TextAlign.center,
-                                snap.collage!.website.toString(),
-                                style: GoogleFonts.roboto(
-                                  fontSize: 17.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.blue, // clickable color
-                                  decoration: TextDecoration
-                                      .underline, // highlight clickable effect
+                              child: Container(
+                                padding: EdgeInsets.only(
+                                    left: 10.w,
+                                    right: 10.w,
+                                    top: 6.h,
+                                    bottom: 6.h),
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  snap.collage!.website.toString(),
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 17.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.blue, // clickable color
+                                    decoration: TextDecoration
+                                        .underline, // highlight clickable effect
+                                  ),
                                 ),
                               ),
                             ),
