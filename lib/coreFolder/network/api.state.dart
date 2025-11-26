@@ -10,6 +10,7 @@ import 'package:educationapp/coreFolder/Model/myListingResModel.dart';
 import 'package:educationapp/coreFolder/Model/newRegisterResModel.dart';
 import 'package:educationapp/coreFolder/Model/passwordChangeBodyModel.dart';
 import 'package:educationapp/coreFolder/Model/passwordChangeResModel.dart';
+import 'package:educationapp/coreFolder/Model/reportResModel.dart';
 import 'package:educationapp/coreFolder/Model/sendRequestBodyModel.dart';
 import 'package:educationapp/coreFolder/Model/sendRequestResModel.dart';
 import 'package:educationapp/coreFolder/Model/skillModel.dart';
@@ -159,4 +160,7 @@ abstract class APIStateNetwork {
 
   @GET("/block/list")
   Future<BlockListModel> getBlockList();
+
+  @POST("/report")
+  Future<ReportResModel> report(@Body() ReportBodyModel body);
 }

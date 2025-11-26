@@ -5,6 +5,7 @@ import 'package:educationapp/coreFolder/Controller/chatController.dart';
 import 'package:educationapp/coreFolder/Model/blockBodyModel.dart';
 import 'package:educationapp/coreFolder/Model/blockListModel.dart';
 import 'package:educationapp/coreFolder/Model/chatHistoryResMdel.dart';
+import 'package:educationapp/coreFolder/Model/reportResModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
 import 'package:educationapp/coreFolder/utils/preety.dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -142,6 +143,100 @@ class _ChatingPageState extends ConsumerState<ChatingPage>
   bool isBlocked = false;
   bool isLoading = false;
 
+  Future<void> showReportDialog(BuildContext context) async {
+    final TextEditingController reportController = TextEditingController();
+
+    bool isReport = false;
+
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              title: Text(
+                "Report",
+                style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+              ),
+              content: TextField(
+                controller: reportController,
+                maxLines: 4,
+                decoration: InputDecoration(
+                  hintText: "Write your report reason...",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("Cancel"),
+                ),
+                ElevatedButton(
+                  onPressed: isReport
+                      ? null
+                      : () async {
+                          if (reportController.text.trim().isEmpty) {
+                            Fluttertoast.showToast(
+                                msg: "Please enter a reason");
+                            return;
+                          }
+
+                          setStateDialog(() => isReport = true);
+
+                          try {
+                            final body = ReportBodyModel(
+                              reportedId: widget.otherUesrid,
+                              reason: reportController.text,
+                            );
+
+                            final service = APIStateNetwork(createDio());
+                            final response = await service.report(body);
+
+                            if (response.data != null) {
+                              Fluttertoast.showToast(
+                                msg: response.message ??
+                                    "Report submitted successfully",
+                              );
+                              Navigator.pop(
+                                  context, reportController.text.trim());
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: response.message ?? "Report Failed");
+                            }
+                          } catch (e, st) {
+                            Fluttertoast.showToast(
+                                msg: "API Error: ${e.toString()}");
+                            log("${e.toString()} \n ${st.toString()}");
+                          } finally {
+                            setStateDialog(() => isReport = false);
+                          }
+                        },
+                  child: isReport
+                      ? SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final hsitoryData = ref.watch(chatHistoryController(widget.otherUesrid));
@@ -230,7 +325,7 @@ class _ChatingPageState extends ConsumerState<ChatingPage>
                     PopupMenuButton<String>(
                       onSelected: (value) async {
                         if (value == "report") {
-                          print("Report clicked");
+                          showReportDialog(context);
                         } else if (value == "block") {
                           setState(() => isLoading = true);
 
