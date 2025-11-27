@@ -11,6 +11,7 @@ import 'package:educationapp/coreFolder/Model/newRegisterResModel.dart';
 import 'package:educationapp/coreFolder/Model/passwordChangeBodyModel.dart';
 import 'package:educationapp/coreFolder/Model/passwordChangeResModel.dart';
 import 'package:educationapp/coreFolder/Model/reportResModel.dart';
+import 'package:educationapp/coreFolder/Model/reviewCategoryResModel.dart';
 import 'package:educationapp/coreFolder/Model/sendRequestBodyModel.dart';
 import 'package:educationapp/coreFolder/Model/sendRequestResModel.dart';
 import 'package:educationapp/coreFolder/Model/skillModel.dart';
@@ -98,7 +99,7 @@ abstract class APIStateNetwork {
     @Part(name: "phone_number") String phoneNumber,
     @Part(name: "password") String password,
     @Part(name: "confirm_password") String confirmPass,
-   // @Part(name: "dob") String dob,
+    // @Part(name: "dob") String dob,
     @Part(name: "user_type") String userType,
     @Part(name: "service_type") String serviceType,
     //@Part(name: "profile_pic") File? profilePicture,
@@ -163,4 +164,7 @@ abstract class APIStateNetwork {
 
   @POST("/report")
   Future<ReportResModel> report(@Body() ReportBodyModel body);
+
+  @GET("/reviews/{id}")
+  Future<ReivewCategoryResModel> reviewCategory(@Path('id')String id);
 }

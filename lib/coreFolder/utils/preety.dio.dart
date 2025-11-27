@@ -290,3 +290,18 @@ Dio createDio() {
 
   return dio;
 }
+
+
+Dio createDio2() {
+  final dio = Dio();
+  dio.interceptors.add(
+    PrettyDioLogger(
+      requestBody: true,
+      requestHeader: true,
+      responseBody: true,
+      responseHeader: true,
+    ),
+  );
+
+  return dio;
+}

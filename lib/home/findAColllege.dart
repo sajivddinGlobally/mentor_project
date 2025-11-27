@@ -343,7 +343,10 @@ class _FindCollegePageState extends ConsumerState<FindCollegePage> {
                           final college = colleges.data![index];
                           return Padding(
                             padding: EdgeInsets.only(
-                                left: 10.w, right: 10.w, bottom: 20.h),
+                                left: 10.w,
+                                right: 10.w,
+                                bottom: 20.h,
+                                top: 10.h),
                             child: GestureDetector(
                               onTap: () {
                                 Navigator.push(

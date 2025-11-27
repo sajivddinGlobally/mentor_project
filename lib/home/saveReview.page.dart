@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:educationapp/coreFolder/Controller/reviewCategoryController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +14,12 @@ import '../coreFolder/Model/ReviewGetModel.dart';
 
 class SaveReviewPage extends ConsumerStatefulWidget {
   int id;
-  SaveReviewPage({super.key, required this.id});
+  final String collageCategoryId;
+  SaveReviewPage({
+    super.key,
+    required this.id,
+    required this.collageCategoryId,
+  });
 
   @override
   ConsumerState<SaveReviewPage> createState() => _SaveReviewPageState();
@@ -192,6 +200,8 @@ class _SaveReviewPageState extends ConsumerState<SaveReviewPage> {
     var userId = box.get("userid");
 
     final reviewAsync = ref.watch(reviewProvider(widget.id));
+    final reviewCategory =
+        ref.watch(reviewCategoryController(widget.collageCategoryId));
 
     return Scaffold(
       backgroundColor: Color(0xff1B1B1B),
@@ -413,6 +423,40 @@ class _SaveReviewPageState extends ConsumerState<SaveReviewPage> {
                                 color: const Color(0xff1B1B1B),
                               ),
                             ),
+                    ),
+
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    reviewCategory.when(
+                      data: (data) {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          itemCount: data.reviews!.length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(data.reviews![index].city ?? ""),
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      error: (error, stackTrace) {
+                        log("${error.toString()} /n ${stackTrace.toString()}");
+                        return Center(
+                          child: Text(error.toString()),
+                        );
+                      },
+                      loading: () => Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
                   ],
                 ),

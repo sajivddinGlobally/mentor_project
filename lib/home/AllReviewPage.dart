@@ -81,7 +81,10 @@ class _AllReviewPageState extends ConsumerState<AllReviewPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SaveReviewPage(id: id)));
+                            builder: (context) => SaveReviewPage(
+                                  id: id,
+                                  collageCategoryId: widget.id.toString(),
+                                )));
                   },
                   child: Container(
                     padding: EdgeInsets.only(

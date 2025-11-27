@@ -39,7 +39,7 @@ class Data {
   String userType;
   String profilePic;
   String studentId;
-  DateTime dob;
+  DateTime? dob;
   DateTime updatedAt;
   DateTime createdAt;
   int id;
@@ -52,7 +52,7 @@ class Data {
     required this.userType,
     required this.profilePic,
     required this.studentId,
-    required this.dob,
+    this.dob,
     required this.updatedAt,
     required this.createdAt,
     required this.id,
@@ -66,7 +66,9 @@ class Data {
         userType: json["user_type"],
         profilePic: json["profile_pic"].toString(),
         studentId: json["student_id"],
-        dob: DateTime.parse(json["dob"]),
+        dob: json["dob"] != null
+            ? DateTime.tryParse(json["dob"].toString())
+            : null,
         updatedAt: DateTime.parse(json["updated_at"]),
         createdAt: DateTime.parse(json["created_at"]),
         id: json["id"],
@@ -80,8 +82,9 @@ class Data {
         "user_type": userType,
         "profile_pic": profilePic,
         "student_id": studentId,
-        "dob":
-            "${dob.year.toString().padLeft(4, '0')}-${dob.month.toString().padLeft(2, '0')}-${dob.day.toString().padLeft(2, '0')}",
+        "dob": dob != null
+            ? "${dob!.year.toString().padLeft(4, '0')}-${dob!.month.toString().padLeft(2, '0')}-${dob!.day.toString().padLeft(2, '0')}"
+            : null,
         "updated_at": updatedAt.toIso8601String(),
         "created_at": createdAt.toIso8601String(),
         "id": id,

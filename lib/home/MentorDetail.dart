@@ -765,6 +765,12 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
     return Scaffold(
       body: profileAsync.when(
         data: (profile) {
+          final mentorRequestsList = profile.mentorRequests;
+
+          final String? status = (mentorRequestsList != null)
+              ? mentorRequestsList.status
+              : null; // यदि लिस्ट खाली है तो null
+
           return RefreshIndicator(
             onRefresh: () async {
               ref.invalidate(profileProvider(widget.id));
@@ -818,7 +824,7 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                               SizedBox(height: 15.w),
                               if (profile.skills != null)
                                 if (profile.skills is List &&
-                                    profile.skills.isNotEmpty)
+                                    profile.skills!.isNotEmpty)
                                   Wrap(
                                     spacing: 10.w,
                                     runSpacing: 10.h,
@@ -886,15 +892,25 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                                       onTap: isLoading
                                           ? null
                                           : () async {
-                                              if (profile.status == null ||
-                                                  profile.status
-                                                          ?.toLowerCase() ==
+                                              // if (profile.status == null ||
+                                              //     profile.status
+                                              //             ?.toLowerCase() ==
+                                              //         "connected") {
+                                              //   await sendConnectRequest(); // Only when no request or connect
+                                              // } else {
+                                              //   Fluttertoast.showToast(
+                                              //       msg:
+                                              //           "Request already: ${profile.status}");
+                                              // }
+
+                                              if (status == null ||
+                                                  status.toLowerCase() ==
                                                       "connected") {
-                                                await sendConnectRequest(); // Only when no request or connect
+                                                await sendConnectRequest();
                                               } else {
                                                 Fluttertoast.showToast(
                                                     msg:
-                                                        "Request already: ${profile.status}");
+                                                        "Request already: $status");
                                               }
                                             },
                                       child: Container(
@@ -905,11 +921,18 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(20),
-                                          color: profile.status == "connected"
+                                          // color: profile.status == "connected"
+                                          //     ? Color(0xff008080)
+                                          //     : profile.status == "pending"
+                                          //         ? Colors.red
+                                          //         : profile.status == "accepted"
+                                          //             ? Colors.green
+                                          //             : Colors.grey,
+                                          color: status == "connected"
                                               ? Color(0xff008080)
-                                              : profile.status == "pending"
+                                              : status == "pending"
                                                   ? Colors.red
-                                                  : profile.status == "accepted"
+                                                  : status == "accepted"
                                                       ? Colors.green
                                                       : Colors.grey,
                                         ),
@@ -925,15 +948,13 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                                                   ),
                                                 )
                                               : Text(
-                                                  profile.status == "connected"
+                                                  status == "connected"
                                                       ? "Send Request"
-                                                      : profile.status ==
-                                                              "pending"
+                                                      : status == "pending"
                                                           ? "Pending"
-                                                          : profile.status ==
-                                                                  "accepted"
+                                                          : status == "accepted"
                                                               ? "Accepted"
-                                                              : "",
+                                                              : "Send Request",
                                                   style: GoogleFonts.roboto(
                                                     fontSize: 14.sp,
                                                     fontWeight: FontWeight.w600,
@@ -1105,7 +1126,7 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                                         SizedBox(height: 10.h),
                                         if (profile.skills != null)
                                           if (profile.skills is List &&
-                                              profile.skills.isNotEmpty)
+                                              profile.skills!.isNotEmpty)
                                             Wrap(
                                               spacing: 10.w,
                                               runSpacing: 10.h,

@@ -140,7 +140,7 @@ class _ExpertTrendingDetailsPageState
                         // ),
                         if (profile.skills != null)
                           if (profile.skills is List &&
-                              profile.skills.isNotEmpty)
+                              profile.skills!.isNotEmpty)
                             Wrap(
                               spacing: 10.w,
                               runSpacing: 10.h,
@@ -370,7 +370,7 @@ class _ExpertTrendingDetailsPageState
                                   SizedBox(height: 10.h),
                                   if (profile.skills != null)
                                     if (profile.skills is List &&
-                                        profile.skills.isNotEmpty)
+                                        profile.skills!.isNotEmpty)
                                       Wrap(
                                         spacing: 10.w,
                                         runSpacing: 10.h,

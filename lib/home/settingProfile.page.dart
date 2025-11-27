@@ -1,6 +1,7 @@
 import 'package:educationapp/coreFolder/Model/passwordChangeBodyModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
 import 'package:educationapp/coreFolder/utils/preety.dio.dart';
+import 'package:educationapp/home/forgot/forgotPassword.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -119,7 +120,13 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
               Align(
                 alignment: AlignmentGeometry.centerRight,
                 child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => ForgotPasswordPage(),
+                          ));
+                    },
                     child: Text(
                       "Forgot Password?",
                       style: GoogleFonts.inter(
