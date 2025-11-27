@@ -46,7 +46,7 @@ class _AllReviewPageState extends ConsumerState<AllReviewPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 60.h,
+            height: 30.h,
           ),
           Padding(
             padding: EdgeInsets.only(left: 15.w, right: 15.w),

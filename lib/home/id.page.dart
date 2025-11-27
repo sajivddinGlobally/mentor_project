@@ -10,6 +10,7 @@ import 'package:educationapp/splash/getstart.page.dart';
 import 'package:educationapp/splash/mentorshpi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -58,13 +59,32 @@ class _IdBodyState extends ConsumerState<IdBody> {
   File? _image;
   final picker = ImagePicker();
 
+  // Future pickImageFromGallery() async {
+  //   var status = await Permission.camera.request();
+  //   if (status.isGranted) {
+  //     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  //     if (pickedFile != null) {
+  //       setState(() {
+  //         _image = File(pickedFile.path);
+  //       });
+  //     }
+  //   } else {
+  //     Fluttertoast.showToast(msg: "Gallery permission denied");
+  //   }
+  // }
   Future pickImageFromGallery() async {
     var status = await Permission.camera.request();
     if (status.isGranted) {
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
+        final compressedFile = await FlutterImageCompress.compressAndGetFile(
+          pickedFile.path,
+          pickedFile.path + "_compressed.jpg",
+          quality: 60, // lower = more compression
+        );
+
         setState(() {
-          _image = File(pickedFile.path);
+          _image = File(compressedFile!.path);
         });
       }
     } else {
@@ -72,13 +92,32 @@ class _IdBodyState extends ConsumerState<IdBody> {
     }
   }
 
+  // Future pickImageFromCamera() async {
+  //   var status = await Permission.camera.request();
+  //   if (status.isGranted) {
+  //     final pickedFile = await picker.pickImage(source: ImageSource.camera);
+  //     if (pickedFile != null) {
+  //       setState(() {
+  //         _image = File(pickedFile.path);
+  //       });
+  //     }
+  //   } else {
+  //     Fluttertoast.showToast(msg: "Camera permission denied");
+  //   }
+  // }
   Future pickImageFromCamera() async {
     var status = await Permission.camera.request();
     if (status.isGranted) {
       final pickedFile = await picker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
+        final compressedFile = await FlutterImageCompress.compressAndGetFile(
+          pickedFile.path,
+          pickedFile.path + "_compressed.jpg",
+          quality: 60,
+        );
+
         setState(() {
-          _image = File(pickedFile.path);
+          _image = File(compressedFile!.path);
         });
       }
     } else {
@@ -321,25 +360,25 @@ class FormDataNotifier extends StateNotifier<FromDataMode> {
     state = state.copyWith(phoneNumber: phone);
   }
 
-  void setDOB(String dob) => state = state.copyWith(dob: dob);
+ // void setDOB(String dob) => state = state.copyWith(dob: dob);
 
   void setUserType(String type) => state = state.copyWith(userType: type);
 
   void setSerType(String type) => state = state.copyWith(serviceType: type);
 
-  void setProfilePicture(String path) =>
-      state = state.copyWith(profileImage: path);
+  // void setProfilePicture(String path) =>
+  //     state = state.copyWith(profileImage: path);
 
   void setIdCarPic(String path) => state = state.copyWith(idCardImage: path);
 
   Future<void> register() async {
     try {
-      File? profileFile;
+      // File? profileFile;
       File? idCardFile;
 
-      if (state.profileImage != null && state.profileImage!.isNotEmpty) {
-        profileFile = File(state.profileImage!);
-      }
+      // if (state.profileImage != null && state.profileImage!.isNotEmpty) {
+      //   profileFile = File(state.profileImage!);
+      // }
       if (state.idCardImage != null && state.idCardImage!.isNotEmpty) {
         idCardFile = File(state.idCardImage!);
       }
@@ -350,10 +389,10 @@ class FormDataNotifier extends StateNotifier<FromDataMode> {
         state.phoneNumber ?? "",
         state.password ?? "",
         state.confirmPass ?? "",
-        state.dob ?? "",
+       // state.dob ?? "",
         state.userType ?? "",
         state.serviceType ?? "",
-        profileFile,
+        // profileFile,
         idCardFile,
       );
 

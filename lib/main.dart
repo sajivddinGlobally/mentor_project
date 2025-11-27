@@ -210,17 +210,19 @@ class _MyAppState extends State<MyApp> {
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.dark,
       ),
-      child: ScreenUtilInit(
-        designSize: const Size(440, 956),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: (_, __) {
-          return MaterialApp(
-            navigatorKey: navigatorKey,
-            debugShowCheckedModeBanner: false,
-            home: token == null ? const SplashScreen() : HomePage(0),
-          );
-        },
+      child: SafeArea(
+        child: ScreenUtilInit(
+          designSize: const Size(440, 956),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, __) {
+            return MaterialApp(
+              navigatorKey: navigatorKey,
+              debugShowCheckedModeBanner: false,
+              home: token == null ? const SplashScreen() : HomePage(0),
+            );
+          },
+        ),
       ),
     );
   }

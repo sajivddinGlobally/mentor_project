@@ -168,7 +168,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
       return Fcmtoken ?? "unknown_device";
     } catch (e) {
       Fluttertoast.showToast(
-        msg: "Notification Service Error. Try restarting the app.",
+        msg: "Notification Service Error. Try restarting the phone.",
         backgroundColor: Colors.orange,
       );
       log('FCM Token Error: $e');

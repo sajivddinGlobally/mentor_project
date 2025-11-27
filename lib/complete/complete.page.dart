@@ -821,7 +821,7 @@ class _ProfileCompletionWidgetState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(top: 30.h),
+                        margin: EdgeInsets.only(top: 10.h),
                         height: 70.h,
                         width: 250.w,
                         decoration: const BoxDecoration(
@@ -834,7 +834,7 @@ class _ProfileCompletionWidgetState
                     ],
                   ),
                   Positioned(
-                    top: 55.h,
+                    top: 25.h,
                     left: 20.w,
                     child: Row(
                       children: [
@@ -870,22 +870,22 @@ class _ProfileCompletionWidgetState
                   ),
                 ],
               ),
-              SizedBox(height: 20.h),
+              // SizedBox(height: 20.h),
               Expanded(
                 child: SingleChildScrollView(
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20.sp),
-                            topRight: Radius.circular(20.sp))),
+                            topLeft: Radius.circular(30.sp),
+                            topRight: Radius.circular(30.sp))),
                     child: skillsProvider.when(
                       data: (snapshot) {
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(height: 20.h),
+                            SizedBox(height: 10.h),
                             RegisterField(
                               type: TextInputType.name,
                               controller: fullNameController,

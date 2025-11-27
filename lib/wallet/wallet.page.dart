@@ -87,7 +87,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 70.h),
+          SizedBox(height: 30.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

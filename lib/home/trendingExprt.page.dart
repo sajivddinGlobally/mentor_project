@@ -39,7 +39,7 @@ class _TrendingExprtPageState extends ConsumerState<TrendingExprtPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 60.h,
+                    height: 30.h,
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 20.w),

@@ -320,10 +320,8 @@ class _APIStateNetwork implements APIStateNetwork {
     String phoneNumber,
     String password,
     String confirmPass,
-    String dob,
     String userType,
     String serviceType,
-    File? profilePicture,
     File? idCards,
   ) async {
     final _extra = <String, dynamic>{};
@@ -336,20 +334,8 @@ class _APIStateNetwork implements APIStateNetwork {
     _data.fields.add(MapEntry('phone_number', phoneNumber));
     _data.fields.add(MapEntry('password', password));
     _data.fields.add(MapEntry('confirm_password', confirmPass));
-    _data.fields.add(MapEntry('dob', dob));
     _data.fields.add(MapEntry('user_type', userType));
     _data.fields.add(MapEntry('service_type', serviceType));
-    if (profilePicture != null) {
-      _data.files.add(
-        MapEntry(
-          'profile_pic',
-          MultipartFile.fromFileSync(
-            profilePicture.path,
-            filename: profilePicture.path.split(Platform.pathSeparator).last,
-          ),
-        ),
-      );
-    }
     if (idCards != null) {
       _data.files.add(
         MapEntry(

@@ -112,81 +112,80 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
     super.dispose();
   }
 
-  DateTime? selectedDate;
-  final dateController = TextEditingController();
+  // DateTime? selectedDate;
+  // final dateController = TextEditingController();
 
-  Future<void> pickDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime(2000),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
+  // Future<void> pickDate() async {
+  //   final picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime(2000),
+  //     firstDate: DateTime(1900),
+  //     lastDate: DateTime.now(),
+  //   );
 
-    if (picked != null) {
-      final formatted = DateFormat('yyyy-MM-dd').format(picked);
-      dateController.text = formatted;
-      ref.read(myFormDataProvider.notifier).setDOB(formatted);
-    }
-  }
+  //   if (picked != null) {
+  //     final formatted = DateFormat('yyyy-MM-dd').format(picked);
+  //     dateController.text = formatted;
+  //     ref.read(myFormDataProvider.notifier).setDOB(formatted);
+  //   }
+  // }
 
-  File? _image;
-  final picker = ImagePicker();
+  // File? _image;
+  // final picker = ImagePicker();
+  // Future pickImageFromGallery() async {
+  //   var status = await Permission.camera.request();
+  //   if (status.isGranted) {
+  //     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  //     if (pickedFile != null) {
+  //       setState(() {
+  //         _image = File(pickedFile.path);
+  //       });
+  //     }
+  //   } else {
+  //     Fluttertoast.showToast(msg: "Gallery permission denied");
+  //   }
+  // }
+  // Future pickImageFromCamera() async {
+  //   var status = await Permission.camera.request();
+  //   if (status.isGranted) {
+  //     final pickedFile = await picker.pickImage(source: ImageSource.camera);
+  //     if (pickedFile != null) {
+  //       setState(() {
+  //         _image = File(pickedFile.path);
+  //       });
+  //     }
+  //   } else {
+  //     Fluttertoast.showToast(msg: "Camera permission denied");
+  //   }
+  // }
+  // Future showImage() async {
+  //   showCupertinoModalPopup(
+  //     context: context,
+  //     builder: (context) {
+  //       return CupertinoActionSheet(
+  //         actions: [
+  //           CupertinoActionSheetAction(
+  //             onPressed: () {
+  //               Navigator.pop(context);
+  //               pickImageFromGallery();
+  //             },
+  //             child: const Text("Gallery"),
+  //           ),
+  //           CupertinoActionSheetAction(
+  //             onPressed: () {
+  //               Navigator.pop(context);
+  //               pickImageFromCamera();
+  //             },
+  //             child: const Text("Camera"),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
-  Future pickImageFromGallery() async {
-    var status = await Permission.camera.request();
-    if (status.isGranted) {
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        setState(() {
-          _image = File(pickedFile.path);
-        });
-      }
-    } else {
-      Fluttertoast.showToast(msg: "Gallery permission denied");
-    }
-  }
-
-  Future pickImageFromCamera() async {
-    var status = await Permission.camera.request();
-    if (status.isGranted) {
-      final pickedFile = await picker.pickImage(source: ImageSource.camera);
-      if (pickedFile != null) {
-        setState(() {
-          _image = File(pickedFile.path);
-        });
-      }
-    } else {
-      Fluttertoast.showToast(msg: "Camera permission denied");
-    }
-  }
-
-  Future showImage() async {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) {
-        return CupertinoActionSheet(
-          actions: [
-            CupertinoActionSheetAction(
-              onPressed: () {
-                Navigator.pop(context);
-                pickImageFromGallery();
-              },
-              child: const Text("Gallery"),
-            ),
-            CupertinoActionSheetAction(
-              onPressed: () {
-                Navigator.pop(context);
-                pickImageFromCamera();
-              },
-              child: const Text("Camera"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
+  bool isShow = false;
+  bool conShow = false;
   @override
   Widget build(BuildContext context) {
     final formData = ref.watch(formDataProvider);
@@ -310,131 +309,235 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               },
             ),
           ),
+          // Padding(
+          //   padding: EdgeInsets.only(left: 28.w, right: 28.w, top: 10.h),
+          //   child: TextFormField(
+          //     onTap: () {
+          //       pickDate();
+          //     },
+          //     controller: dateController,
+          //     readOnly: true,
+          //     decoration: InputDecoration(
+          //       contentPadding:
+          //           EdgeInsets.only(left: 10.w, top: 20.h, bottom: 20.h),
+          //       focusedBorder: OutlineInputBorder(
+          //         borderSide: const BorderSide(color: Colors.grey),
+          //         borderRadius: BorderRadius.circular(40.r),
+          //       ),
+          //       border: OutlineInputBorder(
+          //         borderSide: const BorderSide(color: Colors.grey),
+          //         borderRadius: BorderRadius.circular(40.r),
+          //       ),
+          //       enabledBorder: OutlineInputBorder(
+          //         borderSide: const BorderSide(color: Colors.grey),
+          //         borderRadius: BorderRadius.circular(40.r),
+          //       ),
+          //       prefixIcon: Icon(
+          //         Icons.date_range_outlined,
+          //         color: Color(0xFFC8C8C8),
+          //       ),
+          //       hintText: "Date of Birth",
+          //       hintStyle: GoogleFonts.inter(
+          //         fontSize: 15.sp,
+          //         fontWeight: FontWeight.w600,
+          //         color: Color(0xFFC8C8C8),
+          //       ),
+          //     ),
+          //     validator: (value) {
+          //       if (value == null || value.isEmpty) {
+          //         return 'Please select your date of birth';
+          //       }
+          //       return null;
+          //     },
+          //   ),
+          // ),
+
+          // RegisterField(
+          //   onChange: (value) {
+          //     registerProviderData.setPassword(value);
+          //   },
+          //   controller: passwordController,
+          //   label: 'Password',
+          //   obscureText: true,
+          //   validator: (value) {
+          //     if (value!.isEmpty) return "Password is required";
+          //     if (value.length < 6)
+          //       return "Password must be at least 6 characters";
+          //     return null;
+          //   },
+          // ),
+
           Padding(
-            padding: EdgeInsets.only(left: 28.w, right: 28.w, top: 10.h),
-            child: TextFormField(
-              onTap: () {
-                pickDate();
-              },
-              controller: dateController,
-              readOnly: true,
-              decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.only(left: 10.w, top: 20.h, bottom: 20.h),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(40.r),
+            padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 10.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Password",
+                  style: GoogleFonts.roboto(
+                    fontSize: 13.w,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFF4D4D4D),
+                  ),
                 ),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(40.r),
+                SizedBox(height: 10.h),
+                TextFormField(
+                  onChanged: (value) {
+                    registerProviderData.setPassword(value);
+                  },
+                  controller: passwordController,
+                  obscureText: isShow ? false : true,
+                  decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(40.r),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(40.r),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(40.r),
+                      ),
+                      suffixIcon: InkWell(
+                          onTap: () {
+                            setState(() {
+                              isShow = !isShow;
+                            });
+                          },
+                          child: Icon(
+                            isShow ? Icons.visibility : Icons.visibility_off,
+                            color: Colors.grey,
+                          ))),
+                  validator: (value) {
+                    if (value!.isEmpty) return "Password is required";
+                    if (value.length < 6)
+                      return "Password must be at least 6 characters";
+                    return null;
+                  },
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(40.r),
-                ),
-                prefixIcon: Icon(
-                  Icons.date_range_outlined,
-                  color: Color(0xFFC8C8C8),
-                ),
-                hintText: "Date of Birth",
-                hintStyle: GoogleFonts.inter(
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFFC8C8C8),
-                ),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please select your date of birth';
-                }
-                return null;
-              },
+              ],
             ),
           ),
-          RegisterField(
-            onChange: (value) {
-              registerProviderData.setPassword(value);
-            },
-            controller: passwordController,
-            label: 'Password',
-            obscureText: true,
-            validator: (value) {
-              if (value!.isEmpty) return "Password is required";
-              if (value.length < 6)
-                return "Password must be at least 6 characters";
-              return null;
-            },
-          ),
-          RegisterField(
-            onChange: (value) {
-              registerProviderData.setConfriPassword(value);
-            },
-            controller: confirmPasswordController,
-            label: 'Confirm Password',
-            obscureText: true,
-            validator: (value) {
-              if (value!.isEmpty) return "Confirm Password is required";
-              if (value != passwordController.text) {
-                return "Passwords do not match";
-              }
-              return null;
-            },
-          ),
-          SizedBox(
-            height: 20.h,
-          ),
-          InkWell(
-            onTap: () {
-              showImage();
-            },
-            child: Center(
-              child: DottedBorder(
-                  dashPattern: [8, 8],
-                  radius: Radius.circular(20.r),
-                  borderType: BorderType.RRect,
-                  color: Color(0xFF008080),
-                  strokeWidth: 2.w,
-                  child: Container(
-                    width: 400.w,
-                    height: 220.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.r),
-                    ),
-                    child: _image == null
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.upload_sharp,
-                                color: Color(0xFF008080),
-                                size: 30.sp,
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              Text(
-                                "Upload picture",
-                                style: GoogleFonts.inter(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xFF4D4D4D)),
-                              )
-                            ],
-                          )
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(20.r),
-                            child: Image.file(
-                              _image!,
-                              fit: BoxFit.cover,
-                              width: 400.w,
-                              height: 220.h,
-                            ),
-                          ),
-                  )),
+
+          Padding(
+            padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 10.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Confirm Password",
+                  style: GoogleFonts.roboto(
+                    fontSize: 13.w,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFF4D4D4D),
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                TextFormField(
+                  onChanged: (value) {
+                    registerProviderData.setConfriPassword(value);
+                  },
+                  controller: confirmPasswordController,
+                  obscureText: conShow ? false : true,
+                  decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(40.r),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(40.r),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(40.r),
+                      ),
+                      suffixIcon: InkWell(
+                          onTap: () {
+                            setState(() {
+                              conShow = !conShow;
+                            });
+                          },
+                          child: Icon(
+                            conShow ? Icons.visibility : Icons.visibility_off,
+                            color: Colors.grey,
+                          ))),
+                  validator: (value) {
+                    if (value!.isEmpty) return "Confirm Password is required";
+                    if (value.length < 6)
+                      return "Confirm Password must be at least 6 characters";
+                    return null;
+                  },
+                ),
+              ],
             ),
           ),
+          // RegisterField(
+          //   onChange: (value) {
+          //     registerProviderData.setConfriPassword(value);
+          //   },
+          //   controller: confirmPasswordController,
+          //   label: 'Confirm Password',
+          //   obscureText: true,
+          //   validator: (value) {
+          //     if (value!.isEmpty) return "Confirm Password is required";
+          //     if (value != passwordController.text) {
+          //       return "Passwords do not match";
+          //     }
+          //     return null;
+          //   },
+          // ),
+
+          // SizedBox(
+          //   height: 20.h,
+          // ),
+          // InkWell(
+          //   onTap: () {
+          //     showImage();
+          //   },
+          //   child: Center(
+          //     child: Container(
+          //       width: 380.w,
+          //       height: 220.h,
+          //       decoration: BoxDecoration(
+          //           borderRadius: BorderRadius.circular(20.r),
+          //           border: Border.all(color: Colors.grey)),
+          //       child: _image == null
+          //           ? Column(
+          //               crossAxisAlignment: CrossAxisAlignment.center,
+          //               mainAxisAlignment: MainAxisAlignment.center,
+          //               children: [
+          //                 Icon(
+          //                   Icons.upload_sharp,
+          //                   color: Color(0xFF008080),
+          //                   size: 30.sp,
+          //                 ),
+          //                 SizedBox(
+          //                   height: 10.h,
+          //                 ),
+          //                 Text(
+          //                   "Upload picture",
+          //                   style: GoogleFonts.inter(
+          //                       fontSize: 15.sp,
+          //                       fontWeight: FontWeight.w400,
+          //                       color: Color(0xFF4D4D4D)),
+          //                 )
+          //               ],
+          //             )
+          //           : ClipRRect(
+          //               borderRadius: BorderRadius.circular(20.r),
+          //               child: Image.file(
+          //                 _image!,
+          //                 fit: BoxFit.cover,
+          //                 width: 400.w,
+          //                 height: 220.h,
+          //               ),
+          //             ),
+          //     ),
+          //   ),
+          // ),
           SizedBox(height: 20.h),
           GestureDetector(
             onTap: buttonLoader
@@ -453,10 +556,10 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                         //     formData.serviceType ?? "Opportunities",
                         //     formData.userType ?? "Professional",
                         //     context);
-                        if (_image == null || _image!.path.isEmpty) {
-                          Fluttertoast.showToast(msg: "Please Select Picture");
-                          return;
-                        }
+                        // if (_image == null || _image!.path.isEmpty) {
+                        //   Fluttertoast.showToast(msg: "Please Select Picture");
+                        //   return;
+                        // }
 
                         final Notifier = ref.read(myFormDataProvider.notifier);
                         Notifier.setName(fullNameController.text);
@@ -470,7 +573,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                         Notifier.setUserType(
                             formData.userType ?? "Professional");
 
-                        Notifier.setProfilePicture(_image!.path);
+                        //Notifier.setProfilePicture(_image!.path);
 
                         await ref.read(myFormDataProvider.notifier).register();
 

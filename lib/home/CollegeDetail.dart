@@ -30,7 +30,7 @@ class _CollegeDetailPageState extends ConsumerState<CollegeDetailPage> {
               Column(
                 children: [
                   Container(
-                    height: 220.h,
+                    height: 200.h,
                     width: double.infinity,
                     color: const Color(0xff008080),
                   ),
@@ -328,7 +328,7 @@ class _CollegeDetailPageState extends ConsumerState<CollegeDetailPage> {
                 ],
               ),
               Positioned(
-                top: 60.h,
+                top: 30.h,
                 left: 20.w,
                 right: 20.w,
                 child: Row(
@@ -376,7 +376,7 @@ class _CollegeDetailPageState extends ConsumerState<CollegeDetailPage> {
               Positioned(
                 left: 0,
                 right: 0,
-                top: 140.h,
+                top: 110.h,
                 child: Center(
                   child: ClipOval(
                     child: snap.collage!.image.toString() != null

@@ -37,7 +37,7 @@ class _ChatinboxState extends ConsumerState<Chatinbox> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: 55.h,
+              height: 25.h,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

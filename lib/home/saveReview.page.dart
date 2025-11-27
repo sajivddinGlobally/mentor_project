@@ -199,7 +199,7 @@ class _SaveReviewPageState extends ConsumerState<SaveReviewPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 60.h,
+            height: 30.h,
           ),
           Padding(
             padding: EdgeInsets.only(left: 20.w, right: 20.w),

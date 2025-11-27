@@ -75,7 +75,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               Column(
                 children: [
                   Container(
-                    height: 220.h,
+                    height: 200.h,
                     width: double.infinity,
                     color: const Color(0xff008080),
                   ),
@@ -272,13 +272,17 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                       ),
                                     ),
                                     SizedBox(height: 3.h),
-                                    Text(
-                                      userProfile.data!.description ??
-                                          "No description",
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w600,
-                                        color: const Color(0xff666666),
+                                    Container(
+                                      // color: Colors.amber,
+                                      width: 400.w,
+                                      child: Text(
+                                        userProfile.data!.description ??
+                                            "No description",
+                                        style: GoogleFonts.roboto(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w600,
+                                          color: const Color(0xff666666),
+                                        ),
                                       ),
                                     ),
                                     SizedBox(height: 3.h),
@@ -471,7 +475,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 ],
               ),
               Positioned(
-                top: 60.h,
+                top: 30.h,
                 left: 20.w,
                 right: 20.w,
                 child: Row(
@@ -514,25 +518,25 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               Positioned(
                 left: 0,
                 right: 0,
-                top: 140.h,
+                top: 110.h,
                 child: Center(
                   child: ClipOval(
                     child: userProfile.data!.profilePic != null
                         ? Image.network(
                             userProfile.data!.profilePic!,
-                            height: 182.h,
+                            height: 182.w,
                             width: 182.w,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
                                 Image.network(
                                     "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                    height: 182.h,
+                                    height: 182.w,
                                     width: 182.w,
                                     fit: BoxFit.cover),
                           )
                         : Image.network(
                             "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                            height: 182.h,
+                            height: 182.w,
                             width: 182.w,
                             fit: BoxFit.cover),
                   ),

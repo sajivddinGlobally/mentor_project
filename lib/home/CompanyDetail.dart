@@ -39,7 +39,7 @@ class _CompanyDetailPageState extends ConsumerState<CompanyDetailPage> {
               Column(
                 children: [
                   Container(
-                    height: 220.h,
+                    height: 200.h,
                     width: double.infinity,
                     color: const Color(0xff008080),
                   ),
@@ -50,9 +50,9 @@ class _CompanyDetailPageState extends ConsumerState<CompanyDetailPage> {
                       margin: EdgeInsets.only(top: 100.h),
                       child: SingleChildScrollView(
                         child: Column(children: [
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          // SizedBox(
+                          //   height: 10.h,
+                          // ),
                           Text(
                             snap.collage!.name.toString(),
                             style: GoogleFonts.roboto(
@@ -321,7 +321,7 @@ class _CompanyDetailPageState extends ConsumerState<CompanyDetailPage> {
                 ],
               ),
               Positioned(
-                top: 60.h,
+                top: 30.h,
                 left: 20.w,
                 right: 20.w,
                 child: Row(
@@ -369,19 +369,19 @@ class _CompanyDetailPageState extends ConsumerState<CompanyDetailPage> {
               Positioned(
                 left: 0,
                 right: 0,
-                top: 140.h,
+                top: 110.h,
                 child: Center(
                   child: ClipOval(
                     child: snap.collage!.image.toString() != null
                         ? Image.network(
                             snap.collage!.image.toString(),
-                            height: 182.h,
+                            height: 182.w,
                             width: 182.w,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
                                 Image.network(
                                     "https://t4.ftcdn.net/jpg/06/71/92/37/360_F_671923740_x0zOL3OIuUAnSF6sr7PuznCI5bQFKhI0.jpg",
-                                    height: 182.h,
+                                    height: 182.w,
                                     width: 182.w,
                                     fit: BoxFit.cover),
                           )

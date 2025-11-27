@@ -4,6 +4,7 @@ import 'package:educationapp/Profile/profileScreen.dart';
 import 'package:educationapp/complete/complete.page.dart';
 import 'package:educationapp/coreFolder/Controller/getRequestStudentController.dart';
 import 'package:educationapp/coreFolder/Controller/myListingController.dart';
+import 'package:educationapp/coreFolder/Controller/userProfileController.dart';
 import 'package:educationapp/coreFolder/Model/sendRequestBodyModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
 import 'package:educationapp/coreFolder/utils/preety.dio.dart';
@@ -122,7 +123,13 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget drawerWidget(Box box) {
     final userType = box.get('userType');
-    final profileImage = box.get('profile') ?? {};
+    // final profileImage = box.get('profile') ?? {};
+    // final profile = box.get("profile");
+    final asyncProfile = ref.watch(userProfileController);
+
+    // 2. Hive StateProvider से डेटा पढ़ें (यह अपडेट होने पर UI को री-रेंडर करेगा)
+    final profile = ref.watch(hiveProfileProvider);
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Container(
@@ -175,15 +182,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          height: 50.h,
-                          width: 46.w,
+                          height: 50.w,
+                          width: 50.w,
                           decoration: BoxDecoration(
                             color: const Color.fromARGB(25, 255, 255, 255),
                             borderRadius: BorderRadius.circular(500.r),
                           ),
                           child: ClipOval(
                             child: Image.network(
-                              profileImage['profile_picture']?.toString() ??
+                              // profileImage['profile_picture']?.toString() ??
+                              profile?['profile_picture'] ??
                                   "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
@@ -233,7 +241,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                       Padding(
                         padding: EdgeInsets.only(left: 20.w),
                         child: Text(
-                          "${box.get('full_name') ?? 'User'}",
+                          // profile['full_name'] ?? "User",
+                          profile?['full_name'] ?? "User",
                           style: GoogleFonts.roboto(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w600,
@@ -436,6 +445,11 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
   Widget build(BuildContext context) {
     var box = Hive.box('userdata');
     final profileImage = box.get('profile') ?? {};
+    final profile = box.get("profile");
+    final asyncProfile = ref.watch(userProfileController);
+
+    // 2. Hive StateProvider से डेटा पढ़ें (यह अपडेट होने पर UI को री-रेंडर करेगा)
+    final profileData = ref.watch(hiveProfileProvider);
 
     final getHomeStudentData = ref.watch(getHomeStudentDataProvider);
     final getHomeMentorData = ref.watch(getHomeMentorDataProvider);
@@ -532,15 +546,16 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                               builder: (context) => HomePage(3)));
                     },
                     child: Container(
-                      height: 46.h,
-                      width: 44.w,
+                      height: 50.w,
+                      width: 50.w,
                       decoration: BoxDecoration(
                         color: const Color.fromARGB(25, 255, 255, 255),
                         borderRadius: BorderRadius.circular(500.r),
                       ),
                       child: ClipOval(
                         child: Image.network(
-                          profileImage['profile_picture']?.toString() ??
+                          // profileImage['profile_picture']?.toString() ??
+                          profile?['profile_picture'] ??
                               "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
@@ -579,7 +594,8 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                   color: Colors.white),
                             ),
                             Text(
-                              "${box.get("full_name") ?? "User"}!",
+                              // profile['full_name'] ?? "User",
+                              profile?['full_name'] ?? "User",
                               style: GoogleFonts.roboto(
                                   fontSize: 24.sp,
                                   fontWeight: FontWeight.w600,
@@ -966,7 +982,7 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                                               .profilePic ??
                                                           "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
                                                       fit: BoxFit.cover,
-                                                      height: 50.h,
+                                                      height: 50.w,
                                                       width: 50.w,
                                                       errorBuilder: (context,
                                                           error, stackTrace) {
@@ -974,7 +990,7 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                                           child: Image.network(
                                                             "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
                                                             fit: BoxFit.cover,
-                                                            height: 50.h,
+                                                            height: 50.w,
                                                             width: 50.w,
                                                           ),
                                                         );

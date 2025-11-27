@@ -292,7 +292,7 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 40.h,
+              height: 15.h,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -302,7 +302,12 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                       Navigator.pop(context);
                     },
                     icon: Icon(Icons.arrow_back_ios)),
-                IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+                IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.search,
+                      color: Color(0xFFF9F9F9),
+                    )),
               ],
             ),
             SizedBox(

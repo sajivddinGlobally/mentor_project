@@ -98,10 +98,10 @@ abstract class APIStateNetwork {
     @Part(name: "phone_number") String phoneNumber,
     @Part(name: "password") String password,
     @Part(name: "confirm_password") String confirmPass,
-    @Part(name: "dob") String dob,
+   // @Part(name: "dob") String dob,
     @Part(name: "user_type") String userType,
     @Part(name: "service_type") String serviceType,
-    @Part(name: "profile_pic") File? profilePicture,
+    //@Part(name: "profile_pic") File? profilePicture,
     @Part(name: "student_id") File? idCards,
   );
 

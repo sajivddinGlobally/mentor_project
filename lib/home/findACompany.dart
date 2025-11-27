@@ -115,7 +115,7 @@ class _FindCompanyPageState extends ConsumerState<FindCompanyPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 70.h),
+          SizedBox(height: 30.h),
           _appBar(),
           SizedBox(height: 20.h),
           if (_showSearchBar) ...[
@@ -158,9 +158,8 @@ class _FindCompanyPageState extends ConsumerState<FindCompanyPage> {
               ),
             ),
           ],
-          SizedBox(height: 20.h),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 20.h),
             child: dropDownData.when(
               data: (dropdown) {
                 final skills = ["All", ...(dropdown.companies?.skills ?? [])];

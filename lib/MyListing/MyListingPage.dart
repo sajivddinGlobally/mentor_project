@@ -26,6 +26,7 @@ class _MyListingState extends ConsumerState<MyListing> {
     final type = box.get("userType");
     log("userType listing page : $type");
     final myListingProvider = ref.watch(myListingController);
+
     return Scaffold(
       backgroundColor: Color(0xFF1B1B1B),
       body: Column(
@@ -33,7 +34,7 @@ class _MyListingState extends ConsumerState<MyListing> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 70.h,
+            height: 25.h,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
