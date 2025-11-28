@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:educationapp/coreFolder/Model/sendOTPResModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
 import 'package:educationapp/coreFolder/utils/preety.dio.dart';

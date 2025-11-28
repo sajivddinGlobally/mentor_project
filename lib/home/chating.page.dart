@@ -456,10 +456,39 @@ class _ChatingPageState extends ConsumerState<ChatingPage>
                           ),
                         ),
                       ),
-                      MessageInput(
-                        controller: messController,
-                        onSend: () => _sendMessage(messController.text),
-                      ),
+                      if (isBlocked)
+                        Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 14.h, horizontal: 20.w),
+                          decoration: BoxDecoration(
+                            color: Colors.red.withOpacity(0.10),
+                            border: Border(
+                              top: BorderSide(
+                                  color: Colors.red.withOpacity(0.3)),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.block, color: Colors.red, size: 20),
+                              SizedBox(width: 8),
+                              Text(
+                                "You cannot send messages to this user",
+                                style: GoogleFonts.dmSans(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      else
+                        MessageInput(
+                          controller: messController,
+                          onSend: () => _sendMessage(messController.text),
+                        ),
                     ],
                   ),
                 ),
@@ -475,7 +504,6 @@ class _ChatingPageState extends ConsumerState<ChatingPage>
   }
 }
 
-// MessageInput and ChatBubble remain exactly the same as you had
 class MessageInput extends StatelessWidget {
   final TextEditingController controller;
   final VoidCallback onSend;

@@ -340,9 +340,17 @@ class _ChatinboxState extends ConsumerState<Chatinbox> {
           );
         },
         error: (error, stackTrace) {
-          log(stackTrace.toString());
-          return Center(
-            child: Text(error.toString()),
+          log("${stackTrace.toString()} /n ${error.toString()}");
+          return RefreshIndicator(
+            onRefresh: () async {
+              ref.invalidate(inboxProvider(id.toString()));
+            },
+            child: Center(
+              child: Text(
+                "${error.toString()} /n pull to refresh",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
           );
         },
         loading: () => Center(
