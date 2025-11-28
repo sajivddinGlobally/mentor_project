@@ -10,7 +10,7 @@ part of 'api.state.dart';
 
 class _APIStateNetwork implements APIStateNetwork {
   _APIStateNetwork(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'https://educatservicesindia.com/admin/api';
+    baseUrl ??= 'https://education.globallywebsolutions.com/api';
   }
 
   final Dio _dio;

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:educationapp/coreFolder/Model/sendOTPResModel.dart';
 import 'package:educationapp/coreFolder/Model/verifyOrChangePassBodyModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
 import 'package:educationapp/coreFolder/utils/preety.dio.dart';
@@ -25,6 +26,35 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
   final _otpPinFieldController = GlobalKey<OtpPinFieldState>();
   final newpasswordController = TextEditingController();
   final confirmedPassController = TextEditingController();
+
+  void resendOTP() async {
+    setState(() {
+      isResending = true;
+    });
+    try {
+      final body = sendOTPBodyModel(email: widget.email);
+      final service = APIStateNetwork(createDio());
+      final response = await service.sendOTP(body);
+      if (response != null) {
+        Fluttertoast.showToast(msg: "OTP Send to your email");
+
+        setState(() {
+          isResending = false;
+        });
+      } else {
+        setState(() {
+          isResending = false;
+        });
+        Fluttertoast.showToast(msg: "something went wrong");
+      }
+    } catch (e, st) {
+      setState(() {
+        isResending = false;
+      });
+      Fluttertoast.showToast(msg: "Api Error : $e");
+      log("$e, $st");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,11 +115,16 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                 onSubmit: (text) {
                   otpValue = text;
                 },
-                onChange: (text) {},
+                onChange: (text) {
+                  setState(() {
+                    otpValue = text;
+                  });
+                },
               ),
               SizedBox(height: 20.h),
               if (otpValue.length == 6)
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "New Password",
@@ -240,48 +275,11 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: TextButton(
-                  onPressed: () async {
-                    setState(() {
-                      isResending = true;
-                    });
-                    // try {
-                    //   final body = VerifyOtpBodyModel(
-                    //     email: widget.email,
-                    //     otp: otpValue,
-                    //   );
-
-                    //   final service = APIStateNetwork(createDio());
-                    //   final response = await service.verifyOTP(body);
-
-                    //   // SUCCESS – status 200
-                    //   if (response != null) {
-                    //     setState(() => isLoading = false);
-
-                    //     Fluttertoast.showToast(
-                    //       msg: "OTP Verified Successfully",
-                    //     );
-                    //   }
-                    //   // RESPONSE FALSE
-                    //   else {
-                    //     setState(() => isLoading = false);
-
-                    //     Fluttertoast.showToast(
-                    //       msg: response?.message ?? "Something went wrong",
-                    //     );
-                    //   }
-                    // } on DioException catch (e) {
-                    //   setState(() => isLoading = false);
-
-                    //   final serverMessage =
-                    //       e.response?.data?["message"] ?? "Invalid OTP";
-
-                    //   Fluttertoast.showToast(msg: serverMessage);
-                    // } catch (e) {
-                    //   setState(() => isLoading = false);
-
-                    //   Fluttertoast.showToast(msg: "Error: $e");
-                    // }
-                  },
+                  onPressed: isResending
+                      ? null
+                      : () async {
+                          resendOTP();
+                        },
                   child: isResending
                       ? SizedBox(
                           height: 20.h,

@@ -546,6 +546,7 @@ import 'package:educationapp/splash/getstart.page.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -615,27 +616,66 @@ class _ProfileCompletionWidgetState
   File? _image;
   final picker = ImagePicker();
 
+  // Future pickImageFromGallery() async {
+  //   var status = await Permission.camera.request();
+  //   if (status.isGranted) {
+  //     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  //     if (pickedFile != null) {
+  //       setState(() {
+  //         _image = File(pickedFile.path);
+  //       });
+  //     }
+  //   } else {
+  //     Fluttertoast.showToast(msg: "Gallery permission denied");
+  //   }
+  // }
+
   Future pickImageFromGallery() async {
-    var status = await Permission.camera.request();
-    if (status.isGranted) {
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        setState(() {
-          _image = File(pickedFile.path);
-        });
-      }
-    } else {
-      Fluttertoast.showToast(msg: "Gallery permission denied");
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      final compressed = await FlutterImageCompress.compressAndGetFile(
+        pickedFile.path,
+        '${pickedFile.path}_compressed.jpg',
+        quality: 60,
+      );
+
+      setState(() {
+        _image =
+            compressed != null ? File(compressed.path) : File(pickedFile.path);
+      });
     }
   }
 
+  // Future pickImageFromCamera() async {
+  //   var status = await Permission.camera.request();
+  //   if (status.isGranted) {
+  //     final pickedFile = await picker.pickImage(source: ImageSource.camera);
+  //     if (pickedFile != null) {
+  //       setState(() {
+  //         _image = File(pickedFile.path);
+  //       });
+  //     }
+  //   } else {
+  //     Fluttertoast.showToast(msg: "Camera permission denied");
+  //   }
+  // }
   Future pickImageFromCamera() async {
     var status = await Permission.camera.request();
     if (status.isGranted) {
       final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
       if (pickedFile != null) {
+        final compressed = await FlutterImageCompress.compressAndGetFile(
+          pickedFile.path,
+          '${pickedFile.path}_compressed.jpg',
+          quality: 50, // Reduce size
+        );
+
         setState(() {
-          _image = File(pickedFile.path);
+          _image = compressed != null
+              ? File(compressed.path)
+              : File(pickedFile.path);
         });
       }
     } else {
@@ -785,8 +825,6 @@ class _ProfileCompletionWidgetState
               profileAsync.value!.data!.linkedinUser ?? '';
           aboutController.text = profileAsync.value!.data!.description ?? '';
           _profileLoaded = true;
-          resumeFile = profileAsync.value!.data!.resumeUpload as File?;
-          _image = profileAsync.value!.data!.profilePic as File?;
         });
       });
     }

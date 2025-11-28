@@ -1640,7 +1640,24 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                                             BorderRadius
                                                                 .circular(12.r),
                                                         child: Image.network(
-                                                          college.image ?? "",
+                                                          college.image ??
+                                                              "https://www.howardluksmd.com/wp-content/uploads/2021/10/featured-image-placeholder-728x404.jpg",
+                                                          errorBuilder:
+                                                              (context, error,
+                                                                  stackTrace) {
+                                                            return Image
+                                                                .network(
+                                                              "https://www.howardluksmd.com/wp-content/uploads/2021/10/featured-image-placeholder-728x404.jpg",
+                                                              width:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              height: 111.h,
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                            );
+                                                          },
                                                           width: MediaQuery.of(
                                                                   context)
                                                               .size
@@ -1894,7 +1911,8 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                                       BorderRadius.circular(
                                                           12.r),
                                                   child: Image.network(
-                                                    company.image ?? "",
+                                                    company.image ??
+                                                        "https://www.howardluksmd.com/wp-content/uploads/2021/10/featured-image-placeholder-728x404.jpg",
                                                     width:
                                                         MediaQuery.of(context)
                                                             .size
@@ -1902,6 +1920,18 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                                     height: 111.h,
                                                     fit: BoxFit.contain,
                                                     //color: Colors.white,
+                                                    errorBuilder: (context,
+                                                        error, stackTrace) {
+                                                      return Image.network(
+                                                        "https://www.howardluksmd.com/wp-content/uploads/2021/10/featured-image-placeholder-728x404.jpg",
+                                                        width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
+                                                        height: 111.h,
+                                                        fit: BoxFit.contain,
+                                                      );
+                                                    },
                                                   ),
                                                 ),
                                               ),
@@ -2106,21 +2136,21 @@ class _HomePageBodyState extends ConsumerState<HomePageBody> {
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w600),
               ),
-              Row(
-                children: [
-                  Text(
-                    "Filters",
-                    style: GoogleFonts.roboto(
-                        color: Colors.white,
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(width: 4.w),
-                  Image.asset("assets/filter.png"),
-                  SizedBox(width: 4.w),
-                  Image.asset("assets/search.png"),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     Text(
+              //       "Filters",
+              //       style: GoogleFonts.roboto(
+              //           color: Colors.white,
+              //           fontSize: 20.sp,
+              //           fontWeight: FontWeight.w600),
+              //     ),
+              //     SizedBox(width: 4.w),
+              //     Image.asset("assets/filter.png"),
+              //     SizedBox(width: 4.w),
+              //     Image.asset("assets/search.png"),
+              //   ],
+              // ),
             ],
           ),
         ),

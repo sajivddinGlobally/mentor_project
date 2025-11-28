@@ -35,7 +35,7 @@ class Data {
   String? description;
   String? userType;
   dynamic location;
-  String? coins;
+  dynamic? coins;
   int? profileCompletion;
   List<AcceptedStudent>? acceptedStudents;
   List<Message>? messages;
