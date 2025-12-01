@@ -173,23 +173,21 @@ class _MyAppState extends State<MyApp> {
         if (hasNoInternet) {
           log("⚠️ No Internet connection detected - navigating to NoInternetScreen");
 
-          navigatorKey.currentState?.pushNamedAndRemoveUntil(
-            "/NoInternetScreen",
-            (route) => false, // 🔥 All previous routes removed
-          );
+          // navigatorKey.currentState?.pushNamedAndRemoveUntil(
+          //   "/NoInternetScreen",
+          //   (route) => false,
+          // );
+
+          navigatorKey.currentState?.pushNamed("/NoInternetScreen");
         } else {
           log("✅ Internet connection restored - popping NoInternetScreen if it's on top");
 
-          Future.delayed(
-            const Duration(
-                seconds:
-                    1), // Delay to ensure the pop happens after the route is fully built
-            () {
-              if (navigatorKey.currentState?.canPop() == true) {
-                navigatorKey.currentState?.pop();
-              }
-            },
-          );
+          // यह एक safe pop है — crash नहीं करेगा
+          Future.delayed(const Duration(milliseconds: 300), () {
+            if (navigatorKey.currentState?.canPop() ?? false) {
+              navigatorKey.currentState?.pop();
+            }
+          });
         }
       },
     );

@@ -9,42 +9,13 @@ class NoInternetScreen extends StatefulWidget {
 
 class _NoInternetScreenState extends State<NoInternetScreen> {
   Future<void> _checkAgain(BuildContext context) async {
-    // Show a loading indicator temporarily (optional but good practice)
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Checking connection..."),
-        duration: Duration(milliseconds: 1000),
-      ),
-    );
-
     final results = await Connectivity().checkConnectivity();
-
-    // Check if the results list *does not* contain ConnectivityResult.none
-    final hasInternet = !results.contains(ConnectivityResult.none);
+    final hasInternet =
+        results.isNotEmpty && results.first != ConnectivityResult.none;
 
     if (hasInternet) {
-      // if (navigatorKey.currentState?.canPop() ?? false) {
-      //   navigatorKey.currentState?.pop();
-      // }
-      Future.delayed(
-        const Duration(
-            seconds:
-                1), // Delay to ensure the pop happens after the route is fully built
-        () {
-          if (navigatorKey.currentState?.canPop() == true) {
-            navigatorKey.currentState?.pop();
-          }
-        },
-      );
-      // You can also add a success message here
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Connection restored!"),
-          backgroundColor: Colors.green,
-        ),
-      );
+      navigatorKey.currentState?.popUntil((route) => route.isFirst);
     } else {
-      // Still no internet
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Still offline. Please check network settings."),
