@@ -965,45 +965,78 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                                       ),
                                     ),
                                     SizedBox(width: 20.w),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                              builder: (context) => ChatingPage(
-                                                  otherUesrid:
-                                                      profile.id.toString(),
-                                                  id: box
-                                                      .get("userid")
-                                                      .toString(),
-                                                  name: profile.fullName
-                                                      .toString()),
-                                            ));
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.only(
-                                            left: 10.w, right: 10.w),
-                                        height: 50.h,
-                                        width: 140.w,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              color: const Color(0xff008080)),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            "Message",
-                                            style: GoogleFonts.roboto(
-                                              fontSize: 14.sp,
-                                              fontWeight: FontWeight.w600,
-                                              color: const Color(0xff008080),
+                                    if (status == "accepted") ...[
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              CupertinoPageRoute(
+                                                builder: (context) =>
+                                                    ChatingPage(
+                                                        otherUesrid: profile.id
+                                                            .toString(),
+                                                        id: box
+                                                            .get("userid")
+                                                            .toString(),
+                                                        name: profile.fullName
+                                                            .toString()),
+                                              ));
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                              left: 10.w, right: 10.w),
+                                          height: 50.h,
+                                          width: 140.w,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: Colors.white,
+                                            border: Border.all(
+                                                color: const Color(0xff008080)),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "Message",
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w600,
+                                                color: const Color(0xff008080),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
+                                    ] else ...[
+                                      InkWell(
+                                        onTap: () {
+                                          Fluttertoast.showToast(
+                                              msg: "Request not accepted yet!");
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                              left: 10.w, right: 10.w),
+                                          height: 50.h,
+                                          width: 140.w,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: Colors.white,
+                                            border: Border.all(
+                                                color: const Color(0xff008080)),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "Message",
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w600,
+                                                color: const Color(0xff008080),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ],
                                 ),
                               ),
