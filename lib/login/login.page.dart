@@ -127,55 +127,131 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
   }
 
   // Future<String> fcmGetToken() async {
-  //   // ✅ Now request notification permissions
-  //   NotificationSettings settings =
-  //       await FirebaseMessaging.instance.requestPermission(
-  //     alert: true,
-  //     badge: true,
-  //     sound: true,
-  //   );
+  //   // 💡 500ms Delay यहाँ भी रखें
+  //   await Future.delayed(const Duration(milliseconds: 500));
 
-  //   if (settings.authorizationStatus != AuthorizationStatus.authorized) {
-  //     print('User declined permission');
-  //     return "no_permission";
+  //   try {
+  //     // ✅ Now request notification permissions
+  //     NotificationSettings settings =
+  //         await FirebaseMessaging.instance.requestPermission(
+  //       alert: true,
+  //       badge: true,
+  //       sound: true,
+  //     );
+
+  //     if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+  //       print('User declined permission');
+  //       return "no_permission";
+  //     }
+
+  //     String? Fcmtoken = await FirebaseMessaging.instance.getToken();
+  //     print('FCM Token: $Fcmtoken');
+  //     return Fcmtoken ?? "unknown_device";
+  //   } catch (e) {
+  //     Fluttertoast.showToast(
+  //       msg: "Notification Service Error. Try restarting the phone.",
+  //       backgroundColor: Colors.orange,
+  //     );
+  //     log('FCM Token Error: $e');
+
+  //     return "error_fetching_token";
   //   }
+  // }
 
-  //   String? Fcmtoken = await FirebaseMessaging.instance.getToken();
-  //   print('FCM Token: $Fcmtoken');
-  //   return Fcmtoken ?? "unknown_device";
+  // Future<String> fcmGetToken() async {
+  //   const int maxRetries = 4; // प्रयासों की संख्या 3 से बढ़ाकर 4 करें
+  //   // ⏳ विलंब को और ज़्यादा बढ़ाएँ
+  //   const Duration initialDelay = Duration(milliseconds: 1000);
+
+  //   for (int attempt = 1; attempt <= maxRetries; attempt++) {
+  //     // 💡 हर प्रयास से पहले ज़्यादा विलंब (1s, 2s, 3s, 4s)
+  //     await Future.delayed(initialDelay * attempt);
+
+  //     try {
+  //       // 1. अनुमति केवल पहले प्रयास में
+  //       if (attempt == 1) {
+  //         // ... (पुराना अनुमति लॉजिक, अपरिवर्तित) ...
+  //         NotificationSettings settings =
+  //             await FirebaseMessaging.instance.requestPermission();
+  //         if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+  //           return "no_permission";
+  //         }
+  //       }
+
+  //       String? Fcmtoken = await FirebaseMessaging.instance.getToken();
+
+  //       if (Fcmtoken != null) {
+  //         log('FCM Token (Attempt $attempt): $Fcmtoken');
+  //         return Fcmtoken;
+  //       }
+
+  //       log('FCM Token is null on attempt $attempt. Retrying...');
+  //     } catch (e) {
+  //       log('FCM Token Error on attempt $attempt: $e');
+
+  //       if (attempt == maxRetries) {
+  //         // 🛑 अंतिम प्रयास विफल होने पर, Play Services को ठीक करने का निर्देश दें
+  //         Fluttertoast.showToast(
+  //           msg:
+  //               "Notification Error. Please clear Google Play Services data/cache or restart your phone.",
+  //           toastLength: Toast.LENGTH_LONG, // टोस्ट को लंबे समय तक दिखाएँ
+  //           backgroundColor: Colors.red,
+  //         );
+  //         return "error_fetching_token";
+  //       }
+  //     }
+  //   }
+  //   return "error_fetching_token";
   // }
 
   Future<String> fcmGetToken() async {
-    // 💡 500ms Delay यहाँ भी रखें
-    await Future.delayed(const Duration(milliseconds: 500));
+  const int maxRetries = 5; // प्रयासों की संख्या बढ़ाएँ
+  const Duration initialDelay = Duration(seconds: 2); // पहला विलंब 2 सेकंड का रखें
+  const Duration maxTotalWait = Duration(seconds: 15); // अधिकतम 15 सेकंड इंतजार करें
+  DateTime startTime = DateTime.now();
+
+  // अनुमति केवल पहले प्रयास में
+  NotificationSettings settings = await FirebaseMessaging.instance.requestPermission();
+  if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+      return "no_permission";
+  }
+  
+  for (int attempt = 1; attempt <= maxRetries; attempt++) {
+    // ⏳ चेक करें कि क्या कुल प्रतीक्षा समय पार हो गया है
+    if (DateTime.now().difference(startTime) > maxTotalWait) {
+      log('FCM Token fetching aborted after 15 seconds.');
+      break; // लूप तोड़ दें
+    }
+    
+    // हर प्रयास से पहले एक्सपोनेंशियल विलंब (2s, 4s, 6s, आदि)
+    await Future.delayed(initialDelay * attempt); 
 
     try {
-      // ✅ Now request notification permissions
-      NotificationSettings settings =
-          await FirebaseMessaging.instance.requestPermission(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
-
-      if (settings.authorizationStatus != AuthorizationStatus.authorized) {
-        print('User declined permission');
-        return "no_permission";
-      }
-
       String? Fcmtoken = await FirebaseMessaging.instance.getToken();
-      print('FCM Token: $Fcmtoken');
-      return Fcmtoken ?? "unknown_device";
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: "Notification Service Error. Try restarting the phone.",
-        backgroundColor: Colors.orange,
-      );
-      log('FCM Token Error: $e');
+      
+      if (Fcmtoken != null) {
+        log('FCM Token (Attempt $attempt): $Fcmtoken');
+        return Fcmtoken; // ✅ सफलता
+      }
+      
+      log('FCM Token is null on attempt $attempt. Retrying...');
 
-      return "error_fetching_token";
+    } catch (e) {
+      log('FCM Token Error on attempt $attempt: $e');
+
+      if (attempt == maxRetries || DateTime.now().difference(startTime) > maxTotalWait) {
+        // 🛑 अंतिम विफलता, उपयोगकर्ता को Play Services ठीक करने का निर्देश दें
+        Fluttertoast.showToast(
+          msg: "Notification Error. Play Services busy. Please clear Google Play Services data/cache or restart your phone.",
+          toastLength: Toast.LENGTH_LONG,
+          backgroundColor: Colors.red,
+        );
+        return "error_fetching_token";
+      }
     }
   }
+  return "error_fetching_token";
+}
 
   Future<void> _handleLogin() async {
     if (_formKey.currentState?.validate() ?? false) {
@@ -183,10 +259,12 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
         isLoading = true;
       });
 
+      // 🔄 संशोधित fcmGetToken फंक्शन का उपयोग करें
       final deviceToken = await fcmGetToken();
 
       // 🛑 FIX 1: यदि टोकन प्राप्त करने में त्रुटि हुई है, तो यहाँ रुकें
-      if (deviceToken == "error_fetching_token") {
+      if (deviceToken == "error_fetching_token" ||
+          deviceToken == "no_permission") {
         // fcmGetToken पहले ही टोस्ट दिखा चुका है, इसलिए हम बस लोडिंग बंद करेंगे।
         setState(() {
           isLoading = false;

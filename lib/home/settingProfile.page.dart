@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:educationapp/coreFolder/Model/passwordChangeBodyModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
 import 'package:educationapp/coreFolder/utils/preety.dio.dart';
@@ -45,6 +46,9 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
     final newPasswordController = TextEditingController();
     final repeatPasswordController = TextEditingController();
     bool isChange = false;
+    bool isShow = false;
+    bool conShow = false;
+    bool isOld = false;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -106,16 +110,25 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                         ]),
                     child: TextField(
                       controller: oldPasswordController,
-                      obscureText: true,
+                      obscureText: isOld ? false : true,
                       decoration: InputDecoration(
-                        hintText: "Old Password",
-                        hintStyle: GoogleFonts.roboto(fontSize: 14.sp),
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                          hintText: "Old Password",
+                          hintStyle: GoogleFonts.roboto(fontSize: 14.sp),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          suffixIcon: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  isOld = !isOld;
+                                });
+                              },
+                              child: Icon(
+                                isOld ? Icons.visibility : Icons.visibility_off,
+                                color: Colors.grey,
+                              ))),
                     ),
                   ),
                   SizedBox(height: 5.h),
@@ -153,16 +166,27 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                         ]),
                     child: TextField(
                       controller: newPasswordController,
-                      obscureText: true,
+                      obscureText: isShow ? false : true,
                       decoration: InputDecoration(
-                        hintText: "New Password",
-                        hintStyle: GoogleFonts.roboto(fontSize: 14.sp),
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                          hintText: "New Password",
+                          hintStyle: GoogleFonts.roboto(fontSize: 14.sp),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          suffixIcon: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  isShow = !isShow;
+                                });
+                              },
+                              child: Icon(
+                                isShow
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Colors.grey,
+                              ))),
                     ),
                   ),
                   SizedBox(height: 15.h),
@@ -182,16 +206,27 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                         ]),
                     child: TextField(
                       controller: repeatPasswordController,
-                      obscureText: true,
+                      obscureText: conShow ? false : true,
                       decoration: InputDecoration(
-                        hintText: "Repeat New Password",
-                        hintStyle: GoogleFonts.roboto(fontSize: 14.sp),
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                          hintText: "Repeat New Password",
+                          hintStyle: GoogleFonts.roboto(fontSize: 14.sp),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          suffixIcon: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  conShow = !conShow;
+                                });
+                              },
+                              child: Icon(
+                                conShow
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Colors.grey,
+                              ))),
                     ),
                   ),
                   SizedBox(height: 25.h),
@@ -225,12 +260,9 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                               }
 
                               if (newPass != repeatPass) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Passwords do not match"),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
+                                Fluttertoast.showToast(
+                                    msg: "Passwords do not match",
+                                    backgroundColor: Colors.red);
                                 return;
                               }
                               try {
@@ -250,11 +282,13 @@ class _SettingProfilePageState extends State<SettingProfilePage> {
                                 } else {
                                   Fluttertoast.showToast(msg: response.message);
                                 }
-                              } catch (e, st) {
+                              } on DioException catch (e, st) {
                                 setState(() {
                                   isChange = false;
                                 });
-                                log(e.toString());
+                                log(e.error.toString());
+                                Fluttertoast.showToast(
+                                    msg: e.response!.data['error'] ?? "Error");
                               } finally {
                                 setState(() {
                                   isChange = false;

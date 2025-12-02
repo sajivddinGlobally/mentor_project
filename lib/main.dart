@@ -157,40 +157,54 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String? token;
+  late StreamSubscription<List<ConnectivityResult>> _subscription;
 
   @override
   void initState() {
     super.initState();
     _checkToken();
-    _setupConnectivityListener(); // नया फंक्शन
+    _setupConnectivityListener();
   }
 
   void _setupConnectivityListener() {
-    _subscription = Connectivity().onConnectivityChanged.listen(
-      (List<ConnectivityResult> results) {
-        final bool hasNoInternet = results.contains(ConnectivityResult.none);
+    _subscription = Connectivity().onConnectivityChanged.listen((results) {
+      final hasNoInternet = results.contains(ConnectivityResult.none);
 
-        if (hasNoInternet) {
-          log("⚠️ No Internet connection detected - navigating to NoInternetScreen");
+      if (hasNoInternet) {
+        log("⚠️ No Internet");
 
-          // navigatorKey.currentState?.pushNamedAndRemoveUntil(
-          //   "/NoInternetScreen",
-          //   (route) => false,
-          // );
+        // **CHANGE: Add check to avoid pushing multiples (consistent with Dio interceptor)**
+        Future.microtask(() {
+          final navState = navigatorKey.currentState;
+          final isNavigatingToNoInternet = navState?.context
+                  .findAncestorWidgetOfExactType<NoInternetScreen>() !=
+              null;
 
-          navigatorKey.currentState?.pushNamed("/NoInternetScreen");
-        } else {
-          log("✅ Internet connection restored - popping NoInternetScreen if it's on top");
+          if (navState != null &&
+              navState.context.mounted &&
+              !isNavigatingToNoInternet) {
+            navState.pushNamed("/NoInternetScreen");
+          } else {
+            log("⚠️ Navigation skipped: Already on NoInternet page or context unmounted.");
+          }
+        });
+      } else {
+        log("✅ Internet Restored");
 
-          // यह एक safe pop है — crash नहीं करेगा
-          Future.delayed(const Duration(milliseconds: 300), () {
-            if (navigatorKey.currentState?.canPop() ?? false) {
-              navigatorKey.currentState?.pop();
-            }
-          });
-        }
-      },
-    );
+        // **CHANGE: Simplified to always pop if possible (now safe since stack isn't cleared)**
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (navigatorKey.currentState?.canPop() ?? false) {
+            navigatorKey.currentState?.pop();
+          }
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel(); // IMPORTANT FIX
+    super.dispose();
   }
 
   Future<void> _checkToken() async {
@@ -234,8 +248,6 @@ class _MyAppState extends State<MyApp> {
       return true;
     }
   }
-
-  late StreamSubscription<List<ConnectivityResult>> _subscription;
 
   @override
   Widget build(BuildContext context) {

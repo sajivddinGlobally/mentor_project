@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:dio/dio.dart';
 import 'package:educationapp/coreFolder/Model/sendOTPResModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
 import 'package:educationapp/coreFolder/utils/preety.dio.dart';
@@ -121,22 +122,23 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         Navigator.push(
                             context,
                             CupertinoPageRoute(
-                              builder: (context) => OtpVerifyPage(email: emailController.text,),
+                              builder: (context) => OtpVerifyPage(
+                                email: emailController.text,
+                              ),
                             ));
                         setState(() {
                           isLoading = false;
                         });
-                      } else {
-                        setState(() {
-                          isLoading = false;
-                        });
-                        Fluttertoast.showToast(msg: "something went wrong");
                       }
-                    } catch (e, st) {
+                    } on DioException catch (e, st) {
                       setState(() {
                         isLoading = false;
                       });
-                      Fluttertoast.showToast(msg: "Api Error : $e");
+                      final emailError =
+                          e.response?.data?['error']?['email']?[0];
+
+                      Fluttertoast.showToast(msg: emailError);
+                      
                       log("$e, $st");
                     }
                   },

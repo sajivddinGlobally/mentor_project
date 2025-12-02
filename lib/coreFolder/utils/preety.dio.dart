@@ -169,6 +169,7 @@
 
 import 'dart:developer';
 import 'package:dio/dio.dart';
+import 'package:educationapp/home/noInternetScreen.dart';
 import 'package:educationapp/login/login.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -217,6 +218,47 @@ Dio createDio() {
         final path = e.requestOptions.path;
         final errorData = e.response?.data;
         String errorMessage = "Something went wrong";
+
+        // 🔥 1. Internet OFF error
+        if (e.type == DioExceptionType.connectionError ||
+            e.error.toString().contains("SocketException")) {
+          Future.microtask(() {
+            final navState = navigatorKey.currentState;
+
+            final isNavigatingToNoInternet = navState?.context
+                    .findAncestorWidgetOfExactType<NoInternetScreen>() !=
+                null;
+
+            if (navState != null &&
+                navState.context.mounted &&
+                !isNavigatingToNoInternet) {
+              // **CHANGE: Simple push() instead of pushAndRemoveUntil to avoid clearing stack**
+              navState.push(
+                CupertinoPageRoute(builder: (_) => NoInternetScreen()),
+              );
+            } else {
+              log("⚠️ Navigation skipped: Already on NoInterNet page or context unmounted.");
+            }
+          });
+          handler.next(e);
+          return;
+        }
+
+        // 🔥 2. Timeout errors
+        if (e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.receiveTimeout ||
+            e.type == DioExceptionType.sendTimeout) {
+          showToast("Connection timeout. Please try again.");
+          handler.next(e);
+          return;
+        }
+
+        // 🔥 3. Server unreachable
+        if (e.error.toString().contains("Failed host lookup")) {
+          showToast("Server unreachable. Check connection.");
+          handler.next(e);
+          return;
+        }
 
         log("❌ API ERROR: ($statusCode) on $path");
 

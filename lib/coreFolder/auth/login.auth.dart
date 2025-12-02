@@ -266,29 +266,6 @@ class Auth {
       final dio = await createDio();
       final url = 'https://educatservicesindia.com/admin/api/update-profile';
 
-      // final formData = FormData.fromMap({
-      //   'user_type': userType,
-      //   'total_experience': totalExperience,
-      //   'users_field': usersField, // Fixed typo
-      //   'skills_id': skillsId,
-      //   'language_known': languageKnown, // Fixed typo
-      //   'linkedin_user': linkedinUser,
-      //   'description': description,
-      //   'full_name': fullName,
-      //   // 'email': email,
-      //   // 'phone': phone,
-      //   // 'password': password,
-      //   // 'date_of_birth': dateOfBirth,
-      //   // 'address': address,
-      //   // 'gender': gender,
-      //   // 'semester': semester,
-      //   if (resumeFile != null)
-      //     'resume_upload': await MultipartFile.fromFile(
-      //       resumeFile.path,
-      //       filename: path.basename(resumeFile.path),
-      //     ),
-      // });
-
       final Map<String, dynamic> body = {
         'user_type': userType,
         'total_experience': totalExperience,
@@ -322,14 +299,6 @@ class Auth {
       final response = await dio.post(url, data: formData);
 
       log("UPLOAD RESPONSE = ${response.data}");
-
-      // final response = await dio.post(
-      //   url,
-      //   data: formData,
-      // );
-      // final formData = FormData.fromMap(data);
-
-      // final response = await dio.post(url, data: formData);
 
       if (response.statusCode == 200) {
         final box = await Hive.openBox('userdata');

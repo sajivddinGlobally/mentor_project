@@ -14,7 +14,8 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
         results.isNotEmpty && results.first != ConnectivityResult.none;
 
     if (hasInternet) {
-      navigatorKey.currentState?.popUntil((route) => route.isFirst);
+      // **CHANGE: Simple pop() to return to previous screen, instead of popUntil first**
+      navigatorKey.currentState?.pop();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
