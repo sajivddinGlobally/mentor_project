@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:dio/dio.dart';
 import 'package:educationapp/coreFolder/Model/sendOTPResModel.dart';
 import 'package:educationapp/coreFolder/Model/verifyOrChangePassBodyModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
@@ -26,6 +27,8 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
   final _otpPinFieldController = GlobalKey<OtpPinFieldState>();
   final newpasswordController = TextEditingController();
   final confirmedPassController = TextEditingController();
+  bool isShow = false;
+  bool conShow = false;
 
   void resendOTP() async {
     setState(() {
@@ -47,11 +50,12 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
         });
         Fluttertoast.showToast(msg: "something went wrong");
       }
-    } catch (e, st) {
+    } on DioException catch (e, st) {
       setState(() {
         isResending = false;
       });
-      Fluttertoast.showToast(msg: "Api Error : $e");
+      final erromessage = e.response!.data['error'].toString();
+      Fluttertoast.showToast(msg: erromessage);
       log("$e, $st");
     }
   }
@@ -137,25 +141,37 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                     SizedBox(height: 12.h),
                     TextField(
                       controller: newpasswordController,
+                      obscureText: isShow ? false : true,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(
-                          left: 19.w,
-                          right: 10.w,
-                          top: 15.h,
-                          bottom: 15.h,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.r),
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 1.w),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.r),
-                          borderSide: BorderSide(
-                              //  color: _getLoginButtonColor(widget.title),
-                              ),
-                        ),
-                      ),
+                          contentPadding: EdgeInsets.only(
+                            left: 19.w,
+                            right: 10.w,
+                            top: 15.h,
+                            bottom: 15.h,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.r),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 1.w),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.r),
+                            borderSide: BorderSide(
+                                //  color: _getLoginButtonColor(widget.title),
+                                ),
+                          ),
+                          suffixIcon: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  isShow = !isShow;
+                                });
+                              },
+                              child: Icon(
+                                isShow
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Colors.grey,
+                              ))),
                     ),
                     SizedBox(height: 15.h),
                     Text(
@@ -169,25 +185,37 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                     SizedBox(height: 12.h),
                     TextField(
                       controller: confirmedPassController,
+                      obscureText: conShow ? false : true,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(
-                          left: 19.w,
-                          right: 10.w,
-                          top: 15.h,
-                          bottom: 15.h,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.r),
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 1.w),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.r),
-                          borderSide: BorderSide(
-                              //color: _getLoginButtonColor(widget.title),
-                              ),
-                        ),
-                      ),
+                          contentPadding: EdgeInsets.only(
+                            left: 19.w,
+                            right: 10.w,
+                            top: 15.h,
+                            bottom: 15.h,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.r),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 1.w),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.r),
+                            borderSide: BorderSide(
+                                //color: _getLoginButtonColor(widget.title),
+                                ),
+                          ),
+                          suffixIcon: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  conShow = !conShow;
+                                });
+                              },
+                              child: Icon(
+                                conShow
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Colors.grey,
+                              ))),
                     ),
                   ],
                 ),
@@ -233,15 +261,14 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                             msg: "Password Change Sucessfull");
                         Navigator.pop(context);
                         Navigator.pop(context);
-                      } else {
-                        setState(() {
-                          isLoading = false;
-                        });
-                        Fluttertoast.showToast(msg: "Somethig went wrong");
                       }
-                    } catch (e, st) {
+                    } on DioException catch (e, st) {
+                      _otpPinFieldController.currentState!.clearOtp();
+                      newpasswordController.clear();
+                      confirmedPassController.clear();
+                      final errormessage = e.response!.data['error'].toString();
                       log("${e.toString()} /n ${st.toString()}");
-                      Fluttertoast.showToast(msg: "APi Error $e");
+                      Fluttertoast.showToast(msg: errormessage);
                       setState(() {
                         isLoading = false;
                       });
