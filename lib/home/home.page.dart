@@ -15,6 +15,7 @@ import 'package:educationapp/home/chatInbox.dart';
 import 'package:educationapp/home/chating.page.dart';
 import 'package:educationapp/home/expertTrendingDetails.page.dart';
 import 'package:educationapp/home/findmentor.page.dart';
+import 'package:educationapp/home/requestPage.dart';
 import 'package:educationapp/home/settingProfile.page.dart';
 import 'package:educationapp/home/trendingExprt.page.dart';
 import 'package:educationapp/login/login.page.dart';
@@ -711,59 +712,68 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                       ),
                     SizedBox(width: 15.w),
                     if (userType == "Mentor")
-                      Container(
-                        height: 130.h,
-                        width: 150.w,
-                        decoration: BoxDecoration(
-                          color: const Color(0xffA8E6CF),
-                          borderRadius: BorderRadius.circular(20.r),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 15.h),
-                            Padding(
-                              padding: EdgeInsets.only(left: 15.w),
-                              child: Container(
-                                width: 50.w,
-                                height: 50.h,
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 0, 0, 0)
-                                      .withOpacity(0.1),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Image.asset(
-                                  "assets/mask1.png",
-                                  color: Colors.white,
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => RequestPage(),
+                              ));
+                        },
+                        child: Container(
+                          height: 130.h,
+                          width: 150.w,
+                          decoration: BoxDecoration(
+                            color: const Color(0xffA8E6CF),
+                            borderRadius: BorderRadius.circular(20.r),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 15.h),
+                              Padding(
+                                padding: EdgeInsets.only(left: 15.w),
+                                child: Container(
+                                  width: 50.w,
+                                  height: 50.h,
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromARGB(255, 0, 0, 0)
+                                        .withOpacity(0.1),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Image.asset(
+                                    "assets/mask1.png",
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 10.h),
-                            Padding(
-                              padding: EdgeInsets.only(left: 15.w),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "New Requests",
-                                    style: GoogleFonts.roboto(
-                                        fontSize: 11.sp,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black),
-                                  ),
-                                  Text(
-                                    // "20",
-                                    requestLenght ?? "0",
-                                    style: GoogleFonts.roboto(
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black),
-                                  ),
-                                ],
+                              SizedBox(height: 10.h),
+                              Padding(
+                                padding: EdgeInsets.only(left: 15.w),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "New Requests",
+                                      style: GoogleFonts.roboto(
+                                          fontSize: 11.sp,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                    ),
+                                    Text(
+                                      // "20",
+                                      requestLenght ?? "0",
+                                      style: GoogleFonts.roboto(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     SizedBox(width: 15.w),
@@ -1134,71 +1144,7 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                               );
                                             },
                                           ),
-
                                     SizedBox(height: 10.h),
-                                    // Container(
-                                    //   margin:
-                                    //       EdgeInsets.only(left: 20.w, top: 10.h),
-                                    //   child: Row(
-                                    //     children: [
-                                    //       Text(
-                                    //         "New Messages",
-                                    //         style: GoogleFonts.roboto(
-                                    //             fontSize: 18.sp,
-                                    //             fontWeight: FontWeight.w600,
-                                    //             color: Colors.black),
-                                    //       ),
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                    // SizedBox(
-                                    //   height: 10.h,
-                                    // ),
-                                    // mentorData.data!.messages!.isEmpty
-                                    //     ? Center(
-                                    //         child: Text(
-                                    //           "No Data Available",
-                                    //           style: GoogleFonts.inter(
-                                    //               fontSize: 20.sp,
-                                    //               fontWeight: FontWeight.w300,
-                                    //               color: Colors.black),
-                                    //         ),
-                                    //       )
-                                    //     : ListView.builder(
-                                    //         padding: EdgeInsets.zero,
-                                    //         shrinkWrap: true,
-                                    //         physics:
-                                    //             NeverScrollableScrollPhysics(),
-                                    //         itemCount:
-                                    //             mentorData.data!.messages!.length,
-                                    //         itemBuilder: (context, index) {
-                                    //           return GestureDetector(
-                                    //             onTap: () {},
-                                    //             child: NewContainer(
-                                    //               image: mentorData
-                                    //                       .data!
-                                    //                       .messages![index]
-                                    //                       .profilePic ??
-                                    //                   "https://flutter.github.io/assets-for-api-docs/assets/widgets/puffin.jpg",
-                                    //               title: mentorData
-                                    //                       .data!
-                                    //                       .messages![index]
-                                    //                       .senderName ??
-                                    //                   "No title",
-                                    //               subtitle: mentorData
-                                    //                       .data!
-                                    //                       .messages![index]
-                                    //                       .message ??
-                                    //                   "Helping students land their dream jobs with 5+ years of placement coaching experience",
-                                    //               unread: mentorData
-                                    //                   .data!
-                                    //                   .messages![index]
-                                    //                   .unreadCount
-                                    //                   .toString(),
-                                    //             ),
-                                    //           );
-                                    //         },
-                                    //       )
                                   ],
                                 );
                               },
@@ -2538,118 +2484,6 @@ class MyContainer extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class NewContainer extends StatefulWidget {
-  final String image;
-  final String title;
-  final String subtitle;
-  final String unread;
-  const NewContainer({
-    super.key,
-    required this.image,
-    required this.title,
-    required this.subtitle,
-    required this.unread,
-  });
-
-  @override
-  State<NewContainer> createState() => _NewContainerState();
-}
-
-class _NewContainerState extends State<NewContainer> {
-  @override
-  Widget build(BuildContext context) {
-    log(widget.image.replaceAll('/public/', ''));
-    return Padding(
-      padding:
-          EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w, bottom: 10.h),
-      child: Container(
-        padding:
-            EdgeInsets.only(top: 10.h, left: 10.w, right: 10.w, bottom: 10.h),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(
-            color: const Color.fromARGB(25, 0, 0, 0),
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              blurRadius: 4,
-              spreadRadius: 1,
-            ),
-          ],
-        ),
-        child: Row(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12.r),
-              child: Image.network(
-                widget.image,
-                height: 70.h,
-                width: 70.w,
-                fit: BoxFit.cover,
-              ),
-            ),
-            SizedBox(width: 8.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    widget.title,
-                    style: GoogleFonts.roboto(
-                      color: Colors.black,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Text(
-                    widget.subtitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.roboto(
-                      color: Colors.black,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10.h),
-              ],
-            ),
-            Spacer(),
-            Container(
-              margin: EdgeInsets.only(left: 10.w, right: 10.w),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff008080)),
-              height: 30.h,
-              width: 30.w,
-              child: Center(
-                child: Text(
-                  widget.unread,
-                  style: GoogleFonts.roboto(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white),
-                ),
               ),
             ),
           ],
