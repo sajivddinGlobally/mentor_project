@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:educationapp/coreFolder/Controller/getRequestStudentController.dart';
 import 'package:educationapp/coreFolder/Controller/homeDataController.dart';
 import 'package:educationapp/coreFolder/Controller/myListingController.dart';
+import 'package:educationapp/coreFolder/Controller/themeController.dart';
 import 'package:educationapp/coreFolder/Model/sendRequestBodyModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
 import 'package:educationapp/coreFolder/utils/preety.dio.dart';
@@ -27,16 +28,28 @@ class _RequestPageState extends ConsumerState<RequestPage> {
   @override
   Widget build(BuildContext context) {
     final getRequestHomeData = ref.watch(getRequestStudentController);
+    final themeMode = ref.watch(themeProvider);
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
+      backgroundColor:
+          themeMode == ThemeMode.dark ? Colors.white : Color(0xFF008080),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back,
+                color:
+                    themeMode == ThemeMode.dark ? Colors.black : Colors.white)),
+        backgroundColor:
+            themeMode == ThemeMode.dark ? Colors.white : Color(0xFF008080),
         title: Text(
           "New Request",
           style: GoogleFonts.roboto(
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              color: Colors.black),
+              color: themeMode == ThemeMode.dark ? Colors.black : Colors.white),
         ),
       ),
       body: Column(

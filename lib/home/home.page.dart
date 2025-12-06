@@ -506,6 +506,8 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
   Widget build(BuildContext context) {
     var box = Hive.box('userdata');
 
+    final themeMode = ref.watch(themeProvider);
+
     final asyncProfile = ref.watch(userProfileController);
 
     // 2. Hive StateProvider से डेटा पढ़ें (यह अपडेट होने पर UI को री-रेंडर करेगा)
@@ -960,9 +962,11 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(30.r),
-                                          //color: Color(0x26008080),
-                                          color:
-                                              Color.fromARGB(38, 0, 128, 128),
+                                          // color:
+                                          //     Color.fromARGB(38, 0, 128, 128),
+                                          color: themeMode == ThemeMode.dark
+                                              ? Color.fromARGB(38, 0, 128, 128)
+                                              : Color(0xFF263238),
                                         ),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
@@ -1021,8 +1025,13 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                                         fontSize: 14.sp,
                                                         fontWeight:
                                                             FontWeight.w600,
-                                                        color: Color.fromARGB(
-                                                            204, 0, 0, 0),
+                                                        // color: Color.fromARGB(
+                                                        //     204, 0, 0, 0),
+                                                        color: themeMode ==
+                                                                ThemeMode.dark
+                                                            ? Color.fromARGB(
+                                                                204, 0, 0, 0)
+                                                            : Colors.white,
                                                       ),
                                                     ),
                                                   ),
@@ -1033,7 +1042,11 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                                       fontSize: 14.sp,
                                                       fontWeight:
                                                           FontWeight.w400,
-                                                      color: Colors.black,
+                                                      color: themeMode ==
+                                                              ThemeMode.dark
+                                                          ? Color.fromARGB(
+                                                              204, 0, 0, 0)
+                                                          : Colors.white,
                                                     ),
                                                   ),
                                                 ],
@@ -1084,7 +1097,11 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                                           fontSize: 16.sp,
                                                           fontWeight:
                                                               FontWeight.w400,
-                                                          color: Colors.black,
+                                                          color: themeMode ==
+                                                                  ThemeMode.dark
+                                                              ? Color.fromARGB(
+                                                                  204, 0, 0, 0)
+                                                              : Colors.white,
                                                         ),
                                                       ),
                                                       Text(
@@ -1094,7 +1111,11 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                                           fontSize: 14.sp,
                                                           fontWeight:
                                                               FontWeight.w400,
-                                                          color: Colors.black,
+                                                          color: themeMode ==
+                                                                  ThemeMode.dark
+                                                              ? Color.fromARGB(
+                                                                  204, 0, 0, 0)
+                                                              : Colors.white,
                                                         ),
                                                       ),
                                                     ],
@@ -1118,7 +1139,11 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                                 style: GoogleFonts.roboto(
                                                   fontSize: 15.sp,
                                                   fontWeight: FontWeight.w400,
-                                                  color: Colors.black,
+                                                  color: themeMode ==
+                                                          ThemeMode.dark
+                                                      ? Color.fromARGB(
+                                                          204, 0, 0, 0)
+                                                      : Colors.white,
                                                 ),
                                               ),
                                             ),
@@ -2450,7 +2475,7 @@ class Upertabs extends StatelessWidget {
   }
 }
 
-class MyContainer extends StatelessWidget {
+class MyContainer extends ConsumerWidget {
   final String image;
   final String title;
   final String email;
@@ -2464,14 +2489,16 @@ class MyContainer extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeProvider);
     return Padding(
       padding:
           EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w, bottom: 10.h),
       child: Container(
         padding: EdgeInsets.all(14.w),
         decoration: BoxDecoration(
-          color: Colors.white,
+          //  color: Colors.white,
+          color: themeMode == ThemeMode.dark ? Colors.white : Color(0xFF263238),
           borderRadius: BorderRadius.circular(18.r),
           border: Border.all(color: Colors.grey.withOpacity(0.2)),
           boxShadow: [
@@ -2508,7 +2535,10 @@ class MyContainer extends StatelessWidget {
                   Text(
                     title,
                     style: GoogleFonts.roboto(
-                      color: Colors.black,
+                      // color: Colors.black,
+                      color: themeMode == ThemeMode.dark
+                          ? Colors.black
+                          : Colors.white,
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
                     ),
@@ -2516,15 +2546,23 @@ class MyContainer extends StatelessWidget {
                   SizedBox(height: 4.h),
                   Row(
                     children: [
-                      Icon(Icons.email_outlined,
-                          size: 14.sp, color: Colors.grey),
+                      Icon(
+                        Icons.email_outlined,
+                        size: 14.sp,
+                        color: themeMode == ThemeMode.dark
+                            ? Colors.black
+                            : Colors.white,
+                      ),
                       SizedBox(width: 5.w),
                       Expanded(
                         child: Text(
                           email,
                           style: GoogleFonts.roboto(
                             fontSize: 13.sp,
-                            color: Colors.grey[700],
+                            // color: Colors.grey[700],
+                            color: themeMode == ThemeMode.dark
+                                ? Colors.black
+                                : Colors.white,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -2540,7 +2578,10 @@ class MyContainer extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.roboto(
                       fontSize: 12.sp,
-                      color: Colors.black87,
+                      // color: Colors.black87,
+                      color: themeMode == ThemeMode.dark
+                          ? Colors.black87
+                          : Colors.white,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -2554,7 +2595,7 @@ class MyContainer extends StatelessWidget {
   }
 }
 
-class GetRequestStudentBody extends StatefulWidget {
+class GetRequestStudentBody extends ConsumerStatefulWidget {
   final String image;
   final String title;
   final String subtitle;
@@ -2573,21 +2614,24 @@ class GetRequestStudentBody extends StatefulWidget {
   });
 
   @override
-  State<GetRequestStudentBody> createState() => _GetRequestStudentBodyState();
+  ConsumerState<GetRequestStudentBody> createState() =>
+      _GetRequestStudentBodyState();
 }
 
-class _GetRequestStudentBodyState extends State<GetRequestStudentBody> {
+class _GetRequestStudentBodyState extends ConsumerState<GetRequestStudentBody> {
   bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = ref.watch(themeProvider);
     return Padding(
       padding:
           EdgeInsets.only(top: 10.h, left: 16.w, right: 16.w, bottom: 10.h),
       child: Container(
         padding: EdgeInsets.all(14.w),
         decoration: BoxDecoration(
-          color: Colors.white,
+          // color: Colors.white,
+          color: themeMode == ThemeMode.dark ? Colors.white : Color(0xFF263238),
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(color: Colors.grey.withOpacity(0.2)),
           boxShadow: [
@@ -2625,7 +2669,9 @@ class _GetRequestStudentBodyState extends State<GetRequestStudentBody> {
                     style: GoogleFonts.roboto(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black,
+                      color: themeMode == ThemeMode.dark
+                          ? Colors.black
+                          : Colors.white,
                     ),
                   ),
                   SizedBox(height: 4.h),
@@ -2633,22 +2679,30 @@ class _GetRequestStudentBodyState extends State<GetRequestStudentBody> {
                     widget.subtitle,
                     style: GoogleFonts.roboto(
                       fontSize: 13.sp,
-                      color: Colors.blueGrey,
+                      //color: Colors.blueGrey,
+                      color: themeMode == ThemeMode.dark
+                          ? Colors.blueGrey
+                          : Colors.white,
                     ),
                   ),
                   SizedBox(height: 6.h),
                   Row(
                     children: [
                       Icon(Icons.email_outlined,
-                          size: 14.sp, color: Colors.grey),
+                          size: 14.sp,
+                          color: themeMode == ThemeMode.dark
+                              ? Colors.grey
+                              : Colors.white),
                       SizedBox(width: 4.w),
                       Expanded(
                         child: Text(
                           widget.email,
                           style: GoogleFonts.roboto(
-                            fontSize: 12.sp,
-                            color: Colors.grey[700],
-                          ),
+                              fontSize: 12.sp,
+                              //color: Colors.grey[700],
+                              color: themeMode == ThemeMode.dark
+                                  ? Colors.grey[700]
+                                  : Colors.white),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -2657,14 +2711,19 @@ class _GetRequestStudentBodyState extends State<GetRequestStudentBody> {
                   SizedBox(height: 4.h),
                   Row(
                     children: [
-                      Icon(Icons.phone, size: 14.sp, color: Colors.grey),
+                      Icon(Icons.phone,
+                          size: 14.sp,
+                          color: themeMode == ThemeMode.dark
+                              ? Colors.grey
+                              : Colors.white),
                       SizedBox(width: 4.w),
                       Text(
                         widget.phone,
                         style: GoogleFonts.roboto(
-                          fontSize: 12.sp,
-                          color: Colors.grey[700],
-                        ),
+                            fontSize: 12.sp,
+                            color: themeMode == ThemeMode.dark
+                                ? Colors.grey[700]
+                                : Colors.white),
                       ),
                     ],
                   ),

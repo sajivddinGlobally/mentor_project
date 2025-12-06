@@ -1,29 +1,33 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
+import 'package:educationapp/coreFolder/Controller/themeController.dart';
 import 'package:educationapp/coreFolder/Model/sendOTPResModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
 import 'package:educationapp/coreFolder/utils/preety.dio.dart';
 import 'package:educationapp/home/forgot/verify.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ForgotPasswordPage extends StatefulWidget {
+class ForgotPasswordPage extends ConsumerStatefulWidget {
   const ForgotPasswordPage({super.key});
 
   @override
-  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
+  ConsumerState<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
 }
 
-class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
   final emailController = TextEditingController();
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
+    final themeMode = ref.watch(themeProvider);
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor:
+          themeMode == ThemeMode.dark ? Color(0xFFFFFFFF) : Colors.black,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(left: 20.w, right: 20.w),
@@ -44,7 +48,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(Icons.arrow_back),
+                icon: Icon(
+                  Icons.arrow_back,
+                  color:
+                      themeMode == ThemeMode.dark ? Colors.black : Colors.white,
+                ),
               ),
               SizedBox(height: 20.h),
               Center(
@@ -54,7 +62,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 height: 180.h,
               )),
               SizedBox(height: 30.h),
-              Divider(color: Colors.black12, thickness: 1),
+              Divider(
+                  color: themeMode == ThemeMode.dark
+                      ? Colors.black12
+                      : Colors.white,
+                  thickness: 1),
               SizedBox(height: 20.h),
               Center(
                 child: Text(
@@ -62,7 +74,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   style: GoogleFonts.roboto(
                     fontSize: 26.sp,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF1B1B1B),
+                    color: themeMode == ThemeMode.dark
+                        ? Colors.black
+                        : Colors.white,
                     letterSpacing: -0.4,
                   ),
                 ),
@@ -73,11 +87,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 style: GoogleFonts.gothicA1(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
-                  color: const Color(0xFF030016),
+                  color:
+                      themeMode == ThemeMode.dark ? Colors.black : Colors.white,
                 ),
               ),
               SizedBox(height: 15.h),
               TextField(
+                style: TextStyle(
+                  color:
+                      themeMode == ThemeMode.dark ? Colors.black : Colors.white,
+                ),
                 controller: emailController,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.only(
@@ -88,13 +107,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.r),
-                    borderSide: BorderSide(color: Colors.black),
+                    borderSide: BorderSide(color: Colors.grey),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.r),
                     borderSide: BorderSide(
-                        //color: _getLoginButtonColor(widget.title),
-                        ),
+                      color: themeMode == ThemeMode.dark
+                          ? Colors.black
+                          : Colors.white,
+                    ),
                   ),
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
+import 'package:educationapp/coreFolder/Controller/themeController.dart';
 import 'package:educationapp/coreFolder/Model/sendOTPResModel.dart';
 import 'package:educationapp/coreFolder/Model/verifyOrChangePassBodyModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
@@ -7,20 +8,21 @@ import 'package:educationapp/coreFolder/utils/preety.dio.dart';
 import 'package:educationapp/login/login.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
 
-class OtpVerifyPage extends StatefulWidget {
+class OtpVerifyPage extends ConsumerStatefulWidget {
   final String email;
   const OtpVerifyPage({super.key, required this.email});
 
   @override
-  State<OtpVerifyPage> createState() => _OtpVerifyPageState();
+  ConsumerState<OtpVerifyPage> createState() => _OtpVerifyPageState();
 }
 
-class _OtpVerifyPageState extends State<OtpVerifyPage> {
+class _OtpVerifyPageState extends ConsumerState<OtpVerifyPage> {
   String otpValue = "";
   bool isLoading = false;
   bool isResending = false; // Added to track resend OTP loading state
@@ -62,8 +64,10 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = ref.watch(themeProvider);
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor:
+          themeMode == ThemeMode.dark ? Color(0xFFFFFFFF) : Colors.black,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(left: 20.w, right: 20.w),
@@ -84,7 +88,11 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(Icons.arrow_back),
+                icon: Icon(
+                  Icons.arrow_back,
+                  color:
+                      themeMode == ThemeMode.dark ? Colors.black : Colors.white,
+                ),
               ),
               SizedBox(height: 10.h),
               Center(
@@ -94,7 +102,11 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                 height: 170.h,
               )),
               SizedBox(height: 30.h),
-              Divider(color: Colors.black12, thickness: 1),
+              Divider(
+                  color: themeMode == ThemeMode.dark
+                      ? Colors.black12
+                      : Colors.white,
+                  thickness: 1),
               SizedBox(height: 20.h),
               Center(
                 child: Text(
@@ -102,7 +114,9 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                   style: GoogleFonts.roboto(
                     fontSize: 26.sp,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF1B1B1B),
+                    color: themeMode == ThemeMode.dark
+                        ? Colors.black
+                        : Colors.white,
                     letterSpacing: -0.4,
                   ),
                 ),
@@ -116,6 +130,17 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                 keyboardType: TextInputType.number,
                 otpPinFieldDecoration: OtpPinFieldDecoration.custom,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                otpPinFieldStyle: OtpPinFieldStyle(
+                    activeFieldBackgroundColor: themeMode == ThemeMode.dark
+                        ? Colors.white
+                        : Colors.grey,
+                    defaultFieldBackgroundColor: Colors.white,
+                    activeFieldBorderColor: themeMode == ThemeMode.dark
+                        ? Colors.black
+                        : Color(0xFFA8E6CF),
+                    defaultFieldBorderColor: themeMode == ThemeMode.dark
+                        ? Colors.grey
+                        : Colors.white),
                 onSubmit: (text) {
                   otpValue = text;
                 },
@@ -135,11 +160,18 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                       style: GoogleFonts.gothicA1(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
-                        color: const Color(0xFF030016),
+                        color: themeMode == ThemeMode.dark
+                            ? Colors.black
+                            : Colors.white,
                       ),
                     ),
                     SizedBox(height: 12.h),
                     TextField(
+                      style: TextStyle(
+                        color: themeMode == ThemeMode.dark
+                            ? Colors.black
+                            : Colors.white,
+                      ),
                       controller: newpasswordController,
                       obscureText: isShow ? false : true,
                       decoration: InputDecoration(
@@ -152,13 +184,15 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.r),
                             borderSide:
-                                BorderSide(color: Colors.black, width: 1.w),
+                                BorderSide(color: Colors.grey, width: 1.w),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.r),
                             borderSide: BorderSide(
-                                //  color: _getLoginButtonColor(widget.title),
-                                ),
+                              color: themeMode == ThemeMode.dark
+                                  ? Colors.black
+                                  : Colors.white,
+                            ),
                           ),
                           suffixIcon: InkWell(
                               onTap: () {
@@ -179,11 +213,18 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                       style: GoogleFonts.gothicA1(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
-                        color: const Color(0xFF030016),
+                        color: themeMode == ThemeMode.dark
+                            ? Colors.black
+                            : Colors.white,
                       ),
                     ),
                     SizedBox(height: 12.h),
                     TextField(
+                      style: TextStyle(
+                        color: themeMode == ThemeMode.dark
+                            ? Colors.black
+                            : Colors.white,
+                      ),
                       controller: confirmedPassController,
                       obscureText: conShow ? false : true,
                       decoration: InputDecoration(
@@ -196,13 +237,15 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.r),
                             borderSide:
-                                BorderSide(color: Colors.black, width: 1.w),
+                                BorderSide(color: Colors.grey, width: 1.w),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.r),
                             borderSide: BorderSide(
-                                //color: _getLoginButtonColor(widget.title),
-                                ),
+                              color: themeMode == ThemeMode.dark
+                                  ? Colors.black
+                                  : Colors.white,
+                            ),
                           ),
                           suffixIcon: InkWell(
                               onTap: () {
@@ -294,7 +337,7 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                           style: GoogleFonts.roboto(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w500,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                 ),
@@ -320,7 +363,9 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                           style: GoogleFonts.roboto(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w500,
-                            //color: _getLoginButtonColor(widget.title),
+                            color: themeMode == ThemeMode.dark
+                                ? Color(0xFFA8E6CF)
+                                : Colors.white,
                           ),
                         ),
                 ),

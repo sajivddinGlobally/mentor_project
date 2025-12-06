@@ -1,3 +1,4 @@
+import 'package:educationapp/coreFolder/Controller/themeController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -60,6 +61,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   Widget build(BuildContext context) {
     var box = Hive.box('userdata');
     final userIdRaw = box.get('userid');
+    final themeMode = ref.watch(themeProvider);
     final userId =
         userIdRaw != null ? int.tryParse(userIdRaw.toString()) : null;
     if (userId == null) {
@@ -82,7 +84,9 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     );
     final transactionState = ref.watch(transactionProvider(userId));
     return Scaffold(
-      backgroundColor: const Color(0xFF1B1B1B),
+      // backgroundColor: const Color(0xFF1B1B1B),
+      backgroundColor:
+          themeMode == ThemeMode.dark ? Color(0xFF1B1B1B) : Color(0xFF008080),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -116,7 +120,9 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                 style: GoogleFonts.roboto(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xff008080)),
+                    color: themeMode == ThemeMode.dark
+                        ? Color(0xff008080)
+                        : Colors.white),
               ),
               const Spacer(),
               GestureDetector(
@@ -291,10 +297,16 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
+                      backgroundColor: themeMode == ThemeMode.dark
+                          ? Colors.white
+                          : Colors.black,
                       builder: (context) {
                         return Container(
-                          decoration: const BoxDecoration(
-                              color: Colors.white,
+                          decoration: BoxDecoration(
+                              // color: Colors.white,
+                              color: themeMode == ThemeMode.dark
+                                  ? Colors.white
+                                  : Colors.black,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(40),
                                   topRight: Radius.circular(40))),
@@ -372,6 +384,10 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                 // ),
                                 SizedBox(height: 10.h),
                                 TextFormField(
+                                  style: TextStyle(
+                                      color: themeMode == ThemeMode.dark
+                                          ? Colors.black
+                                          : Colors.white),
                                   onChanged: (value) {
                                     // When user types manually, unselect the buttons
                                     setState(() {
@@ -685,8 +701,11 @@ class _WalletPageState extends ConsumerState<WalletPage> {
           Expanded(
             child: Container(
               width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                  color: Colors.white,
+              decoration: BoxDecoration(
+                  // color: Colors.white,
+                  color: themeMode == ThemeMode.dark
+                      ? Colors.white
+                      : Color(0xFF1B1B1B),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40),
                       topRight: Radius.circular(40))),
@@ -703,7 +722,9 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                         Text(
                           "Payment Transaction",
                           style: GoogleFonts.roboto(
-                              color: Colors.black,
+                              color: themeMode == ThemeMode.dark
+                                  ? Color(0xFF1B1B1B)
+                                  : Colors.white,
                               fontWeight: FontWeight.w600,
                               fontSize: 20.sp),
                         )
@@ -734,13 +755,19 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                 padding: EdgeInsets.all(15.w),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.r),
-                                  color: Color(0xffF1F2F6),
+                                  //color: Color(0xffF1F2F6),
+                                  color: themeMode == ThemeMode.dark
+                                      ? Color(0xffF1F2F6)
+                                      : Color(0xFF008080),
                                 ),
                                 child: Row(
                                   children: [
                                     Icon(
                                       Icons.person_sharp,
                                       size: 25.sp,
+                                      color: themeMode == ThemeMode.dark
+                                          ? Color(0xffF1F2F6)
+                                          : Colors.white,
                                     ),
                                     SizedBox(
                                       width: 10.w,
@@ -752,18 +779,26 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                         Text(
                                           trans.type?.toString() ?? 'Unknown',
                                           style: GoogleFonts.inter(
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.w600,
-                                              color: Color(0xFF1B1B1B)),
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w600,
+                                            // color: Color(0xFF1B1B1B,),
+                                            color: themeMode == ThemeMode.dark
+                                                ? Color(0xFF1B1B1B)
+                                                : Colors.white,
+                                          ),
                                         ),
                                         SizedBox(
                                           width: 235.w,
                                           child: Text(
                                             trans.description?.toString() ?? '',
                                             style: GoogleFonts.inter(
-                                                fontSize: 14.sp,
-                                                fontWeight: FontWeight.w400,
-                                                color: Color(0xFF666666)),
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w400,
+                                              //color: Color(0xFF666666),
+                                              color: themeMode == ThemeMode.dark
+                                                  ? Color(0xFF1B1B1B)
+                                                  : Colors.white,
+                                            ),
                                           ),
                                         )
                                       ],
