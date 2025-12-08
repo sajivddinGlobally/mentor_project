@@ -37,6 +37,7 @@ class _CollegeDetailPageState extends ConsumerState<CollegeDetailPage> {
                     color: const Color(0xff008080),
                   ),
                   Container(
+                    height: MediaQuery.of(context).size.height,
                     color: themeMode == ThemeMode.light
                         ? Color(0xFF1B1B1B)
                         : Colors.white,

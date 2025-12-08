@@ -60,7 +60,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             style: GoogleFonts.roboto(
                               fontSize: 15.sp,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xff666666),
+                              // color: const Color(0xff666666),
+                              color: themeMode == ThemeMode.dark
+                                  ? Color(0xff666666)
+                                  : Colors.white,
                             ),
                           ),
                           Padding(
@@ -68,11 +71,14 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             child: Text(
                               textAlign: TextAlign.center,
                               //'College: ${profile.usersField ?? 'N/A'} - Company: ${profile.companiesWorked?.toString() ?? 'N/A'}',
-                              "${userProfile.data!.usersField ?? "No field"} - ${userProfile.data!.serviceType ?? "No serviceType"}",
+                              "${userProfile.data!.serviceType ?? "No serviceType"}",
                               style: GoogleFonts.roboto(
                                 fontSize: 15.sp,
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xff666666),
+                                // color: const Color(0xff666666),
+                                color: themeMode == ThemeMode.dark
+                                    ? Color(0xff666666)
+                                    : Colors.white,
                               ),
                             ),
                           ),
@@ -189,7 +195,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                         style: GoogleFonts.roboto(
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w600,
-                                          color: const Color(0xff666666),
+
+                                          ///color: const Color(0xff666666),
+                                          color: themeMode == ThemeMode.dark
+                                              ? Color(0xff666666)
+                                              : Colors.white,
                                         ),
                                       ),
                                     ),
@@ -201,7 +211,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                         style: GoogleFonts.roboto(
                                           fontSize: 15.sp,
                                           fontWeight: FontWeight.w600,
-                                          color: Color(0xff666666),
+                                          // color: Color(0xff666666),
+                                          color: themeMode == ThemeMode.dark
+                                              ? Color(0xff666666)
+                                              : Colors.white,
                                         ),
                                       ),
                                     ),
@@ -213,7 +226,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                         style: GoogleFonts.roboto(
                                           fontSize: 15.sp,
                                           fontWeight: FontWeight.w600,
-                                          color: Color(0xff666666),
+                                          //color: Color(0xff666666),
+                                          color: themeMode == ThemeMode.dark
+                                              ? Color(0xff666666)
+                                              : Colors.white,
                                         ),
                                       ),
                                     ),
@@ -253,7 +269,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                           style: GoogleFonts.roboto(
                                             fontSize: 12.sp,
                                             fontWeight: FontWeight.w600,
-                                            color: const Color(0xff666666),
+                                            //color: const Color(0xff666666),
+                                            color: themeMode == ThemeMode.dark
+                                                ? Color(0xff666666)
+                                                : Colors.white,
                                           ),
                                         ),
                                         Text(
@@ -262,7 +281,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                           style: GoogleFonts.roboto(
                                             fontSize: 12.sp,
                                             fontWeight: FontWeight.w600,
-                                            color: const Color(0xff666666),
+                                            // color: const Color(0xff666666),
+                                            color: themeMode == ThemeMode.dark
+                                                ? Color(0xff666666)
+                                                : Colors.white,
                                           ),
                                         ),
                                       ],
@@ -318,7 +340,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                                           fontSize: 14.sp,
                                                           fontWeight:
                                                               FontWeight.w600,
-                                                          color: Colors.black,
+                                                          //color: Colors.black,
+                                                          color: themeMode ==
+                                                                  ThemeMode.dark
+                                                              ? Color(
+                                                                  0xff666666)
+                                                              : Colors.white,
                                                         ),
                                                       ),
                                                     ),
@@ -331,7 +358,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                           style: GoogleFonts.roboto(
                                             fontSize: 15.sp,
                                             fontWeight: FontWeight.w600,
-                                            color: const Color(0xff666666),
+                                            // color: const Color(0xff666666),
+                                            color: themeMode == ThemeMode.dark
+                                                ? Color(0xff666666)
+                                                : Colors.white,
                                           ),
                                         ),
                                     ],
@@ -373,7 +403,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                         style: GoogleFonts.roboto(
                                           fontSize: 15.sp,
                                           fontWeight: FontWeight.w600,
-                                          color: const Color(0xff666666),
+                                          //color: const Color(0xff666666),
+                                          color: themeMode == ThemeMode.dark
+                                              ? Color(0xff666666)
+                                              : Colors.white,
                                         ),
                                       ),
                                     ],

@@ -251,15 +251,17 @@ class Auth {
 
   static Future<void> updateUserProfile({
     required String userType,
-    File? resumeFile,
-    required String totalExperience,
-    required String usersField,
-    required String skillsId,
-    required String languageKnown,
-    required String linkedinUser,
-    required String description,
     required String fullName,
+    File? resumeFile,
+    required String qualification,
+    required String educationYear,
+    required String collageName,
+    required String gender,
     required String dob,
+    required String skill,
+    required String description,
+    required String language,
+    required String linkedIn,
     File? profileImage,
   }) async {
     try {
@@ -268,14 +270,120 @@ class Auth {
 
       final Map<String, dynamic> body = {
         'user_type': userType,
+        'full_name': fullName,
+        'highest_qualification': qualification,
+        'college_or_institute_name': collageName,
+        'language_known': language,
+        'linkedin_user': linkedIn,
+        'description': description,
+        'gender': gender,
+        'dob': dob,
+        "skill": skill,
+        "education_year": educationYear,
+      };
+
+      // Resume File
+      if (resumeFile != null) {
+        body['resume_upload'] = await MultipartFile.fromFile(
+          resumeFile.path,
+          filename: path.basename(resumeFile.path),
+        );
+      }
+
+      // Profile Image (IMPORTANT)
+      if (profileImage != null) {
+        body['profile_pic'] = await MultipartFile.fromFile(
+          profileImage.path,
+          filename: path.basename(profileImage.path),
+        );
+      }
+
+      final formData = FormData.fromMap(body);
+
+      final response = await dio.post(url, data: formData);
+
+      log("UPLOAD RESPONSE = ${response.data}");
+
+      if (response.statusCode == 200) {
+        final box = await Hive.openBox('userdata');
+        final userId = response.data['data']['id'].toString(); // Corrected
+        await box.put('user_id', userId); // Use 'user_id' instead of 'token'
+        Fluttertoast.showToast(
+          msg: response.data['message'] ?? 'Profile updated successfully',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 12.0,
+        );
+        log('Profile update successful: ${response.data}');
+      } else {
+        throw DioException(
+          response: response,
+          requestOptions: response.requestOptions,
+          error: response.data['message'] ?? 'Failed to update profile',
+        );
+      }
+    } on DioException catch (e) {
+      final errorMessage =
+          e.response?.data['message'] ?? 'Failed to update profile';
+      Fluttertoast.showToast(
+        msg: errorMessage,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 12.0,
+      );
+      throw Exception('Failed to update profile: $errorMessage');
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: 'An unexpected error occurred: $e',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 12.0,
+      );
+      throw Exception('Failed to update profile: $e');
+    }
+  }
+
+  static Future<void> updateUserProfileMentor({
+    required String userType,
+    File? resumeFile,
+    required String fullName,
+    required String jobRol,
+    required String jobLocation,
+    required String companyName,
+    required String salary,
+    required String totalExperience,
+    required String gender,
+    required String dob,
+    File? profileImage,
+    required String skillsId,
+    required String languageKnown,
+    required String linkedinUser,
+    required String description,
+  }) async {
+    try {
+      final dio = await createDio();
+      final url = 'https://educatservicesindia.com/admin/api/update-profile';
+
+      final Map<String, dynamic> body = {
+        'user_type': userType,
         'total_experience': totalExperience,
-        'users_field': usersField,
         'skills_id': skillsId,
         'language_known': languageKnown,
         'linkedin_user': linkedinUser,
         'description': description,
         'full_name': fullName,
         'dob': dob,
+        "job_role": jobRol,
+        "job_location": jobLocation,
+        "job_company_name": companyName,
+        "gender": gender,
+        'salary': salary,
       };
 
       // Resume File

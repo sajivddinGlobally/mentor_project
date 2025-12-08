@@ -626,7 +626,9 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                           Text(
                             "Add Coin",
                             style: GoogleFonts.roboto(
-                                fontSize: 12.sp, fontWeight: FontWeight.w500),
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black),
                           )
                         ],
                       ),
@@ -814,7 +816,9 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                                     .trim()
                                                     .startsWith('-'))
                                             ? Colors.red
-                                            : const Color(0xFF008080),
+                                            : themeMode == ThemeMode.dark
+                                                ? Color(0xFF008080)
+                                                : Colors.white,
                                       ),
                                     )
                                   ],

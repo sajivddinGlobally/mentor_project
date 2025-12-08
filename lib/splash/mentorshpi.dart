@@ -314,13 +314,13 @@ class _MentorshipBodyState extends ConsumerState<MentorshipBody> {
   int selectIndex = 0;
   Set<Datum> selectedOptions = {};
   Set<String> selectedOptions2 = {
-    "🎓 Placements"
+    "Placements"
   }; // Default selection for students
   List<String> options = [
-    "🎓 Placements",
-    "🧑‍🎓 Career Guidance",
-    "📚 Skills Selection",
-    "🤔 General Advice"
+    "Placements",
+    "Career Guidance",
+    "Skills Selection",
+    "General Advice"
   ];
 
   void sendToNextPage() {

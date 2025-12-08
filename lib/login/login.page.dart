@@ -4,6 +4,7 @@ import 'package:educationapp/coreFolder/Controller/themeController.dart';
 import 'package:educationapp/coreFolder/Model/login.body.model.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
 import 'package:educationapp/coreFolder/utils/preety.dio.dart';
+import 'package:educationapp/home/forgot/forgotPassword.page.dart';
 import 'package:educationapp/home/home.page.dart';
 import 'package:educationapp/splash/getstart.page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -485,8 +486,32 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               ],
             ),
           ),
-          SizedBox(height: 6.h),
-          SizedBox(height: 15.h),
+          Align(
+            alignment: AlignmentGeometry.centerRight,
+            child: TextButton(
+                style: TextButton.styleFrom(
+                    padding: EdgeInsets.only(
+                        left: 15.w, right: 20.w, top: 6.h, bottom: 6.h),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => ForgotPasswordPage(),
+                      ));
+                },
+                child: Text(
+                  "Forgot Password?",
+                  style: GoogleFonts.inter(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                    color: themeMode == ThemeMode.dark
+                        ? Color(0xFF1B1B1B)
+                        : Colors.white,
+                  ),
+                )),
+          ),
+          //  SizedBox(height: 10.h),
           GestureDetector(
             onTap: isLoading
                 ? null

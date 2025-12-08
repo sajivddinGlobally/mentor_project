@@ -440,7 +440,7 @@ class _FindMentorPageState extends ConsumerState<FindMentorPage> {
                 style: GoogleFonts.roboto(
                   fontSize: 24.sp,
                   // color: const Color(0xff008080),
-                  color: themeMode == ThemeMode.light
+                  color: themeMode == ThemeMode.dark
                       ? Color(0xff008080)
                       : Colors.white,
                 ),
