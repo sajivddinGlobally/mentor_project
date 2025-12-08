@@ -813,8 +813,7 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                                 ),
                               ),
                               Text(
-                                profile.totalExperience ??
-                                    'No experience listed',
+                                "Total Exprience ${profile.totalExperience ?? 'No experience listed'}",
                                 style: GoogleFonts.roboto(
                                   fontSize: 15.sp,
                                   fontWeight: FontWeight.w600,
@@ -1129,8 +1128,7 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                                             ),
                                             SizedBox(height: 5.h),
                                             Text(
-                                              profile.totalExperience ??
-                                                  'No education details available',
+                                              "Total Exprience ${profile.totalExperience ?? 'No experience listed'}",
                                               style: GoogleFonts.roboto(
                                                 fontSize: 12.sp,
                                                 fontWeight: FontWeight.w600,

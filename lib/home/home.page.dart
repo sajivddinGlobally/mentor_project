@@ -1316,8 +1316,11 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                                 getRequestStudentController);
                                             ref.invalidate(myListingController);
                                           } else {
+                                            // Fluttertoast.showToast(
+                                            //     msg: response.message);
                                             Fluttertoast.showToast(
-                                                msg: response.message);
+                                                msg:
+                                                    "Please upgrade the membership for mentor");
                                           }
                                         } catch (e, st) {
                                           log("${e.toString()} /n ${st.toString()}");
@@ -2349,14 +2352,21 @@ class _UserTabsState extends State<UserTabs> {
                   InkWell(
                     onTap: () {
                       log(box.get("userid").toString());
+                      // Navigator.push(
+                      //     context,
+                      //     CupertinoPageRoute(
+                      //       builder: (context) => ChatingPage(
+                      //         id: box.get("userid").toString(),
+                      //         name: widget.fullname,
+                      //         otherUesrid: widget.otherUserId,
+                      //       ),
+                      //     ));
+
                       Navigator.push(
                           context,
                           CupertinoPageRoute(
-                            builder: (context) => ChatingPage(
-                              id: box.get("userid").toString(),
-                              name: widget.fullname,
-                              otherUesrid: widget.otherUserId,
-                            ),
+                            builder: (context) =>
+                                MentorDetailPage(id: widget.id ?? 0),
                           ));
                     },
                     child: Container(

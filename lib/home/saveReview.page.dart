@@ -199,7 +199,7 @@ class _SaveReviewPageState extends ConsumerState<SaveReviewPage> {
 
                       value: collage,
                       decoration: InputDecoration(
-                        labelText: "Select College Feature",
+                        labelText: "Select Feature",
                         labelStyle: GoogleFonts.roboto(
                           fontSize: 13.w,
                           fontWeight: FontWeight.w400,

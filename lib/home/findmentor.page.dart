@@ -649,7 +649,8 @@ class DataLoading extends StatelessWidget {
       itemCount: 7,
       itemBuilder: (context, index) {
         return Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 15.h),
+          padding:
+              EdgeInsets.only(left: 20.w, right: 20.w, bottom: 15.h, top: 20.h),
           child: Shimmer.fromColors(
             baseColor: Colors.grey[300]!, // base shimmer color for white theme
             highlightColor: Colors.grey[100]!, // light moving shine

@@ -105,6 +105,25 @@ class _ProfileCompletionWidgetState
     }
   }
 
+  // Future<void> showFilePicker() async {
+  //   final result = await FilePicker.platform.pickFiles(
+  //     type: FileType.custom,
+  //     allowedExtensions: [
+  //       'pdf',
+  //       'doc',
+  //       'docx',
+  //       // 'application/msword',
+  //       'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  //     ],
+  //   );
+
+  //   if (result != null) {
+  //     setState(() {
+  //       resumeFile = File(result.files.single.path!);
+  //     });
+  //   }
+  // }
+
   DateTime? selectedDate;
   final dateController = TextEditingController();
 
@@ -193,26 +212,6 @@ class _ProfileCompletionWidgetState
     );
   }
 
-  // String formatDate(String dob) {
-  //   try {
-  //     // Try parsing ISO formats (2024-12-05)
-  //     final parsed = DateTime.tryParse(dob);
-  //     if (parsed != null) {
-  //       return "${parsed.day.toString().padLeft(2, '0')}/"
-  //           "${parsed.month.toString().padLeft(2, '0')}/"
-  //           "${parsed.year}";
-  //     }
-
-  //     // Replace '-' with '/'
-  //     if (dob.contains('-')) {
-  //       return dob.replaceAll('-', '/');
-  //     }
-
-  //     return dob;
-  //   } catch (e) {
-  //     return dob;
-  //   }
-  // }
   String formatDate(String dob) {
     if (dob.isEmpty || dob == "null" || dob == "NULL") {
       return ""; // <- null ya empty to kuch bhi show mat karo
@@ -673,12 +672,13 @@ class _ProfileCompletionWidgetState
                                       : Colors.white,
                                   value: qualification == null
                                       ? null
-                                      : qualificationList.firstWhere(
-                                          (item) =>
-                                              item.toLowerCase() ==
-                                              qualification!.toLowerCase(),
-                                          orElse: () => qualificationList[0],
-                                        ),
+                                      : (qualificationList
+                                              .where((item) =>
+                                                  item.toLowerCase() ==
+                                                  qualification!.toLowerCase())
+                                              .isNotEmpty
+                                          ? qualification
+                                          : null),
                                   decoration: InputDecoration(
                                     labelText: 'Highest Qualification',
                                     labelStyle: GoogleFonts.roboto(

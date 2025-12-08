@@ -15,21 +15,21 @@ class WebViewPage extends StatefulWidget {
 class _WebViewPageState extends State<WebViewPage> {
   late final WebViewController _controller;
   bool isLoading = true; // LOADER FLAG
-   Timer? _timer;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
 
-    
     // Start 5 second timeout for loader
     _timer = Timer(const Duration(seconds: 5), () {
       if (mounted) setState(() => isLoading = false);
     });
 
-
     _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setJavaScriptMode(
+        JavaScriptMode.unrestricted,
+      )
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(
         NavigationDelegate(

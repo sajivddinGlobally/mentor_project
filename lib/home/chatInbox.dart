@@ -339,18 +339,41 @@ class _ChatinboxState extends ConsumerState<Chatinbox> {
                                                 ],
                                               ),
                                             ),
-                                            Container(
-                                              margin:
-                                                  EdgeInsets.only(right: 13.w),
-                                              height: 30.h,
-                                              width: 30.w,
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xff008080)
-                                                      .withOpacity(0.2),
-                                                  shape: BoxShape.circle),
-                                              child: Icon(
-                                                Icons.arrow_forward_ios,
-                                                size: 10.sp,
+                                            InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    CupertinoPageRoute(
+                                                      builder: (context) =>
+                                                          ChatingPage(
+                                                        otherUesrid: data
+                                                            .inbox![index]
+                                                            .otherUser!
+                                                            .id
+                                                            .toString(),
+                                                        id: data.egedUser!.id
+                                                            .toString(),
+                                                        name: data
+                                                                .inbox![index]
+                                                                .otherUser!
+                                                                .name ??
+                                                            "N/A",
+                                                      ),
+                                                    ));
+                                              },
+                                              child: Container(
+                                                margin: EdgeInsets.only(
+                                                    right: 13.w),
+                                                height: 30.h,
+                                                width: 30.w,
+                                                decoration: BoxDecoration(
+                                                    color: Color(0xff008080)
+                                                        .withOpacity(0.2),
+                                                    shape: BoxShape.circle),
+                                                child: Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  size: 10.sp,
+                                                ),
                                               ),
                                             )
                                           ],
