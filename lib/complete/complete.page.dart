@@ -1077,7 +1077,8 @@ class _ProfileCompletionWidgetState
                             SizedBox(height: 10.h),
                             GestureDetector(
                               onTap: () {
-                                if (userType == "Mentor") {
+                                if (userType == "Mentor" ||
+                                    userType == "Professional") {
                                   updateProfileMentor();
                                 } else {
                                   updateProfile();
