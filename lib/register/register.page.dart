@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:educationapp/coreFolder/Controller/themeController.dart';
 import 'package:educationapp/home/id.page.dart';
@@ -653,11 +654,15 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                           ),
                           (route) => false,
                         );
-                      } catch (e, st) {
+                      } on DioException catch (e, st) {
                         setState(() {
                           buttonLoader = false;
                         });
-                        // Fluttertoast.showToast(msg: e.toString());
+                        final error = e.response!.data['message'];
+                        Fluttertoast.showToast(
+                            msg: error.toString(),
+                            textColor: Colors.red,
+                            toastLength: Toast.LENGTH_LONG);
                         log("Register Error $e");
                         log(st.toString());
                       } finally {

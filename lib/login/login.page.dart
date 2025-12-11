@@ -314,6 +314,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
         final error = e.response!.data['error'];
         Fluttertoast.showToast(
           msg: error,
+          toastLength: Toast.LENGTH_LONG,
           backgroundColor: Colors.red,
         );
       } catch (e, st) {

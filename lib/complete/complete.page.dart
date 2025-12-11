@@ -971,8 +971,8 @@ class _ProfileCompletionWidgetState
                               child: Center(
                                 child: Container(
                                   margin: EdgeInsets.only(top: 20.h),
-                                  width: 380.w,
-                                  height: 220.h,
+                                  width: 360.w,
+                                  height: 250.h,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20.r),
                                       border: Border.all(color: Colors.grey)),
@@ -984,9 +984,9 @@ class _ProfileCompletionWidgetState
                                                   BorderRadius.circular(20.r),
                                               child: Image.file(
                                                 _image!,
-                                                fit: BoxFit.contain,
-                                                width: 400.w,
-                                                height: 220.h,
+                                                fit: BoxFit.cover,
+                                                width: 360.w,
+                                                height: 250.h,
                                               ),
                                             ),
                                             Align(
@@ -1012,9 +1012,9 @@ class _ProfileCompletionWidgetState
                                                           20.r),
                                                   child: Image.network(
                                                     _profileData!.profilePic!,
-                                                    fit: BoxFit.contain,
-                                                    width: 400.w,
-                                                    height: 220.h,
+                                                    fit: BoxFit.cover,
+                                                    width: 360.w,
+                                                    height: 250.h,
                                                     errorBuilder: (context,
                                                             error,
                                                             stackTrace) =>
@@ -1113,6 +1113,7 @@ class _ProfileCompletionWidgetState
                         );
                       },
                       error: (error, stackTrace) {
+                        log(stackTrace.toString());
                         return Center(
                           child: Text(error.toString()),
                         );

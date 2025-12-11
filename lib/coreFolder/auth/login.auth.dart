@@ -1,18 +1,9 @@
 import 'dart:developer';
-import 'dart:developer' as developer;
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:educationapp/login/login.page.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/adapters.dart';
-import '../Model/login.body.model.dart';
-import '../Model/login.rsponse.model.dart';
-import '../Model/ResisterModel.dart';
-import '../network/api.state.dart';
 import '../utils/preety.dio.dart';
 import 'package:path/path.dart' as path;
 
@@ -26,7 +17,6 @@ import 'package:path/path.dart' as path;
 //     provisional: true, // iOS के लिए provisional permission
 //     carPlay: true,
 //   );
-
 //   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
 //     print('User granted permission');
 //   } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
@@ -35,7 +25,6 @@ import 'package:path/path.dart' as path;
 //     print('User declined or has not accepted permission');
 //     return "no_permission"; // Return a fallback string instead of void
 //   }
-
 //   // FCM Token निकालें
 //   String? token = await FirebaseMessaging.instance.getToken();
 //   // setState(() {
@@ -44,7 +33,6 @@ import 'package:path/path.dart' as path;
 //   print('FCM Token: $token'); // Console में print होगा - moved before return
 //   return token ?? "unknown_device";
 // }
-
 // Future<String> fcmGetToken() async {
 //   // ✅ Now request notification permissions
 //   NotificationSettings settings =
@@ -53,12 +41,10 @@ import 'package:path/path.dart' as path;
 //     badge: true,
 //     sound: true,
 //   );
-
 //   if (settings.authorizationStatus != AuthorizationStatus.authorized) {
 //     print('User declined permission');
 //     return "no_permission";
 //   }
-
 //   String? Fcmtoken = await FirebaseMessaging.instance.getToken();
 //   print('FCM Token: $Fcmtoken');
 //   return Fcmtoken ?? "unknown_device";
@@ -147,7 +133,6 @@ class Auth {
   //     throw Exception('Failed to login: $e');
   //   }
   // }
-
   // static Future<void> register(
   //   String email,
   //   String password,
@@ -168,7 +153,6 @@ class Auth {
   //         serviceType: serviceType,
   //         userType: userType),
   //   );
-
   //   if (response.data != null) {
   //     Fluttertoast.showToast(msg: response.data['message']);
   //     Navigator.pushAndRemoveUntil(
@@ -181,7 +165,6 @@ class Auth {
   //   } else {
   //     Fluttertoast.showToast(msg: "Something went wrong");
   //   }
-
   //   // if (response.response.data['message'] == "Registration successful") {
   //   //   Fluttertoast.showToast(
   //   //     msg: response.response.data['message'],
@@ -211,12 +194,9 @@ class Auth {
   //   //   );
   //   //   throw Exception('Failed to login');
   //   // }
-
   //   // final message = (response.response.data['message'] ?? '').toString().trim();
-
   //   // // ✅ check for any success message
   //   // final isSuccess = message.toLowerCase().contains('success');
-
   //   // if (isSuccess) {
   //   //   Fluttertoast.showToast(
   //   //     msg: message,
@@ -226,15 +206,12 @@ class Auth {
   //   //     textColor: Colors.white,
   //   //     fontSize: 12.0,
   //   //   );
-
   //   //   log('✅ Register successful: ${response.response.data}');
-
   //   //   Navigator.pushAndRemoveUntil(
   //   //     context,
   //   //     CupertinoPageRoute(builder: (context) => const LoginPage()),
   //   //     (route) => false,
   //   //   );
-
   //   //   return;
   //   // }
   //   // Fluttertoast.showToast(
@@ -245,7 +222,6 @@ class Auth {
   //   //   textColor: Colors.white,
   //   //   fontSize: 12.0,
   //   // );
-
   //   // throw Exception('Registration failed: $message');
   // }
 

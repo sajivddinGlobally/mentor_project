@@ -8,7 +8,6 @@ import 'package:educationapp/coreFolder/utils/preety.dio.dart';
 import 'package:educationapp/main.dart';
 import 'package:educationapp/register/register.page.dart';
 import 'package:educationapp/splash/getstart.page.dart';
-import 'package:educationapp/splash/mentorshpi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -16,7 +15,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -206,8 +204,8 @@ class _IdBodyState extends ConsumerState<IdBody> {
                 color: Color(0xFF008080),
                 strokeWidth: 2.w,
                 child: Container(
-                  width: 400.w,
-                  height: 220.h,
+                  width: 360.w,
+                  height: 250.h,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.r),
                   ),
@@ -242,8 +240,8 @@ class _IdBodyState extends ConsumerState<IdBody> {
                           child: Image.file(
                             _image!,
                             fit: BoxFit.cover,
-                            width: 400.w,
-                            height: 220.h,
+                            width: 360.w,
+                            height: 200.h,
                           ),
                         ),
                 )),

@@ -276,7 +276,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
             SizedBox(height: 10.h),
-            if (userType != "Mentor")
+            if (userType == "Student")
               ListTile(
                 onTap: () {
                   Navigator.push(
@@ -301,7 +301,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
               ),
-            if (userType != "Mentor")
+            if (userType == "Student")
               ListTile(
                 onTap: () {
                   Navigator.push(
@@ -326,7 +326,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
               ),
-            if (userType != "Mentor")
+            if (userType == "Student")
               ListTile(
                 onTap: () {
                   Navigator.push(
@@ -351,7 +351,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
               ),
-            if (userType != "Mentor")
+            if (userType == "Student")
               ListTile(
                 onTap: () {
                   Navigator.push(
@@ -376,7 +376,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
               ),
-            if (userType == "Mentor")
+            if (userType == "Professional" || userType == "Mentor")
               ListTile(
                 onTap: () {
                   Navigator.push(
@@ -687,7 +687,7 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
                   children: [
-                    if (userType != "Mentor")
+                    if (userType == "Student")
                       Expanded(
                         child: InkWell(
                           onTap: () {
@@ -774,7 +774,7 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                         ),
                       ),
                     SizedBox(width: 15.w),
-                    if (userType == "Mentor")
+                    if (userType == "Professional" || userType == "Mentor")
                       InkWell(
                         onTap: () {
                           Navigator.push(
@@ -840,7 +840,7 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                         ),
                       ),
                     SizedBox(width: 15.w),
-                    if (userType != "Mentor")
+                    if (userType == "Student")
                       InkWell(
                         onTap: () {
                           Navigator.push(
@@ -924,120 +924,180 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                 ),
               ),
               SizedBox(height: 30.h),
-              userType == "Mentor"
-                  ? Container(
-                      // height: 500.h,
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                      ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 20.h),
-                            getHomeMentorData.when(
-                              data: (mentorData) {
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                              builder: (context) =>
-                                                  ProfileCompletionWidget(true),
-                                            ));
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.only(
-                                            left: 20.w, right: 20.w),
-                                        // width: 400.w.clamp(0, 400.w),
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 20.h),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(30.r),
-                                          // color:
-                                          //     Color.fromARGB(38, 0, 128, 128),
-                                          color: themeMode == ThemeMode.dark
-                                              ? Color.fromARGB(38, 0, 128, 128)
-                                              : Color(0xFF263238),
+              // userType != "Professional"
+              //     ?
+              if (userType == "Professional" || userType == "Mentor")
+                Container(
+                  // height: 500.h,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 20.h),
+                        getHomeMentorData.when(
+                          data: (mentorData) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        CupertinoPageRoute(
+                                          builder: (context) =>
+                                              ProfileCompletionWidget(true),
+                                        ));
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                        left: 20.w, right: 20.w),
+                                    // width: 400.w.clamp(0, 400.w),
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 20.h),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30.r),
+                                      // color:
+                                      //     Color.fromARGB(38, 0, 128, 128),
+                                      color: themeMode == ThemeMode.dark
+                                          ? Color.fromARGB(38, 0, 128, 128)
+                                          : Color(0xFF263238),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              left: 20.w,
+                                              right: 20.w,
+                                              top: 10.h),
+                                          height: 5.h,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(10.r),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10.r),
+                                            child: LinearProgressIndicator(
+                                              // value: profileCompletion.clamp(
+                                              //     0.0, 1.0),
+                                              value: (((mentorData.data!
+                                                                  .profileCompletion ??
+                                                              0.0) /
+                                                          100)
+                                                      .clamp(0.0, 1.0))
+                                                  .toDouble(),
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                      Color(0xFF008080)),
+                                              minHeight: 20.h,
+                                            ),
+                                          ),
                                         ),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                  left: 20.w,
-                                                  right: 20.w,
-                                                  top: 10.h),
-                                              height: 5.h,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(10.r),
-                                              ),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.r),
-                                                child: LinearProgressIndicator(
-                                                  // value: profileCompletion.clamp(
-                                                  //     0.0, 1.0),
-                                                  value: (((mentorData.data!
-                                                                      .profileCompletion ??
-                                                                  0.0) /
-                                                              100)
-                                                          .clamp(0.0, 1.0))
-                                                      .toDouble(),
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation<
-                                                              Color>(
-                                                          Color(0xFF008080)),
-                                                  minHeight: 20.h,
+                                        SizedBox(height: 12.h),
+                                        Container(
+                                          margin: EdgeInsets.only(right: 16.w),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 20.w),
+                                                child: Text(
+                                                  "Profile Completed",
+                                                  style: GoogleFonts.roboto(
+                                                    fontSize: 14.sp,
+                                                    fontWeight: FontWeight.w600,
+                                                    // color: Color.fromARGB(
+                                                    //     204, 0, 0, 0),
+                                                    color: themeMode ==
+                                                            ThemeMode.dark
+                                                        ? Color.fromARGB(
+                                                            204, 0, 0, 0)
+                                                        : Colors.white,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            SizedBox(height: 12.h),
-                                            Container(
-                                              margin:
-                                                  EdgeInsets.only(right: 16.w),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 20.w),
-                                                    child: Text(
-                                                      "Profile Completed",
-                                                      style: GoogleFonts.roboto(
-                                                        fontSize: 14.sp,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        // color: Color.fromARGB(
-                                                        //     204, 0, 0, 0),
-                                                        color: themeMode ==
-                                                                ThemeMode.dark
-                                                            ? Color.fromARGB(
-                                                                204, 0, 0, 0)
-                                                            : Colors.white,
+                                              Text(
+                                                //  "${(profileCompletion * 100).toInt()}%",
+                                                "${(mentorData.data!.profileCompletion ?? 0.0).toStringAsFixed(0)}%",
+                                                style: GoogleFonts.roboto(
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: themeMode ==
+                                                          ThemeMode.dark
+                                                      ? Color.fromARGB(
+                                                          204, 0, 0, 0)
+                                                      : Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              left: 15.w,
+                                              right: 20.w,
+                                              top: 16.h),
+                                          child: Row(
+                                            children: [
+                                              ClipOval(
+                                                child: Image.network(
+                                                  // profileImage['profile_picture']
+                                                  //         ?.toString() ??
+                                                  //     "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                                  mentorData.data!.profilePic ??
+                                                      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                                  fit: BoxFit.cover,
+                                                  height: 50.w,
+                                                  width: 50.w,
+                                                  errorBuilder: (context, error,
+                                                      stackTrace) {
+                                                    return ClipOval(
+                                                      child: Image.network(
+                                                        "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                                        fit: BoxFit.cover,
+                                                        height: 50.w,
+                                                        width: 50.w,
                                                       ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                              SizedBox(width: 10.w),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    // "Mike Pena",
+                                                    "${mentorData.data!.fullName ?? "Mentor"}!",
+                                                    style: GoogleFonts.roboto(
+                                                      fontSize: 16.sp,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: themeMode ==
+                                                              ThemeMode.dark
+                                                          ? Color.fromARGB(
+                                                              204, 0, 0, 0)
+                                                          : Colors.white,
                                                     ),
                                                   ),
                                                   Text(
-                                                    //  "${(profileCompletion * 100).toInt()}%",
-                                                    "${(mentorData.data!.profileCompletion ?? 0.0).toStringAsFixed(0)}%",
+                                                    "Placement | Interview",
                                                     style: GoogleFonts.roboto(
                                                       fontSize: 14.sp,
                                                       fontWeight:
@@ -1051,933 +1111,845 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                                   ),
                                                 ],
                                               ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                  left: 15.w,
-                                                  right: 20.w,
-                                                  top: 16.h),
-                                              child: Row(
-                                                children: [
-                                                  ClipOval(
-                                                    child: Image.network(
-                                                      // profileImage['profile_picture']
-                                                      //         ?.toString() ??
-                                                      //     "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                                      mentorData.data!
-                                                              .profilePic ??
-                                                          "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                                      fit: BoxFit.cover,
-                                                      height: 50.w,
-                                                      width: 50.w,
-                                                      errorBuilder: (context,
-                                                          error, stackTrace) {
-                                                        return ClipOval(
-                                                          child: Image.network(
-                                                            "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                                            fit: BoxFit.cover,
-                                                            height: 50.w,
-                                                            width: 50.w,
-                                                          ),
-                                                        );
-                                                      },
-                                                    ),
-                                                  ),
-                                                  SizedBox(width: 10.w),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        // "Mike Pena",
-                                                        "${mentorData.data!.fullName ?? "Mentor"}!",
-                                                        style:
-                                                            GoogleFonts.roboto(
-                                                          fontSize: 16.sp,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color: themeMode ==
-                                                                  ThemeMode.dark
-                                                              ? Color.fromARGB(
-                                                                  204, 0, 0, 0)
-                                                              : Colors.white,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        "Placement | Interview",
-                                                        style:
-                                                            GoogleFonts.roboto(
-                                                          fontSize: 14.sp,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color: themeMode ==
-                                                                  ThemeMode.dark
-                                                              ? Color.fromARGB(
-                                                                  204, 0, 0, 0)
-                                                              : Colors.white,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                  left: 20.w,
-                                                  right: 15.w,
-                                                  top: 16.h),
-                                              child: Text(
-                                                // "With over 5 years of experience, "
-                                                // "I've guided 300+ students to land jobs "
-                                                // "in top companies like Google, TCS, and Deloitte. "
-                                                // "My sessions focus on mock interviews, resume building, "
-                                                // "and effective communication",
-                                                mentorData.data!.description ??
-                                                    "No descripion",
-                                                style: GoogleFonts.roboto(
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: themeMode ==
-                                                          ThemeMode.dark
-                                                      ? Color.fromARGB(
-                                                          204, 0, 0, 0)
-                                                      : Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 20.w, right: 20.w, top: 20.h),
-                                      child: Text(
-                                        "Your Bids",
-                                        style: GoogleFonts.inter(
-                                            fontSize: 20.sp,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
-                                    mentorData.data!.acceptedStudents!.isEmpty
-                                        ? Center(
-                                            child: Text(
-                                              "No Accepted Student",
-                                              style: GoogleFonts.inter(
-                                                fontSize: 20.sp,
-                                                fontWeight: FontWeight.w300,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          )
-                                        : ListView.builder(
-                                            shrinkWrap: true,
-                                            padding: EdgeInsets.zero,
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            itemCount: mentorData
-                                                .data!.acceptedStudents!.length,
-                                            itemBuilder: (context, index) {
-                                              final student = mentorData.data!
-                                                  .acceptedStudents![index];
-                                              return InkWell(
-                                                onTap: () {
-                                                  log(box
-                                                      .get("userid")
-                                                      .toString());
-                                                  log(
-                                                    mentorData
-                                                        .data!
-                                                        .acceptedStudents![
-                                                            index]
-                                                        .id
-                                                        .toString(),
-                                                  );
-                                                  Navigator.push(
-                                                      context,
-                                                      CupertinoPageRoute(
-                                                        builder: (context) => ChatingPage(
-                                                            id: box
-                                                                .get("userid")
-                                                                .toString(),
-                                                            otherUesrid: mentorData
-                                                                .data!
-                                                                .acceptedStudents![
-                                                                    index]
-                                                                .id
-                                                                .toString(),
-                                                            name: student
-                                                                    .fullName ??
-                                                                "No Name"),
-                                                      ));
-                                                },
-                                                child: MyContainer(
-                                                  image: student.profilePic ??
-                                                      "https://flutter.github.io/assets-for-api-docs/assets/widgets/puffin.jpg",
-                                                  title:
-                                                      student.fullName ?? "N/A",
-                                                  email: student.email ??
-                                                      "No Email",
-                                                  description:
-                                                      student.description ?? "",
-                                                ),
-                                              );
-                                            },
+                                            ],
                                           ),
-                                    SizedBox(height: 10.h),
-                                  ],
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              left: 20.w,
+                                              right: 15.w,
+                                              top: 16.h),
+                                          child: Text(
+                                            // "With over 5 years of experience, "
+                                            // "I've guided 300+ students to land jobs "
+                                            // "in top companies like Google, TCS, and Deloitte. "
+                                            // "My sessions focus on mock interviews, resume building, "
+                                            // "and effective communication",
+                                            mentorData.data!.description ??
+                                                "No descripion",
+                                            style: GoogleFonts.roboto(
+                                              fontSize: 15.sp,
+                                              fontWeight: FontWeight.w400,
+                                              color: themeMode == ThemeMode.dark
+                                                  ? Color.fromARGB(204, 0, 0, 0)
+                                                  : Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 20.w, right: 20.w, top: 20.h),
+                                  child: Text(
+                                    "Your Bids",
+                                    style: GoogleFonts.inter(
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                mentorData.data!.acceptedStudents!.isEmpty
+                                    ? Center(
+                                        child: Text(
+                                          "No Accepted Student",
+                                          style: GoogleFonts.inter(
+                                            fontSize: 20.sp,
+                                            fontWeight: FontWeight.w300,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      )
+                                    : ListView.builder(
+                                        shrinkWrap: true,
+                                        padding: EdgeInsets.zero,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemCount: mentorData
+                                            .data!.acceptedStudents!.length,
+                                        itemBuilder: (context, index) {
+                                          final student = mentorData
+                                              .data!.acceptedStudents![index];
+                                          return InkWell(
+                                            onTap: () {
+                                              log(box.get("userid").toString());
+                                              log(
+                                                mentorData.data!
+                                                    .acceptedStudents![index].id
+                                                    .toString(),
+                                              );
+                                              Navigator.push(
+                                                  context,
+                                                  CupertinoPageRoute(
+                                                    builder: (context) => ChatingPage(
+                                                        id: box
+                                                            .get("userid")
+                                                            .toString(),
+                                                        otherUesrid: mentorData
+                                                            .data!
+                                                            .acceptedStudents![
+                                                                index]
+                                                            .id
+                                                            .toString(),
+                                                        name:
+                                                            student.fullName ??
+                                                                "No Name"),
+                                                  ));
+                                            },
+                                            child: MyContainer(
+                                              image: student.profilePic ??
+                                                  "https://flutter.github.io/assets-for-api-docs/assets/widgets/puffin.jpg",
+                                              title: student.fullName ?? "N/A",
+                                              email:
+                                                  student.email ?? "No Email",
+                                              description:
+                                                  student.description ?? "",
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                SizedBox(height: 10.h),
+                              ],
+                            );
+                          },
+                          error: (error, stackTrace) {
+                            log(stackTrace.toString());
+                            return Center(
+                              child: Text(error.toString()),
+                            );
+                          },
+                          loading: () => Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 20.w, top: 10.h),
+                          child: Row(
+                            children: [
+                              Text(
+                                "New Request",
+                                style: GoogleFonts.roboto(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        getRequestHomeData.when(
+                          data: (requestData) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              setState(() {
+                                requestLenght =
+                                    requestData.data.length.toString();
+                              });
+                            });
+
+                            if (requestData.data.isEmpty) {
+                              return Center(
+                                child: Text(
+                                  "No Request Available",
+                                  style: GoogleFonts.inter(
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black),
+                                ),
+                              );
+                            }
+
+                            return ListView.builder(
+                              padding: EdgeInsets.zero,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: requestData.data.length,
+                              itemBuilder: (context, index) {
+                                final student = requestData.data[index];
+                                return GetRequestStudentBody(
+                                  image: student.studentProfile ??
+                                      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                                  title: student.studentName,
+                                  subtitle: student.studentType,
+                                  email: student.studentEmail,
+                                  phone: student.studentPhone,
+                                  callBack: () async {
+                                    final body = AcceptRequestBodyModel(
+                                        requestId: requestData.data[index].id);
+                                    try {
+                                      setState(() {
+                                        isAccept = true;
+                                      });
+                                      final service =
+                                          APIStateNetwork(createDio());
+                                      final response =
+                                          await service.acceptRequest(body);
+                                      if (response.status == true) {
+                                        Fluttertoast.showToast(
+                                            msg: response.message);
+                                        ref.invalidate(
+                                            getHomeMentorDataProvider);
+                                        ref.invalidate(
+                                            getRequestStudentController);
+                                        ref.invalidate(myListingController);
+                                      } else {
+                                        // Fluttertoast.showToast(
+                                        //     msg: response.message);
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                "Please upgrade the membership for mentor",
+                                            toastLength: Toast.LENGTH_LONG);
+                                      }
+                                    } catch (e, st) {
+                                      log("${e.toString()} /n ${st.toString()}");
+                                      Fluttertoast.showToast(msg: "Not Accept");
+                                    } finally {
+                                      setState(() {
+                                        isAccept = false;
+                                      });
+                                    }
+                                  },
                                 );
                               },
-                              error: (error, stackTrace) {
-                                log(stackTrace.toString());
+                            );
+                          },
+                          error: (error, stackTrace) {
+                            log(stackTrace.toString());
+                            return Center(
+                              child: Text(error.toString()),
+                            );
+                          },
+                          loading: () => Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
+                      ],
+                    ),
+                  ),
+                )
+              else
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 380.h,
+                        width: double.infinity,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            HomePageBody(
+                              callBack: (String category) {
+                                setState(() {
+                                  filterQuery = category;
+                                });
+                              },
+                            ),
+                            SizedBox(height: 10.h),
+                            getHomeStudentData.when(
+                              data: (data) {
+                                final mentors = filterQuery == "All" ||
+                                        filterQuery.isEmpty
+                                    ? data.mentors?.values
+                                            .expand((list) => list)
+                                            .toList() ??
+                                        []
+                                    : data.mentors?[filterQuery]?.toList() ??
+                                        [];
+                                if (mentors.isEmpty) {
+                                  return Center(
+                                    child: Text(
+                                      "No mentors available",
+                                      style: GoogleFonts.roboto(
+                                          fontSize: 14.sp, color: Colors.white),
+                                    ),
+                                  );
+                                }
+                                return SizedBox(
+                                  height: 260.h,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20.w),
+                                    itemCount: mentors.length,
+                                    itemBuilder: (context, index) {
+                                      final mentor = mentors[index];
+                                      return UserTabs(
+                                        callBack: () {
+                                          Navigator.push(
+                                              context,
+                                              CupertinoPageRoute(
+                                                builder: (context) =>
+                                                    MentorDetailPage(
+                                                        id: mentor.id ?? 0),
+                                              ));
+                                        },
+                                        id: mentor.id ?? 0,
+                                        fullname: mentor.fullName ?? "Unknown",
+                                        dec: mentor.description ??
+                                            "No description",
+                                        servicetype: [
+                                          mentor.serviceType ?? "N/A"
+                                        ],
+                                        image: mentor.profilePic ?? "",
+                                        otherUserId: mentor.id.toString(),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                              loading: () => const Center(
+                                child: CircularProgressIndicator(
+                                    color: Color(0xff008080)),
+                              ),
+                              error: (error, stack) {
+                                log("Mentors Error: $error");
+                                log("StackTrace: $stack");
                                 return Center(
-                                  child: Text(error.toString()),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "Error loading mentors: $error",
+                                        style: GoogleFonts.roboto(
+                                            fontSize: 14.sp,
+                                            color: Colors.white),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () => ref.refresh(
+                                            getHomeStudentDataProvider),
+                                        child: const Text("Retry"),
+                                      ),
+                                    ],
+                                  ),
                                 );
                               },
-                              loading: () => Center(
-                                child: CircularProgressIndicator(),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 30.h),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: Text(
+                                "Explore Trending Skills",
+                                style: GoogleFonts.roboto(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white),
                               ),
                             ),
-                            Container(
-                              margin: EdgeInsets.only(left: 20.w, top: 10.h),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "New Request",
+                          ]),
+                      SizedBox(height: 20.h),
+                      getHomeStudentData.when(
+                        data: (data) {
+                          final skills = data.skills ?? [];
+                          if (skills.isEmpty) {
+                            return Center(
+                              child: Text(
+                                "No skills available",
+                                style: GoogleFonts.roboto(
+                                    fontSize: 14.sp, color: Colors.white),
+                              ),
+                            );
+                          }
+                          return SizedBox(
+                            height: 145.h,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              itemCount: skills.length,
+                              itemBuilder: (context, index) {
+                                final skill = skills[index];
+                                return Padding(
+                                  padding: EdgeInsets.only(right: 15.w),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                            builder: (context) =>
+                                                TrendingExprtPage(
+                                              id: skill.id ?? 0,
+                                            ),
+                                          ));
+                                    },
+                                    child: Container(
+                                      width: 120.w,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFF2A2A2A),
+                                        borderRadius:
+                                            BorderRadius.circular(15.r),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 50.w,
+                                            height: 50.h,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                image: NetworkImage(
+                                                    skill.image ?? ""),
+                                                fit: BoxFit.cover,
+                                                onError: (exception,
+                                                        stackTrace) =>
+                                                    const AssetImage(
+                                                        "assets/placeholder.png"),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 10.h),
+                                          Text(
+                                            limitString(
+                                                skill.title ?? "Unknown", 18),
+                                            style: GoogleFonts.roboto(
+                                                fontSize: 12.sp,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          Text(
+                                            skill.level
+                                                    ?.toString()
+                                                    .split('.')
+                                                    .last ??
+                                                "N/A",
+                                            style: GoogleFonts.roboto(
+                                                fontSize: 10.sp,
+                                                fontWeight: FontWeight.w400,
+                                                color: const Color(0xFFA8E6CF)),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                        loading: () => const Center(
+                          child: CircularProgressIndicator(
+                              color: Color(0xff008080)),
+                        ),
+                        error: (error, stack) => Center(
+                          child: Text(
+                            "Error loading skills",
+                            style: GoogleFonts.roboto(
+                                fontSize: 14.sp, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Container(
+                        height: 350.h,
+                        width: double.infinity,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin:
+                                      EdgeInsets.only(left: 20.w, top: 20.h),
+                                  child: Text(
+                                    "Explore College Review",
                                     style: GoogleFonts.roboto(
                                         fontSize: 18.sp,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.black),
                                   ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 10.h),
-                            getRequestHomeData.when(
-                              data: (requestData) {
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) {
-                                  setState(() {
-                                    requestLenght =
-                                        requestData.data.length.toString();
-                                  });
-                                });
-
-                                if (requestData.data.isEmpty) {
-                                  return Center(
-                                    child: Text(
-                                      "No Request Available",
-                                      style: GoogleFonts.inter(
-                                          fontSize: 20.sp,
-                                          fontWeight: FontWeight.w300,
-                                          color: Colors.black),
-                                    ),
-                                  );
-                                }
-
-                                return ListView.builder(
-                                  padding: EdgeInsets.zero,
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: requestData.data.length,
-                                  itemBuilder: (context, index) {
-                                    final student = requestData.data[index];
-                                    return GetRequestStudentBody(
-                                      image: student.studentProfile ??
-                                          "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-                                      title: student.studentName,
-                                      subtitle: student.studentType,
-                                      email: student.studentEmail,
-                                      phone: student.studentPhone,
-                                      callBack: () async {
-                                        final body = AcceptRequestBodyModel(
-                                            requestId:
-                                                requestData.data[index].id);
-                                        try {
-                                          setState(() {
-                                            isAccept = true;
-                                          });
-                                          final service =
-                                              APIStateNetwork(createDio());
-                                          final response =
-                                              await service.acceptRequest(body);
-                                          if (response.status == true) {
-                                            Fluttertoast.showToast(
-                                                msg: response.message);
-                                            ref.invalidate(
-                                                getHomeMentorDataProvider);
-                                            ref.invalidate(
-                                                getRequestStudentController);
-                                            ref.invalidate(myListingController);
-                                          } else {
-                                            // Fluttertoast.showToast(
-                                            //     msg: response.message);
-                                            Fluttertoast.showToast(
-                                                msg:
-                                                    "Please upgrade the membership for mentor");
-                                          }
-                                        } catch (e, st) {
-                                          log("${e.toString()} /n ${st.toString()}");
-                                          Fluttertoast.showToast(
-                                              msg: "Not Accept");
-                                        } finally {
-                                          setState(() {
-                                            isAccept = false;
-                                          });
-                                        }
-                                      },
-                                    );
-                                  },
-                                );
-                              },
-                              error: (error, stackTrace) {
-                                log(stackTrace.toString());
-                                return Center(
-                                  child: Text(error.toString()),
-                                );
-                              },
-                              loading: () => Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
-                            SizedBox(height: 20.h),
-                          ],
-                        ),
-                      ),
-                    )
-                  : SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 380.h,
-                            width: double.infinity,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                                bottomLeft: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                HomePageBody(
-                                  callBack: (String category) {
-                                    setState(() {
-                                      filterQuery = category;
-                                    });
-                                  },
-                                ),
-                                SizedBox(height: 10.h),
-                                getHomeStudentData.when(
-                                  data: (data) {
-                                    final mentors = filterQuery == "All" ||
-                                            filterQuery.isEmpty
-                                        ? data.mentors?.values
-                                                .expand((list) => list)
-                                                .toList() ??
-                                            []
-                                        : data.mentors?[filterQuery]
-                                                ?.toList() ??
-                                            [];
-                                    if (mentors.isEmpty) {
-                                      return Center(
-                                        child: Text(
-                                          "No mentors available",
-                                          style: GoogleFonts.roboto(
-                                              fontSize: 14.sp,
-                                              color: Colors.white),
-                                        ),
-                                      );
-                                    }
-                                    return SizedBox(
-                                      height: 260.h,
-                                      child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20.w),
-                                        itemCount: mentors.length,
-                                        itemBuilder: (context, index) {
-                                          final mentor = mentors[index];
-                                          return UserTabs(
-                                            callBack: () {
-                                              Navigator.push(
-                                                  context,
-                                                  CupertinoPageRoute(
-                                                    builder: (context) =>
-                                                        MentorDetailPage(
-                                                            id: mentor.id ?? 0),
-                                                  ));
-                                            },
-                                            id: mentor.id ?? 0,
-                                            fullname:
-                                                mentor.fullName ?? "Unknown",
-                                            dec: mentor.description ??
-                                                "No description",
-                                            servicetype: [
-                                              mentor.serviceType ?? "N/A"
-                                            ],
-                                            image: mentor.profilePic ?? "",
-                                            otherUserId: mentor.id.toString(),
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  },
-                                  loading: () => const Center(
-                                    child: CircularProgressIndicator(
-                                        color: Color(0xff008080)),
-                                  ),
-                                  error: (error, stack) {
-                                    log("Mentors Error: $error");
-                                    log("StackTrace: $stack");
-                                    return Center(
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            "Error loading mentors: $error",
-                                            style: GoogleFonts.roboto(
-                                                fontSize: 14.sp,
-                                                color: Colors.white),
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () => ref.refresh(
-                                                getHomeStudentDataProvider),
-                                            child: const Text("Retry"),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
                                 ),
                               ],
                             ),
-                          ),
-                          SizedBox(height: 30.h),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 20.w),
-                                  child: Text(
-                                    "Explore Trending Skills",
-                                    style: GoogleFonts.roboto(
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white),
-                                  ),
-                                ),
-                              ]),
-                          SizedBox(height: 20.h),
-                          getHomeStudentData.when(
-                            data: (data) {
-                              final skills = data.skills ?? [];
-                              if (skills.isEmpty) {
-                                return Center(
-                                  child: Text(
-                                    "No skills available",
-                                    style: GoogleFonts.roboto(
-                                        fontSize: 14.sp, color: Colors.white),
-                                  ),
-                                );
-                              }
-                              return SizedBox(
-                                height: 145.h,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 20.w),
-                                  itemCount: skills.length,
-                                  itemBuilder: (context, index) {
-                                    final skill = skills[index];
-                                    return Padding(
-                                      padding: EdgeInsets.only(right: 15.w),
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              CupertinoPageRoute(
-                                                builder: (context) =>
-                                                    TrendingExprtPage(
-                                                  id: skill.id ?? 0,
-                                                ),
-                                              ));
-                                        },
+                            SizedBox(height: 20.h),
+                            getHomeStudentData.when(
+                              data: (data) {
+                                final colleges = data.colleges ?? [];
+                                if (colleges.isEmpty) {
+                                  return Center(
+                                    child: Text(
+                                      "No colleges available",
+                                      style: GoogleFonts.roboto(
+                                          fontSize: 14.sp, color: Colors.white),
+                                    ),
+                                  );
+                                }
+                                return SizedBox(
+                                  height: 260.h,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20.w),
+                                    itemCount: colleges.length,
+                                    itemBuilder: (context, index) {
+                                      final college = colleges[index];
+                                      return Padding(
+                                        padding: EdgeInsets.only(right: 15.w),
                                         child: Container(
-                                          width: 120.w,
+                                          width: 195.w,
                                           decoration: BoxDecoration(
-                                            color: const Color(0xFF2A2A2A),
+                                            color: Colors.white,
+                                            border: Border.all(
+                                                color: Color.fromRGBO(
+                                                    0, 0, 0, 0.1)),
                                             borderRadius:
                                                 BorderRadius.circular(15.r),
                                           ),
                                           child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Container(
-                                                width: 50.w,
-                                                height: 50.h,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        skill.image ?? ""),
-                                                    fit: BoxFit.cover,
-                                                    onError: (exception,
-                                                            stackTrace) =>
-                                                        const AssetImage(
-                                                            "assets/placeholder.png"),
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(height: 10.h),
-                                              Text(
-                                                limitString(
-                                                    skill.title ?? "Unknown",
-                                                    18),
-                                                style: GoogleFonts.roboto(
-                                                    fontSize: 12.sp,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.white),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              Text(
-                                                skill.level
-                                                        ?.toString()
-                                                        .split('.')
-                                                        .last ??
-                                                    "N/A",
-                                                style: GoogleFonts.roboto(
-                                                    fontSize: 10.sp,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: const Color(
-                                                        0xFFA8E6CF)),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                            loading: () => const Center(
-                              child: CircularProgressIndicator(
-                                  color: Color(0xff008080)),
-                            ),
-                            error: (error, stack) => Center(
-                              child: Text(
-                                "Error loading skills",
-                                style: GoogleFonts.roboto(
-                                    fontSize: 14.sp, color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          Container(
-                            height: 350.h,
-                            width: double.infinity,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                                bottomLeft: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          left: 20.w, top: 20.h),
-                                      child: Text(
-                                        "Explore College Review",
-                                        style: GoogleFonts.roboto(
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 20.h),
-                                getHomeStudentData.when(
-                                  data: (data) {
-                                    final colleges = data.colleges ?? [];
-                                    if (colleges.isEmpty) {
-                                      return Center(
-                                        child: Text(
-                                          "No colleges available",
-                                          style: GoogleFonts.roboto(
-                                              fontSize: 14.sp,
-                                              color: Colors.white),
-                                        ),
-                                      );
-                                    }
-                                    return SizedBox(
-                                      height: 260.h,
-                                      child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20.w),
-                                        itemCount: colleges.length,
-                                        itemBuilder: (context, index) {
-                                          final college = colleges[index];
-                                          return Padding(
-                                            padding:
-                                                EdgeInsets.only(right: 15.w),
-                                            child: Container(
-                                              width: 195.w,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                border: Border.all(
-                                                    color: Color.fromRGBO(
-                                                        0, 0, 0, 0.1)),
-                                                borderRadius:
-                                                    BorderRadius.circular(15.r),
-                                              ),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          CupertinoPageRoute(
-                                                            builder: (context) =>
-                                                                CollegeDetailPage(
-                                                                    college
-                                                                        .id!),
-                                                          ));
-                                                    },
-                                                    child: Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 8.h,
-                                                          left: 8.w,
-                                                          right: 8.w),
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(12.r),
-                                                        child: Image.network(
-                                                          college.image ??
-                                                              "https://www.howardluksmd.com/wp-content/uploads/2021/10/featured-image-placeholder-728x404.jpg",
-                                                          errorBuilder:
-                                                              (context, error,
-                                                                  stackTrace) {
-                                                            return Image
-                                                                .network(
-                                                              "https://www.howardluksmd.com/wp-content/uploads/2021/10/featured-image-placeholder-728x404.jpg",
-                                                              width:
-                                                                  MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width,
-                                                              height: 111.h,
-                                                              fit: BoxFit
-                                                                  .contain,
-                                                            );
-                                                          },
+                                              InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      CupertinoPageRoute(
+                                                        builder: (context) =>
+                                                            CollegeDetailPage(
+                                                                college.id!),
+                                                      ));
+                                                },
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 8.h,
+                                                      left: 8.w,
+                                                      right: 8.w),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12.r),
+                                                    child: Image.network(
+                                                      college.image ??
+                                                          "https://www.howardluksmd.com/wp-content/uploads/2021/10/featured-image-placeholder-728x404.jpg",
+                                                      errorBuilder: (context,
+                                                          error, stackTrace) {
+                                                        return Image.network(
+                                                          "https://www.howardluksmd.com/wp-content/uploads/2021/10/featured-image-placeholder-728x404.jpg",
                                                           width: MediaQuery.of(
                                                                   context)
                                                               .size
                                                               .width,
                                                           height: 111.h,
                                                           fit: BoxFit.contain,
-                                                        ),
+                                                        );
+                                                      },
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      height: 111.h,
+                                                      fit: BoxFit.contain,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.w),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      padding: EdgeInsets.only(
+                                                          left: 10.w,
+                                                          right: 10.w,
+                                                          top: 5.h,
+                                                          bottom: 5.h),
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      40.r),
+                                                          color: Color(
+                                                              0xFFDEDDEC)),
+                                                      child: Text(
+                                                        college.city ?? "N/A",
+                                                        style:
+                                                            GoogleFonts.roboto(
+                                                                fontSize: 14.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color: Colors
+                                                                    .black),
                                                       ),
                                                     ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.w),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                    SizedBox(
+                                                      height: 8.h,
+                                                    ),
+                                                    Row(
                                                       children: [
                                                         Container(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 10.w,
-                                                                  right: 10.w,
-                                                                  top: 5.h,
-                                                                  bottom: 5.h),
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          40.r),
-                                                              color: Color(
-                                                                  0xFFDEDDEC)),
-                                                          child: Text(
-                                                            college.city ??
-                                                                "N/A",
-                                                            style: GoogleFonts
-                                                                .roboto(
-                                                                    fontSize:
-                                                                        14.sp,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400,
-                                                                    color: Colors
-                                                                        .black),
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 8.h,
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            Container(
-                                                                padding: EdgeInsets
-                                                                    .only(
-                                                                        left:
-                                                                            8.w,
-                                                                        right:
-                                                                            8.w,
-                                                                        top:
-                                                                            5.h,
-                                                                        bottom: 5
-                                                                            .h),
-                                                                decoration: BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(40
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    left: 8.w,
+                                                                    right: 8.w,
+                                                                    top: 5.h,
+                                                                    bottom:
+                                                                        5.h),
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(40
                                                                             .r),
-                                                                    color: Color(
-                                                                        0xFFDEDDEC)),
-                                                                child: Row(
-                                                                  children: [
-                                                                    Icon(
-                                                                      Icons
-                                                                          .star,
+                                                                color: Color(
+                                                                    0xFFDEDDEC)),
+                                                            child: Row(
+                                                              children: [
+                                                                Icon(
+                                                                  Icons.star,
+                                                                  color: Color(
+                                                                      0xFF008080),
+                                                                  size: 14.sp,
+                                                                ),
+                                                                Text(
+                                                                  "${college.avgRating!.toStringAsFixed(1)} Rating",
+                                                                  maxLines: 1,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style: GoogleFonts.inter(
+                                                                      fontSize:
+                                                                          12.sp,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400,
                                                                       color: Color(
-                                                                          0xFF008080),
-                                                                      size:
-                                                                          14.sp,
-                                                                    ),
-                                                                    Text(
-                                                                      "${college.avgRating!.toStringAsFixed(1)} Rating",
-                                                                      maxLines:
-                                                                          1,
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      style: GoogleFonts.inter(
-                                                                          fontSize: 12
-                                                                              .sp,
-                                                                          fontWeight: FontWeight
-                                                                              .w400,
-                                                                          color:
-                                                                              Color(0xFF2E2E2E)),
-                                                                    )
-                                                                  ],
-                                                                )),
-                                                            SizedBox(
-                                                              width: 5.w,
-                                                            ),
-                                                            Container(
-                                                                padding: EdgeInsets
-                                                                    .only(
-                                                                        left:
-                                                                            8.w,
-                                                                        right:
-                                                                            8.w,
-                                                                        top:
-                                                                            5.h,
-                                                                        bottom: 5
-                                                                            .h),
-                                                                decoration: BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(40
+                                                                          0xFF2E2E2E)),
+                                                                )
+                                                              ],
+                                                            )),
+                                                        SizedBox(
+                                                          width: 5.w,
+                                                        ),
+                                                        Container(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    left: 8.w,
+                                                                    right: 8.w,
+                                                                    top: 5.h,
+                                                                    bottom:
+                                                                        5.h),
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(40
                                                                             .r),
-                                                                    color: Color(
-                                                                        0xFFDEDDEC)),
-                                                                child: Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      "${college.totalReviews!} Review",
-                                                                      maxLines:
-                                                                          1,
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      style: GoogleFonts.inter(
-                                                                          fontSize: 12
-                                                                              .sp,
-                                                                          fontWeight: FontWeight
+                                                                color: Color(
+                                                                    0xFFDEDDEC)),
+                                                            child: Row(
+                                                              children: [
+                                                                Text(
+                                                                  "${college.totalReviews!} Review",
+                                                                  maxLines: 1,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style: GoogleFonts.inter(
+                                                                      fontSize:
+                                                                          12.sp,
+                                                                      fontWeight:
+                                                                          FontWeight
                                                                               .w400,
-                                                                          color:
-                                                                              Color(0xFF2E2E2E)),
-                                                                    )
-                                                                  ],
-                                                                )),
-                                                          ],
-                                                        ),
-                                                        Divider(
-                                                            color:
-                                                                Colors.black12),
-                                                        Text(
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          college.collegeName ??
-                                                              "Unknown",
-                                                          style: GoogleFonts
-                                                              .roboto(
-                                                                  fontSize:
-                                                                      15.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  letterSpacing:
-                                                                      -0.5),
-                                                        ),
+                                                                      color: Color(
+                                                                          0xFF2E2E2E)),
+                                                                )
+                                                              ],
+                                                            )),
                                                       ],
                                                     ),
-                                                  ),
-                                                ],
+                                                    Divider(
+                                                        color: Colors.black12),
+                                                    Text(
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      college.collegeName ??
+                                                          "Unknown",
+                                                      style: GoogleFonts.roboto(
+                                                          fontSize: 15.sp,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.black,
+                                                          letterSpacing: -0.5),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  },
-                                  loading: () => const Center(
-                                    child: CircularProgressIndicator(
-                                        color: Color(0xff008080)),
-                                  ),
-                                  error: (error, stack) => Center(
-                                    child: Text(
-                                      "Error loading colleges",
-                                      style: GoogleFonts.roboto(
-                                          fontSize: 14.sp, color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 30.h),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Top Companies",
-                                  style: GoogleFonts.roboto(
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 25.h),
-                          getHomeStudentData.when(
-                            data: (data) {
-                              final companies = data.companies ?? [];
-                              if (companies.isEmpty) {
-                                return Center(
-                                  child: Text(
-                                    "No companies available",
-                                    style: GoogleFonts.roboto(
-                                        fontSize: 14.sp, color: Colors.white),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 );
-                              }
-                              return SizedBox(
-                                height: 270.h,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 20.w),
-                                  itemCount: companies.length,
-                                  itemBuilder: (context, index) {
-                                    final company = companies[index];
-                                    return Padding(
-                                      padding: EdgeInsets.only(right: 15.w),
-                                      child: Container(
-                                        width: 195.w,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFF2A2A2A),
-                                          borderRadius:
-                                              BorderRadius.circular(15.r),
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    CupertinoPageRoute(
-                                                      builder: (context) =>
-                                                          CompanyDetailPage(
-                                                              company.id!),
-                                                    ));
-                                              },
-                                              child: Padding(
-                                                padding: EdgeInsets.only(
-                                                    top: 8.h,
-                                                    left: 8.w,
-                                                    right: 8.w),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          12.r),
-                                                  child: Image.network(
-                                                    company.image ??
-                                                        "https://www.howardluksmd.com/wp-content/uploads/2021/10/featured-image-placeholder-728x404.jpg",
+                              },
+                              loading: () => const Center(
+                                child: CircularProgressIndicator(
+                                    color: Color(0xff008080)),
+                              ),
+                              error: (error, stack) => Center(
+                                child: Text(
+                                  "Error loading colleges",
+                                  style: GoogleFonts.roboto(
+                                      fontSize: 14.sp, color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 30.h),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Top Companies",
+                              style: GoogleFonts.roboto(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 25.h),
+                      getHomeStudentData.when(
+                        data: (data) {
+                          final companies = data.companies ?? [];
+                          if (companies.isEmpty) {
+                            return Center(
+                              child: Text(
+                                "No companies available",
+                                style: GoogleFonts.roboto(
+                                    fontSize: 14.sp, color: Colors.white),
+                              ),
+                            );
+                          }
+                          return SizedBox(
+                            height: 270.h,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              itemCount: companies.length,
+                              itemBuilder: (context, index) {
+                                final company = companies[index];
+                                return Padding(
+                                  padding: EdgeInsets.only(right: 15.w),
+                                  child: Container(
+                                    width: 195.w,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF2A2A2A),
+                                      borderRadius: BorderRadius.circular(15.r),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                CupertinoPageRoute(
+                                                  builder: (context) =>
+                                                      CompanyDetailPage(
+                                                          company.id!),
+                                                ));
+                                          },
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 8.h,
+                                                left: 8.w,
+                                                right: 8.w),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12.r),
+                                              child: Image.network(
+                                                company.image ??
+                                                    "https://www.howardluksmd.com/wp-content/uploads/2021/10/featured-image-placeholder-728x404.jpg",
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                height: 111.h,
+                                                fit: BoxFit.contain,
+                                                //color: Colors.white,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return Image.network(
+                                                    "https://www.howardluksmd.com/wp-content/uploads/2021/10/featured-image-placeholder-728x404.jpg",
                                                     width:
                                                         MediaQuery.of(context)
                                                             .size
                                                             .width,
                                                     height: 111.h,
                                                     fit: BoxFit.contain,
-                                                    //color: Colors.white,
-                                                    errorBuilder: (context,
-                                                        error, stackTrace) {
-                                                      return Image.network(
-                                                        "https://www.howardluksmd.com/wp-content/uploads/2021/10/featured-image-placeholder-728x404.jpg",
-                                                        width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width,
-                                                        height: 111.h,
-                                                        fit: BoxFit.contain,
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
+                                                  );
+                                                },
                                               ),
                                             ),
-                                            Padding(
-                                              padding: EdgeInsets.all(8.w),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(8.w),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    left: 10.w,
+                                                    right: 10.w,
+                                                    top: 5.h,
+                                                    bottom: 5.h),
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            40.r),
+                                                    color: Color.fromARGB(
+                                                        25, 222, 221, 236)),
+                                                child: Text(
+                                                  company.city ?? "Unknown",
+                                                  style: GoogleFonts.roboto(
+                                                      fontSize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Color(0xFFFFFFFF)),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 8.h,
+                                              ),
+                                              Row(
                                                 children: [
                                                   Container(
                                                     padding: EdgeInsets.only(
@@ -1991,50 +1963,18 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                                                 .circular(40.r),
                                                         color: Color.fromARGB(
                                                             25, 222, 221, 236)),
-                                                    child: Text(
-                                                      company.city ?? "Unknown",
-                                                      style: GoogleFonts.roboto(
-                                                          fontSize: 14.sp,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Color(
-                                                              0xFFFFFFFF)),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 8.h,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Container(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                left: 10.w,
-                                                                right: 10.w,
-                                                                top: 5.h,
-                                                                bottom: 5.h),
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        40.r),
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    25,
-                                                                    222,
-                                                                    221,
-                                                                    236)),
-                                                        child: Row(
-                                                          children: [
-                                                            Icon(
-                                                              Icons.star,
-                                                              color: Color(
-                                                                  0xFF008080),
-                                                              size: 14.sp,
-                                                            ),
-                                                            Text(
-                                                              "${company.avgRating ?? "Unknown"} Rating",
-                                                              style: GoogleFonts.roboto(
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.star,
+                                                          color:
+                                                              Color(0xFF008080),
+                                                          size: 14.sp,
+                                                        ),
+                                                        Text(
+                                                          "${company.avgRating ?? "Unknown"} Rating",
+                                                          style: GoogleFonts
+                                                              .roboto(
                                                                   fontSize:
                                                                       12.sp,
                                                                   fontWeight:
@@ -2042,97 +1982,90 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                                                           .w400,
                                                                   color: Color(
                                                                       0xFFFFFFFF)),
-                                                            ),
-                                                          ],
                                                         ),
-                                                      ),
-                                                      Container(
-                                                          margin:
-                                                              EdgeInsets.only(
-                                                                  left: 8.w),
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 8.w,
-                                                                  right: 8.w,
-                                                                  top: 5.h,
-                                                                  bottom: 5.h),
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          40.r),
-                                                              color: Color
-                                                                  .fromARGB(
-                                                                      25,
-                                                                      222,
-                                                                      221,
-                                                                      236)),
-                                                          child: Row(
-                                                            children: [
-                                                              Text(
-                                                                "${company.totalReviews!} Review",
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: GoogleFonts.inter(
-                                                                    fontSize:
-                                                                        12.sp,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400,
-                                                                    color: Color(
-                                                                        0xFFFFFFFF)),
-                                                              )
-                                                            ],
-                                                          )),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
-                                                  SizedBox(
-                                                    height: 5.h,
-                                                  ),
-                                                  Divider(
-                                                      color: Colors.white12),
-                                                  Text(
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    company.companyName ??
-                                                        "Unknown",
-                                                    style: GoogleFonts.roboto(
-                                                        fontSize: 15.sp,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.white,
-                                                        letterSpacing: -0.5),
-                                                  ),
+                                                  Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 8.w),
+                                                      padding: EdgeInsets.only(
+                                                          left: 8.w,
+                                                          right: 8.w,
+                                                          top: 5.h,
+                                                          bottom: 5.h),
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      40.r),
+                                                          color: Color.fromARGB(
+                                                              25,
+                                                              222,
+                                                              221,
+                                                              236)),
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                            "${company.totalReviews!} Review",
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: GoogleFonts.inter(
+                                                                fontSize: 12.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color: Color(
+                                                                    0xFFFFFFFF)),
+                                                          )
+                                                        ],
+                                                      )),
                                                 ],
                                               ),
-                                            ),
-                                          ],
+                                              SizedBox(
+                                                height: 5.h,
+                                              ),
+                                              Divider(color: Colors.white12),
+                                              Text(
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                company.companyName ??
+                                                    "Unknown",
+                                                style: GoogleFonts.roboto(
+                                                    fontSize: 15.sp,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.white,
+                                                    letterSpacing: -0.5),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                            loading: () => const Center(
-                              child: CircularProgressIndicator(
-                                  color: Color(0xff008080)),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                            error: (error, stack) => Center(
-                              child: Text(
-                                "Error loading companies",
-                                style: GoogleFonts.roboto(
-                                    fontSize: 14.sp, color: Colors.white),
-                              ),
-                            ),
+                          );
+                        },
+                        loading: () => const Center(
+                          child: CircularProgressIndicator(
+                              color: Color(0xff008080)),
+                        ),
+                        error: (error, stack) => Center(
+                          child: Text(
+                            "Error loading companies",
+                            style: GoogleFonts.roboto(
+                                fontSize: 14.sp, color: Colors.white),
                           ),
-                          SizedBox(height: 30.h),
-                        ],
+                        ),
                       ),
-                    ),
+                      SizedBox(height: 30.h),
+                    ],
+                  ),
+                ),
             ],
           ),
         ),

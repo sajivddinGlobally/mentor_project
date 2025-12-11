@@ -193,8 +193,12 @@ class _GetstartBodyState extends ConsumerState<GetstartBody> {
         GestureDetector(
           onTap: () {
             setState(() {
-              UserRegisterDataHold.usertype = "Mentor";
-              ref.read(formDataProvider.notifier).updateUserType("Mentor");
+              UserRegisterDataHold.usertype = "Professional";
+              //"Mentor";
+              ref.read(formDataProvider.notifier).updateUserType("Professional"
+                  // "Mentor",
+
+                  );
             });
             Navigator.push(context,
                 CupertinoPageRoute(builder: (context) => MentorShipPage()));

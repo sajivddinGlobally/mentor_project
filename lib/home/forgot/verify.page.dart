@@ -57,7 +57,11 @@ class _OtpVerifyPageState extends ConsumerState<OtpVerifyPage> {
         isResending = false;
       });
       final erromessage = e.response!.data['error'].toString();
-      Fluttertoast.showToast(msg: erromessage);
+      Fluttertoast.showToast(
+        msg: erromessage,
+        backgroundColor: Colors.red,
+        toastLength: Toast.LENGTH_LONG,
+      );
       log("$e, $st");
     }
   }

@@ -2,10 +2,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:educationapp/coreFolder/Model/blockBodyModel.dart';
 import 'package:educationapp/coreFolder/Model/blockListModel.dart';
+import 'package:educationapp/coreFolder/Model/getMentorReviewModel.dart';
 import 'package:educationapp/coreFolder/Model/getProfileUserModel.dart';
 import 'package:educationapp/coreFolder/Model/getStudentRequestResModel.dart';
 import 'package:educationapp/coreFolder/Model/login.body.model.dart';
 import 'package:educationapp/coreFolder/Model/login.rsponse.model.dart';
+import 'package:educationapp/coreFolder/Model/mentorReviewResModel.dart';
 import 'package:educationapp/coreFolder/Model/myListingResModel.dart';
 import 'package:educationapp/coreFolder/Model/newRegisterResModel.dart';
 import 'package:educationapp/coreFolder/Model/passwordChangeBodyModel.dart';
@@ -54,7 +56,7 @@ abstract class APIStateNetwork {
   Future<ReviewGetModel> getReview(@Path('id') String id);
 
   @GET('/mentor/Transaction/{id}')
-  Future<TransactionGetModel> getTransaction(@Path('id') String id);//
+  Future<TransactionGetModel> getTransaction(@Path('id') String id);
 
   @GET('/profile/{id}')
   Future<ProfileGetModel> mentorProfile(@Path('id') String id);
@@ -176,4 +178,12 @@ abstract class APIStateNetwork {
   @POST("/updates-password")
   Future<HttpResponse> verifyORChangePass(
       @Body() verifyORChangePasswordBodyModel body);
+
+  @POST("/mentor-review")
+  Future<MentorReviewResModel> mentorReview(
+    @Body() MentorReviewBodyModel body,
+  );
+
+  @GET("/mentor-review/{id}")
+  Future<GetmentorReviewModel> getmentorReview(@Path('id') String id);
 }

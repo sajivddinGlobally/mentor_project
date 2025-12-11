@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:educationapp/coreFolder/Controller/myListingController.dart';
 import 'package:educationapp/coreFolder/Controller/themeController.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class _MyListingState extends ConsumerState<MyListing> {
     log("userType listing page : $type");
     final myListingProvider = ref.watch(myListingController);
     final themeMode = ref.watch(themeProvider);
+    final isMentorOrProfessional = type == "Mentor" || type == "Professional";
 
     return Scaffold(
       // backgroundColor: Color(0xFF1B1B1B),
@@ -157,10 +159,20 @@ class _MyListingState extends ConsumerState<MyListing> {
               child: myListingProvider.when(
                 data: (myListingData) {
                   final query = searchController.text.toLowerCase();
+                  // final filteredList = myListingData.data.where((item) {
+                  //   final name = type == "Mentor"
+                  //       ? item.studentName.toLowerCase()
+                  //       : item.mentorName.toLowerCase();
+                  //   return name.contains(query);
+                  // }).toList();
+
                   final filteredList = myListingData.data.where((item) {
-                    final name = type == "Mentor"
-                        ? item.studentName.toLowerCase()
-                        : item.mentorName.toLowerCase();
+                    final name = isMentorOrProfessional
+                        ? item.studentName
+                            .toLowerCase() // Mentor/Professional के लिए छात्र का नाम
+                        : item.mentorName
+                            .toLowerCase(); // Student के लिए मेंटर का नाम
+
                     return name.contains(query);
                   }).toList();
 
@@ -229,7 +241,10 @@ class _MyListingState extends ConsumerState<MyListing> {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(40.r),
                                   child: Image.network(
-                                    type == "Mentor"
+                                    // type == "Mentor"
+                                    //     ? item.studentProfile
+                                    //     : item.mentorProfile,
+                                    isMentorOrProfessional
                                         ? item.studentProfile
                                         : item.mentorProfile,
                                     height: 60.h,
@@ -252,7 +267,9 @@ class _MyListingState extends ConsumerState<MyListing> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        type == "Mentor"
+                                        // type == "Mentor"
+                                        (type == "Mentor" ||
+                                                type == "Professional")
                                             ? item.studentName
                                             : item.mentorName,
                                         style: GoogleFonts.roboto(
@@ -262,7 +279,8 @@ class _MyListingState extends ConsumerState<MyListing> {
                                         ),
                                       ),
                                       Text(
-                                        type == "Mentor"
+                                        // type == "Mentor"
+                                        isMentorOrProfessional
                                             ? item.studentEmail
                                             : item.mentorEmail,
                                         style: GoogleFonts.roboto(
@@ -271,7 +289,8 @@ class _MyListingState extends ConsumerState<MyListing> {
                                         ),
                                       ),
                                       Text(
-                                        type == "Mentor"
+                                        // type == "Mentor"
+                                        isMentorOrProfessional
                                             ? item.studentPhone
                                             : item.mentorPhone,
                                         style: GoogleFonts.roboto(
@@ -292,8 +311,37 @@ class _MyListingState extends ConsumerState<MyListing> {
                 },
                 error: (error, stackTrace) {
                   log(stackTrace.toString());
+                  if (error is DioException) {
+                    final statusCode = error.response?.statusCode;
+                    // 🔥 If API sends 403 → Show No Data Accepted UI
+                    if (statusCode == 403) {
+                      return Center(
+                        child: Text(
+                          "No Data Accepted",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      );
+                    }
+
+                    // Other Dio errors
+                    return Center(
+                      child: Text(
+                        "Error: ${error.message}",
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    );
+                  }
+
+                  // Non-Dio errors
                   return Center(
-                    child: Text(error.toString()),
+                    child: Text(
+                      error.toString(),
+                      style: const TextStyle(color: Colors.red),
+                    ),
                   );
                 },
                 loading: () => Center(

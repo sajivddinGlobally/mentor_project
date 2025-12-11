@@ -702,6 +702,7 @@
 
 import 'dart:developer';
 
+import 'package:educationapp/coreFolder/Controller/getMentorReveiwController.dart';
 import 'package:educationapp/coreFolder/Controller/getRequestStudentController.dart';
 import 'package:educationapp/coreFolder/Controller/reviewController.dart';
 import 'package:educationapp/coreFolder/Controller/themeController.dart';
@@ -709,6 +710,7 @@ import 'package:educationapp/coreFolder/Model/sendRequestBodyModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
 import 'package:educationapp/coreFolder/utils/preety.dio.dart';
 import 'package:educationapp/home/chating.page.dart';
+import 'package:educationapp/home/mentorAddReview.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -762,6 +764,8 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
   @override
   Widget build(BuildContext context) {
     final profileAsync = ref.watch(profileProvider(widget.id));
+    final getMentorReviewProvider =
+        ref.watch(getMentorReviewController(widget.id.toString()));
     final themeMode = ref.watch(themeProvider);
     var box = Hive.box('userdata');
     return Scaffold(
@@ -1243,6 +1247,184 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                                 ),
                               ),
                               SizedBox(height: 20.h),
+                              Divider(),
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: 16.w, right: 16.w, top: 15.h),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Reviews & Testimonials",
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: themeMode == ThemeMode.light
+                                            ? Color(0xffDEDDEC)
+                                            : Color(0xFF008080),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                              builder: (context) =>
+                                                  MentoraddReviewPage(
+                                                      id: widget.id.toString()),
+                                            ));
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            "View All",
+                                            style: GoogleFonts.roboto(
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.w600,
+                                              color:
+                                                  themeMode == ThemeMode.light
+                                                      ? Color(0xffDEDDEC)
+                                                      : Color(0xFF008080),
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.arrow_forward_ios,
+                                            size: 20.sp,
+                                            color: themeMode == ThemeMode.light
+                                                ? Color(0xffDEDDEC)
+                                                : Color(0xFF008080),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 15.h,
+                              ),
+                              getMentorReviewProvider.when(
+                                data: (snp) {
+                                  if (snp.reviews!.isEmpty) {
+                                    return Center(
+                                      child: Text(
+                                        "No Review yeat.",
+                                        style: GoogleFonts.inter(
+                                          fontSize: 16.sp,
+                                          color: themeMode == ThemeMode.dark
+                                              ? const Color(0xFF1B1B1B)
+                                              : Colors.white,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  // 👇 Take only top 5
+                                  final limitedReviews =
+                                      snp.reviews!.take(5).toList();
+
+                                  return ListView.builder(
+                                    reverse: true,
+                                    padding: EdgeInsets.zero,
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: limitedReviews.length,
+                                    itemBuilder: (context, index) {
+                                      final review = limitedReviews[index];
+
+                                      final double avg = double.tryParse(
+                                              review.rating.toString() ?? "") ??
+                                          0.0;
+                                      final int rating =
+                                          avg.clamp(0, 5).toInt();
+
+                                      return Container(
+                                        padding: EdgeInsets.only(
+                                            left: 16.w,
+                                            right: 16.w,
+                                            top: 16.h,
+                                            bottom: 16.h),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20.r),
+                                          // color: Color(0xFFF1F2F6),
+                                          color: themeMode == ThemeMode.dark
+                                              ? Color(0xffF1F2F6)
+                                              : Color(0xFF008080),
+                                        ),
+                                        margin: EdgeInsets.only(
+                                            bottom: 20.h,
+                                            left: 15.w,
+                                            right: 15.w),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                ...List.generate(
+                                                  rating,
+                                                  (indiex) => Icon(
+                                                    Icons.star,
+                                                    color: Colors.amber,
+                                                    size: 20.0,
+                                                  ),
+                                                ),
+                                                ...List.generate(
+                                                  5 - rating, // Remaining stars (5 - filled stars)
+                                                  (i) => const Icon(
+                                                    Icons
+                                                        .star_border, // Outlined star icon
+                                                    color: Colors
+                                                        .amber, // Use the same color for visual consistency
+                                                    size: 20.0,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 5.h),
+                                            Text(
+                                              review.description ?? '',
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 16.sp,
+                                                color:
+                                                    themeMode == ThemeMode.light
+                                                        ? Color(0xffDEDDEC)
+                                                        : Color(0xFF666666),
+                                              ),
+                                            ),
+                                            Text(
+                                              review.userName ?? "N/A",
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 14.sp,
+                                                color:
+                                                    themeMode == ThemeMode.light
+                                                        ? Color(0xffDEDDEC)
+                                                        : Color(0xFF666666),
+                                              ),
+                                            ),
+                                            // SizedBox(
+                                            //   height: 10.h,
+                                            // )
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                error: (error, stackTrace) {
+                                  log(stackTrace.toString());
+                                  return Center(
+                                    child: Text(error.toString()),
+                                  );
+                                },
+                                loading: () => Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              )
                             ]),
                           ),
                         ),

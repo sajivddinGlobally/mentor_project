@@ -150,8 +150,6 @@
 //   return dio;
 // }
 
-
-
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:educationapp/home/noInternetScreen.dart';
@@ -190,10 +188,13 @@ Dio createDio() {
         // **✅ सुधार 1: हर रिक्वेस्ट पर Hive से token लें**
         var box = Hive.box("userdata");
         var token = box.get("token");
+        var userType = box.get("userType");
 
         options.headers.addAll({
           'Accept': 'application/json',
           if (token != null) 'Authorization': 'Bearer $token',
+          // सर्वर को यह बताने के लिए कि अनुरोध किस userType द्वारा किया जा रहा है
+          if (userType != null) 'X-User-Type': userType,
         });
         handler.next(options);
       },
@@ -203,6 +204,14 @@ Dio createDio() {
         final path = e.requestOptions.path;
         final errorData = e.response?.data;
         String errorMessage = "Something went wrong";
+
+        // // 🚨 403 Forbidden को स्पष्ट रूप से संभालें
+        // if (statusCode == 403) {
+        //   errorMessage =
+        //       errorData['message'] ?? "Authorization failed. Please re-login.";
+        //   showToast(errorMessage);
+        //   // यहाँ आप यूज़र को लॉगआउट स्क्रीन पर रीडायरेक्ट कर सकते हैं।
+        // }
 
         // 🔥 1. Internet OFF error
         if (e.type == DioExceptionType.connectionError ||
@@ -267,7 +276,6 @@ Dio createDio() {
 
         // --- 401 Unauthorized Handling ---
         if (statusCode == 401) {
-          // **✅ सुधार 2: केवल उन API कॉल के लिए 401 हैंडल करें जो login/refresh API नहीं हैं**
           if (!path.contains('/login') && !path.contains('/refresh')) {
             final box = Hive.box("userdata");
             // Token delete करने से पहले toast दिखाएँ
@@ -278,11 +286,9 @@ Dio createDio() {
             await box.flush();
             log("Token cleared due to 401 error.");
 
-            // **✅ सुधार 3: Navigator को मुख्य thread पर और सुरक्षित तरीके से चलाएँ**
             Future.microtask(() {
               final navState = navigatorKey.currentState;
-              // सुनिश्चित करें कि हम पहले से ही LoginPage पर नहीं जा रहे हैं।
-              // क्योंकि 401 error एक साथ कई जगह से आ सकता है।
+
               final isNavigatingToLogin = navState?.context
                       .findAncestorWidgetOfExactType<LoginPage>() !=
                   null;
@@ -300,32 +306,24 @@ Dio createDio() {
               }
             });
           }
-          // 401 के मामले में, हम यहाँ handler.next(e) कॉल नहीं करेंगे यदि हम नेविगेट कर रहे हैं
-          // ताकि calling function को error न मिले और UI पर कोई असर न पड़े।
-          // लेकिन Dio Interceptor API के अनुसार, हमें 'handler.next' कॉल करना चाहिए।
         }
 
-        // --- General Error Toast ---
-        // 401 Unauthorized error के लिए हमने Toast ऊपर दिखा दिया है,
-        // इसलिए बाकि errors के लिए Toast दिखाएँ:
-        if (statusCode != 401) {
-          showToast(errorMessage);
-        }
+        // if (statusCode != 401) {
+        //   showToast(errorMessage);
+        // }
 
-        // एरर को आगे बढ़ाएँ (calling function में error throw होगा)
         handler.next(e);
-        return; // Return added to explicitly exit the onError function
+        return;
       },
     ),
   );
 
-  // PrettyDioLogger को InterceptorWrapper के बाद रखें ताकि log में अंतिम state दिखे
   dio.interceptors.add(
     PrettyDioLogger(
       requestBody: true,
-      requestHeader: true,
       responseBody: true,
-      responseHeader: false,
+      requestHeader: true,
+      responseHeader: true,
     ),
   );
 

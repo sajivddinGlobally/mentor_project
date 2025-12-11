@@ -158,7 +158,11 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                       final emailError =
                           e.response?.data?['error']?['email']?[0];
 
-                      Fluttertoast.showToast(msg: emailError.toString());
+                      Fluttertoast.showToast(
+                        msg: emailError.toString(),
+                        backgroundColor: Colors.red,
+                        toastLength: Toast.LENGTH_LONG,
+                      );
 
                       log("$e, $st");
                     }

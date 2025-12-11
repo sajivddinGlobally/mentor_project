@@ -382,7 +382,7 @@ class _MentorshipBodyState extends ConsumerState<MentorshipBody> {
                 child: Text(
                   formData.userType == "Student"
                       ? "what are you looking for ?"
-                      : "what do u offer as a mentor",
+                      : "what do u offer as a Professional",
                   style: GoogleFonts.roboto(
                       color: themeMode == ThemeMode.dark
                           ? Color(0xFF1B1B1B)
