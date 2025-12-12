@@ -28,6 +28,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../wallet/wallet.page.dart';
 import 'TendingSkill.dart';
 import 'findAColllege.dart';
@@ -278,6 +279,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             SizedBox(height: 10.h),
             if (userType == "Student")
               ListTile(
+                dense: true,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -303,6 +305,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             if (userType == "Student")
               ListTile(
+                dense: true,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -328,6 +331,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             if (userType == "Student")
               ListTile(
+                dense: true,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -353,6 +357,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             if (userType == "Student")
               ListTile(
+                dense: true,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -378,6 +383,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             if (userType == "Professional" || userType == "Mentor")
               ListTile(
+                dense: true,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -402,6 +408,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
               ),
             ListTile(
+              dense: true,
               onTap: () {
                 Fluttertoast.showToast(
                     msg: themeMode == ThemeMode.light
@@ -426,6 +433,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
             ListTile(
+              dense: true,
               onTap: () {
                 Navigator.push(
                     context,
@@ -449,8 +457,37 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
               ),
             ),
+            ListTile(
+              dense: true,
+              leading: Icon(
+                Icons.camera_alt_outlined,
+                color: themeMode == ThemeMode.light
+                    ? Colors.white
+                    : Color(0xff008080),
+              ),
+              title: Text(
+                "Follow us on Instagram",
+                style: GoogleFonts.roboto(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  //  color: const Color.fromARGB(255, 27, 27, 27),
+                  color: themeMode == ThemeMode.light
+                      ? Colors.white
+                      : Color(0xFF1B1B1B),
+                ),
+              ),
+              onTap: () async {
+                final url =
+                    "https://www.instagram.com/educat.in?igsh=MWd4aHF3bThiMnJnZg==";
+                await launchUrl(
+                  Uri.parse(url),
+                  // mode: LaunchMode.externalApplication,
+                );
+              },
+            ),
             const Divider(),
             ListTile(
+              dense: true,
               leading: Image.asset(
                 "assets/logoutIcon.png",
                 color: themeMode == ThemeMode.light ? Colors.white : null,
