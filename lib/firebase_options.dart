@@ -50,11 +50,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCNjva5mxX-a8CIe1c2ViWQ5iHA6mTD67A',
-    appId: '1:1004979894879:android:cf30b6071a5ba85c8979ea',
-    messagingSenderId: '1004979894879',
-    projectId: 'mentor-project-60e60',
-    storageBucket: 'mentor-project-60e60.firebasestorage.app',
+    apiKey: 'AIzaSyBufBIfWiZjVQbEEuovA7xjumVJjRRWYwQ',
+    appId: '1:371373570384:android:9271cfc14cc19ff672d455',
+    messagingSenderId: '371373570384',
+    projectId: 'educat-320a4',
+    storageBucket: 'educat-320a4.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(

@@ -824,9 +824,9 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('WebSocket Status: $status'),
-                          Text('WebSocket Mentor: $statusMemtnro'),
-                          Text('WebSocket multiple: $multiplestatus'),
+                          // Text('WebSocket Status: $status'),
+                          // Text('WebSocket Mentor: $statusMemtnro'),
+
                           Row(
                             children: [
                               Text(

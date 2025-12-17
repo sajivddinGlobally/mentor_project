@@ -113,10 +113,11 @@ class _OnlineMentorPageState extends ConsumerState<OnlineMentorPage> {
                                           )));
                             },
                             child: UserTabs(
-                              image: item['profile_pic'],
+                              image: item['profile_pic'] ??
+                                  "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
                               id: item['id'],
-                              fullname: item['full_name'],
-                              dec: item['description'],
+                              fullname: item['full_name'] ?? "No Name",
+                              dec: item['description'] ?? "N/A",
                               servicetype: item['service_type'] == null
                                   ? []
                                   : item['service_type']

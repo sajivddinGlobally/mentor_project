@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "1004979894879",
-    "project_id": "mentor-project-60e60",
-    "storage_bucket": "mentor-project-60e60.firebasestorage.app"
+    "project_number": "371373570384",
+    "project_id": "educat-320a4",
+    "storage_bucket": "educat-320a4.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1004979894879:android:cf30b6071a5ba85c8979ea",
+        "mobilesdk_app_id": "1:371373570384:android:9271cfc14cc19ff672d455",
         "android_client_info": {
-          "package_name": "com.example.educationapp"
+          "package_name": "com.educat"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCNjva5mxX-a8CIe1c2ViWQ5iHA6mTD67A"
+          "current_key": "AIzaSyBufBIfWiZjVQbEEuovA7xjumVJjRRWYwQ"
         }
       ],
       "services": {
