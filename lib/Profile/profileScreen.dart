@@ -49,7 +49,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                height: 15.h,
+                                height: 20.h,
                               ),
                               Center(
                                 child: Text(

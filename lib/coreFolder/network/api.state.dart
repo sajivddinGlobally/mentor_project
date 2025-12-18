@@ -4,6 +4,7 @@ import 'package:educationapp/coreFolder/Model/blockBodyModel.dart';
 import 'package:educationapp/coreFolder/Model/blockListModel.dart';
 import 'package:educationapp/coreFolder/Model/getCreateListModel.dart';
 import 'package:educationapp/coreFolder/Model/getMentorReviewModel.dart';
+import 'package:educationapp/coreFolder/Model/getNotificationResModel.dart';
 import 'package:educationapp/coreFolder/Model/getProfileUserModel.dart';
 import 'package:educationapp/coreFolder/Model/getStudentRequestResModel.dart';
 import 'package:educationapp/coreFolder/Model/listingBodyModel.dart';
@@ -199,4 +200,7 @@ abstract class APIStateNetwork {
   @POST("/send")
   Future<HttpResponse<dynamic>> sendNotifcation(
       @Body() SendNotifcationBodyModel body);
+
+  @GET("/mentor/users")
+  Future<GetNotificationResModel> getNotification();
 }

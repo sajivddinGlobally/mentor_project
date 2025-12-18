@@ -419,25 +419,31 @@ class _CollegeDetailPageState extends ConsumerState<CollegeDetailPage> {
                 right: 0,
                 top: 110.h,
                 child: Center(
-                  child: ClipOval(
-                    child: snap.collage!.image.toString() != null
-                        ? Image.network(
-                            snap.collage!.image.toString(),
-                            height: 182.h,
-                            width: 182.w,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Image.network(
-                                    "https://t4.ftcdn.net/jpg/06/71/92/37/360_F_671923740_x0zOL3OIuUAnSF6sr7PuznCI5bQFKhI0.jpg",
-                                    height: 182.h,
-                                    width: 182.w,
-                                    fit: BoxFit.cover),
-                          )
-                        : Image.network(
-                            "https://t4.ftcdn.net/jpg/06/71/92/37/360_F_671923740_x0zOL3OIuUAnSF6sr7PuznCI5bQFKhI0.jpg",
-                            height: 182.h,
-                            width: 182.w,
-                            fit: BoxFit.cover),
+                  child: Container(
+                    height: 182.h,
+                    width: 182.w,
+                    decoration: BoxDecoration(
+                        color: Colors.grey, shape: BoxShape.circle),
+                    child: ClipOval(
+                      child: snap.collage!.image.toString() != null
+                          ? Image.network(
+                              snap.collage!.image.toString(),
+                              height: 182.h,
+                              width: 182.w,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Image.network(
+                                      "https://t4.ftcdn.net/jpg/06/71/92/37/360_F_671923740_x0zOL3OIuUAnSF6sr7PuznCI5bQFKhI0.jpg",
+                                      height: 182.h,
+                                      width: 182.w,
+                                      fit: BoxFit.cover),
+                            )
+                          : Image.network(
+                              "https://t4.ftcdn.net/jpg/06/71/92/37/360_F_671923740_x0zOL3OIuUAnSF6sr7PuznCI5bQFKhI0.jpg",
+                              height: 182.h,
+                              width: 182.w,
+                              fit: BoxFit.cover),
+                    ),
                   ),
                 ),
               ),

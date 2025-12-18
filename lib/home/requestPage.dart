@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:educationapp/apiService.dart';
 import 'package:educationapp/coreFolder/Controller/getRequestStudentController.dart';
 import 'package:educationapp/coreFolder/Controller/homeDataController.dart';
 import 'package:educationapp/coreFolder/Controller/myListingController.dart';
@@ -8,12 +9,14 @@ import 'package:educationapp/coreFolder/Model/sendRequestBodyModel.dart';
 import 'package:educationapp/coreFolder/network/api.state.dart';
 import 'package:educationapp/coreFolder/utils/preety.dio.dart';
 import 'package:educationapp/home/home.page.dart';
+import 'package:educationapp/notificationService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 
 class RequestPage extends ConsumerStatefulWidget {
   const RequestPage({super.key});
@@ -25,8 +28,26 @@ class RequestPage extends ConsumerStatefulWidget {
 class _RequestPageState extends ConsumerState<RequestPage> {
   String? requestLenght;
   bool isAccept = false;
+
+  String? fcmToken;
+  final api = ApiService();
+
+  @override
+  void initState() {
+    super.initState();
+    NotificationService.init();
+    _loadToken();
+  }
+
+  Future<void> _loadToken() async {
+    fcmToken = await NotificationService.getToken();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    var box = Hive.box("userdata");
+
     final getRequestHomeData = ref.watch(getRequestStudentController);
     final themeMode = ref.watch(themeProvider);
     return Scaffold(
@@ -99,6 +120,11 @@ class _RequestPageState extends ConsumerState<RequestPage> {
                         final service = APIStateNetwork(createDio());
                         final response = await service.acceptRequest(body);
                         if (response.status == true) {
+                          api.sendNotification(
+                              mentorId: box.get("userid").toString(),
+                              token: fcmToken!,
+                              title: 'Test Notification',
+                              b: 'This is a test message');
                           Fluttertoast.showToast(msg: response.message);
                           ref.invalidate(getHomeMentorDataProvider);
                           ref.invalidate(getRequestStudentController);

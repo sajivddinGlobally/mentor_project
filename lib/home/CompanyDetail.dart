@@ -55,9 +55,9 @@ class _CompanyDetailPageState extends ConsumerState<CompanyDetailPage> {
                       margin: EdgeInsets.only(top: 100.h),
                       child: SingleChildScrollView(
                         child: Column(children: [
-                          // SizedBox(
-                          //   height: 10.h,
-                          // ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
                           Text(
                             snap.collage!.name.toString(),
                             style: GoogleFonts.roboto(
@@ -408,25 +408,31 @@ class _CompanyDetailPageState extends ConsumerState<CompanyDetailPage> {
                 right: 0,
                 top: 110.h,
                 child: Center(
-                  child: ClipOval(
-                    child: snap.collage!.image.toString() != null
-                        ? Image.network(
-                            snap.collage!.image.toString(),
-                            height: 182.w,
-                            width: 182.w,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Image.network(
-                                    "https://t4.ftcdn.net/jpg/06/71/92/37/360_F_671923740_x0zOL3OIuUAnSF6sr7PuznCI5bQFKhI0.jpg",
-                                    height: 182.w,
-                                    width: 182.w,
-                                    fit: BoxFit.cover),
-                          )
-                        : Image.network(
-                            "https://t4.ftcdn.net/jpg/06/71/92/37/360_F_671923740_x0zOL3OIuUAnSF6sr7PuznCI5bQFKhI0.jpg",
-                            height: 182.h,
-                            width: 182.w,
-                            fit: BoxFit.cover),
+                  child: Container(
+                    height: 182.w,
+                    width: 182.w,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.grey),
+                    child: ClipOval(
+                      child: snap.collage!.image.toString() != null
+                          ? Image.network(
+                              snap.collage!.image.toString(),
+                              height: 182.w,
+                              width: 182.w,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Image.network(
+                                      "https://t4.ftcdn.net/jpg/06/71/92/37/360_F_671923740_x0zOL3OIuUAnSF6sr7PuznCI5bQFKhI0.jpg",
+                                      height: 182.w,
+                                      width: 182.w,
+                                      fit: BoxFit.cover),
+                            )
+                          : Image.network(
+                              "https://t4.ftcdn.net/jpg/06/71/92/37/360_F_671923740_x0zOL3OIuUAnSF6sr7PuznCI5bQFKhI0.jpg",
+                              height: 182.h,
+                              width: 182.w,
+                              fit: BoxFit.cover),
+                    ),
                   ),
                 ),
               ),

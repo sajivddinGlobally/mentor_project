@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:educationapp/MyListing/MyListingPage.dart';
 import 'package:educationapp/Profile/profileScreen.dart';
+import 'package:educationapp/apiService.dart';
 import 'package:educationapp/complete/complete.page.dart';
 import 'package:educationapp/coreFolder/Controller/getRequestStudentController.dart';
 import 'package:educationapp/coreFolder/Controller/myListingController.dart';
@@ -17,11 +18,13 @@ import 'package:educationapp/home/chatInbox.dart';
 import 'package:educationapp/home/chating.page.dart';
 import 'package:educationapp/home/expertTrendingDetails.page.dart';
 import 'package:educationapp/home/findmentor.page.dart';
+import 'package:educationapp/home/notification.page.dart';
 import 'package:educationapp/home/onlineMentor.page.dart';
 import 'package:educationapp/home/requestPage.dart';
 import 'package:educationapp/home/settingProfile.page.dart';
 import 'package:educationapp/home/trendingExprt.page.dart';
 import 'package:educationapp/login/login.page.dart';
+import 'package:educationapp/notificationService.dart';
 import 'package:educationapp/splash/splash.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -548,10 +551,12 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
   late int userId;
   String status = 'Connecting...';
   String statusMemtnro = 'ConnectingMentor...';
-  String multiplestatus = 'Connectingmultiplestatus...';
   int onlineMentorCount = 0;
   List<Map<String, dynamic>> onlineMentors =
       []; // mentor list store karne ke liye
+
+  String? fcmToken;
+  final api = ApiService();
 
   @override
   void initState() {
@@ -560,6 +565,13 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
     userId = box.get("userid");
     _connectWebSocket();
     _connectedUsersCount();
+    NotificationService.init();
+    _loadToken();
+  }
+
+  Future<void> _loadToken() async {
+    fcmToken = await NotificationService.getToken();
+    setState(() {});
   }
 
   void _connectWebSocket() {
@@ -767,10 +779,15 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                     const Spacer(),
                     IconButton(
                         onPressed: () {
-                          setState(() {
-                            _HomePageState()._currentIndex =
-                                4; // Navigate to Chat
-                          });
+                          // setState(() {
+                          //   _HomePageState()._currentIndex =
+                          //       4; // Navigate to Chat
+                          // });
+                          Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => NotificationPage(),
+                              ));
                         },
                         icon: Icon(
                           Icons.notifications_active_outlined,
@@ -1522,6 +1539,12 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                         final response =
                                             await service.acceptRequest(body);
                                         if (response.status == true) {
+                                          api.sendNotification(
+                                              mentorId:
+                                                  box.get("userid").toString(),
+                                              token: fcmToken!,
+                                              title: 'Test Notification',
+                                              b: 'This is a test message');
                                           Fluttertoast.showToast(
                                               msg: response.message);
                                           ref.invalidate(
@@ -2505,17 +2528,27 @@ class _UserTabsState extends ConsumerState<UserTabs> {
               height: 112.h,
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12.r),
-                  image: DecorationImage(
-                      image: NetworkImage(widget.image),
-                      fit: BoxFit.cover,
-                      onError: (exception, stackTrace) =>
-                          const AssetImage("assets/placeholder.png"))),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12.r),
+                image: DecorationImage(
+                  image: NetworkImage(widget.image),
+                  fit: BoxFit.cover,
+                  onError: (exception, stackTrace) => NetworkImage(
+                      "https://thumbs.dreamstime.com/b/no-image-vector-symbol-missing-available-icon-gallery-moment-placeholder-246411909.jpg"),
+                ),
+              ),
+              // child: ClipRRect(
+              //   borderRadius: BorderRadius.circular(12.r),
+              //   child: Image.network(
+              //     widget.image,
+              //     errorBuilder: (context, error, stackTrace) {
+              //       return Image.network(
+              //           "https://thumbs.dreamstime.com/b/no-image-vector-symbol-missing-available-icon-gallery-moment-placeholder-246411909.jpg");
+              //     },
+              //   ),
+              // ),
             ),
           ),
-          // Expanded(
-          //   child:
           Container(
             // margin: EdgeInsets.all(10.sp),
             child: Column(

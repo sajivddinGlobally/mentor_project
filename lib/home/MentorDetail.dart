@@ -30,6 +30,7 @@ class MentorDetailPage extends ConsumerStatefulWidget {
 
 class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
   bool isLoading = false;
+  final api = ApiService();
 
   Future<void> sendConnectRequest() async {
     setState(() {
@@ -41,6 +42,11 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
       final response = await service.studentSendRequest(body);
 
       if (response.status == true) {
+        api.sendNotification(
+            mentorId: widget.id.toString(),
+            token: token!,
+            title: 'Test Notification',
+            b: 'This is a test message');
         Fluttertoast.showToast(msg: response.message);
         ref.invalidate(getRequestStudentController); // keep this
         ref.read(requestRefreshTrigger.notifier).state =
@@ -82,8 +88,6 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
     final themeMode = ref.watch(themeProvider);
     var box = Hive.box('userdata');
 
-    final api = ApiService();
-
     return Scaffold(
       body: profileAsync.when(
         data: (profile) {
@@ -120,22 +124,6 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                             child: Column(children: [
                               SizedBox(
                                 height: 15.h,
-                              ),
-                              const SizedBox(height: 20),
-                              ElevatedButton(
-                                onPressed: token == null
-                                    ? null
-                                    : () {
-                                        api.sendNotification(
-                                            token: token!,
-                                            title: 'Test Notification',
-                                            b: 'This is a test message'
-                                            // token: token!,
-                                            // title: "Test Notification",
-                                            // body: "This is a test message",
-                                            );
-                                      },
-                                child: const Text("Send Notification"),
                               ),
                               Text(
                                 profile.fullName!,
@@ -178,7 +166,7 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                                   )
                               else
                                 Text(
-                                  'No skills listed',
+                                  'No skills',
                                   style: GoogleFonts.roboto(
                                     fontSize: 12.sp,
                                     fontWeight: FontWeight.w600,
@@ -186,7 +174,7 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                                   ),
                                 ),
                               Text(
-                                "Total Exprience ${profile.totalExperience ?? 'No experience listed'}",
+                                "Total Exprience ${profile.totalExperience ?? 'No experience'}",
                                 style: GoogleFonts.roboto(
                                   fontSize: 15.sp,
                                   fontWeight: FontWeight.w600,
@@ -370,7 +358,7 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                                           width: 400.w,
                                           child: Text(
                                             profile.description ??
-                                                'No description available',
+                                                'No description',
                                             style: GoogleFonts.roboto(
                                               fontSize: 15.sp,
                                               fontWeight: FontWeight.w600,
@@ -382,7 +370,7 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                                         SizedBox(
                                           width: 400.w,
                                           child: Text(
-                                            'College: ${profile.usersField ?? 'N/A'} - Company: ${profile.companiesWorked?.toString() ?? 'N/A'}',
+                                            'Company: ${profile.companiesWorked?.toString() ?? 'N/A'}',
                                             style: GoogleFonts.roboto(
                                               fontSize: 15.sp,
                                               fontWeight: FontWeight.w600,
@@ -423,15 +411,7 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
                                             ),
                                             SizedBox(height: 5.h),
                                             Text(
-                                              "Total Exprience ${profile.totalExperience ?? 'No experience listed'}",
-                                              style: GoogleFonts.roboto(
-                                                fontSize: 12.sp,
-                                                fontWeight: FontWeight.w600,
-                                                color: const Color(0xff666666),
-                                              ),
-                                            ),
-                                            Text(
-                                              'College: ${profile.usersField ?? 'N/A'} - Company: ${profile.companiesWorked?.toString() ?? 'N/A'}',
+                                              'Company: ${profile.companiesWorked?.toString() ?? 'N/A'}',
                                               style: GoogleFonts.roboto(
                                                 fontSize: 12.sp,
                                                 fontWeight: FontWeight.w600,
