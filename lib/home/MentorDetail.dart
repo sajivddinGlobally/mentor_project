@@ -31,7 +31,6 @@ class MentorDetailPage extends ConsumerStatefulWidget {
 class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
   bool isLoading = false;
   final api = ApiService();
-
   Future<void> sendConnectRequest() async {
     setState(() {
       isLoading = true;
@@ -44,9 +43,8 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
       if (response.status == true) {
         api.sendNotification(
             mentorId: widget.id.toString(),
-            token: token!,
-            title: 'Test Notification',
-            b: 'This is a test message');
+            title: 'New Mentorship Request',
+            b: 'You have received a new mentorship request');
         Fluttertoast.showToast(msg: response.message);
         ref.invalidate(getRequestStudentController); // keep this
         ref.read(requestRefreshTrigger.notifier).state =
@@ -65,9 +63,7 @@ class _MentorDetailPageState extends ConsumerState<MentorDetailPage> {
       });
     }
   }
-
   String? token;
-
   @override
   void initState() {
     super.initState();

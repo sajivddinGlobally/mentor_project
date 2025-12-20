@@ -1526,25 +1526,32 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                     subtitle: student.studentType,
                                     email: student.studentEmail,
                                     phone: student.studentPhone,
+
                                     callBack: () async {
+
                                       final body = AcceptRequestBodyModel(
                                           requestId:
                                               requestData.data[index].id);
                                       try {
+
                                         setState(() {
                                           isAccept = true;
                                         });
+
                                         final service =
                                             APIStateNetwork(createDio());
                                         final response =
                                             await service.acceptRequest(body);
+
                                         if (response.status == true) {
-                                          api.sendNotification(
-                                              mentorId:
-                                                  box.get("userid").toString(),
-                                              token: fcmToken!,
-                                              title: 'Test Notification',
-                                              b: 'This is a test message');
+
+                                          api.sendNotificationMentor(
+                                              title: 'Mentorship Request Accepted 🎉',
+                                              b: 'Great news! Your mentorship request has been accepted.',
+                                              user_Id:  student.studentId.toString()
+                                          );
+
+
                                           Fluttertoast.showToast(
                                               msg: response.message);
                                           ref.invalidate(
@@ -1570,6 +1577,7 @@ class _HomePageContentState extends ConsumerState<HomePageContent> {
                                         });
                                       }
                                     },
+
                                   );
                                 },
                               );

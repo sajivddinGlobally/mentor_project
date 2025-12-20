@@ -122,7 +122,6 @@ class _RequestPageState extends ConsumerState<RequestPage> {
                         if (response.status == true) {
                           api.sendNotification(
                               mentorId: box.get("userid").toString(),
-                              token: fcmToken!,
                               title: 'Test Notification',
                               b: 'This is a test message');
                           Fluttertoast.showToast(msg: response.message);

@@ -26,6 +26,7 @@ import 'package:educationapp/coreFolder/Model/trendingSkillExpertResModel.dart';
 import 'package:educationapp/coreFolder/Model/userProfileResModel.dart';
 import 'package:educationapp/coreFolder/Model/verifyOrChangePassBodyModel.dart';
 import 'package:retrofit/retrofit.dart';
+import '../Model/bodyNewModel.dart';
 import '../Model/service.model.dart';
 import '../Model/mentorHomeModel.dart';
 import '../Model/CollegeSearchModel.dart';
@@ -200,6 +201,12 @@ abstract class APIStateNetwork {
   @POST("/send")
   Future<HttpResponse<dynamic>> sendNotifcation(
       @Body() SendNotifcationBodyModel body);
+
+
+  @POST("/send-notification")
+  Future<HttpResponse<dynamic>> sendNotifcationMentorside(
+      @Body() MentorBodyNotification body);
+
 
   @GET("/mentor/users")
   Future<GetNotificationResModel> getNotification();
